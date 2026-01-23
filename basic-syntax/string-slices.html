@@ -175,7 +175,7 @@
 <details>
 <ul>
 <li>
-<p><code>&amp;str</code> introduces a string slice, which is an immutable reference to UTF-8 encoded string data 
+<p><code>&amp;str</code> introduces a string slice, which is an immutable reference to UTF-8 encoded string data
 stored in a block of memory. String literals (<code>”Hello”</code>), are stored in the program’s binary.</p>
 </li>
 <li>
@@ -183,23 +183,23 @@ stored in a block of memory. String literals (<code>”Hello”</code>), are sto
 <code>Vec&lt;T&gt;</code> is an array that changes size dynamically.</p>
 </li>
 <li>
-<p>As with many other types <code>String::from()</code> creates a string from a string literal; <code>String::new()</code> 
+<p>As with many other types <code>String::from()</code> creates a string from a string literal; <code>String::new()</code>
 creates a new empty string, to which string data can be added using the <code>push()</code> and <code>push_str()</code> methods.</p>
 </li>
 <li>
-<p>The <code>format!()</code> macro is a convenient way to generate an owned string from dynamic values. It 
+<p>The <code>format!()</code> macro is a convenient way to generate an owned string from dynamic values. It
 accepts the same format specification as <code>println!()</code>.</p>
 </li>
 <li>
 <p>You can borrow <code>&amp;str</code> slices from <code>String</code> via <code>&amp;</code> and optionally range selection.</p>
 </li>
 <li>
-<p>For C++ programmers: think of <code>&amp;str</code> as <code>const char*</code> from C++, but the one that always points 
-to a valid string in memory. Rust <code>String</code> is a rough equivalent of <code>std::string</code> from C++ 
+<p>For C++ programmers: think of <code>&amp;str</code> as <code>const char*</code> from C++, but the one that always points
+to a valid string in memory. Rust <code>String</code> is a rough equivalent of <code>std::string</code> from C++
 (main difference: it can only contain UTF-8 encoded bytes and will never use a small-string optimization).</p>
 </li>
 <li>
-<p>How do I modify s1? Here is an example built by iteratively following the guidelines of the compiler. </p>
+<p>How do I modify s1? Here is an example built by iteratively following the guidelines of the compiler.</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     let mut s1: &amp;str = &quot;World&quot;;
     println!(&quot;s1: {s1}&quot;);
@@ -215,6 +215,9 @@ to a valid string in memory. Rust <code>String</code> is a rough equivalent of <
     println!(&quot;s3: {s3}&quot;);
 }
 </code></pre></pre>
+<pre><code>fn to_owned(&amp;self) -&gt; Self::Owned
+</code></pre>
+<p>Creates owned data from borrowed data, usually by cloning.</p>
 </li>
 </ul>
 </details>

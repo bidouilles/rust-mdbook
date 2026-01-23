@@ -179,7 +179,7 @@ without naming the type. This can be useful when you don’t want to expose the 
 public API.</li>
 </ul>
 <p>This example is great, because it uses <code>impl Display</code> twice. It helps to explain that
-nothing here enforces that it is <em>the same</em> <code>impl Display</code> type. If we used a single 
+nothing here enforces that it is <em>the same</em> <code>impl Display</code> type. If we used a single
 <code>T: Display</code>, it would enforce the constraint that input <code>T</code> and return <code>T</code> type are the same type.
 It would not work for this particular function, as the type we expect as input is likely not
 what <code>format!</code> returns. If we wanted to do the same via <code>: Display</code> syntax, we’d need two

@@ -183,7 +183,7 @@ implementation.</p>
 <code>&amp;mut T</code> doesn’t outlive the lock being held.</li>
 <li><code>Mutex&lt;T&gt;</code> implements both <code>Send</code> and <code>Sync</code> iff <code>T</code> implements <code>Send</code>.</li>
 <li>A read-write lock counterpart - <code>RwLock</code>.</li>
-<li>Why does <code>lock()</code> return a <code>Result</code>? 
+<li>Why does <code>lock()</code> return a <code>Result</code>?
 <ul>
 <li>If the thread that held the <code>Mutex</code> panicked, the <code>Mutex</code> becomes “poisoned”. The error signals that
 the data it protected might be in an inconsistent state. Calling <code>lock()</code> on a poisoned mutex

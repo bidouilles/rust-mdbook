@@ -181,9 +181,9 @@ algorithm.</p>
 </ul>
 <details>
 <ul>
-<li>In fact, Rust contains several layers of the Standard Library: <code>core</code>, <code>alloc</code> and <code>std</code>. </li>
+<li>In fact, Rust contains several layers of the Standard Library: <code>core</code>, <code>alloc</code> and <code>std</code>.</li>
 <li><code>core</code> includes the most basic types and functions that don’t depend on <code>libc</code>, allocator or
-even the presence of an operating system. </li>
+even the presence of an operating system.</li>
 <li><code>alloc</code> includes types which require a global heap allocator, such as <code>Vec</code>, <code>Box</code> and <code>Arc</code>.</li>
 <li>Embedded Rust applications often only use <code>core</code>, and sometimes <code>alloc</code>.</li>
 </ul>

@@ -172,7 +172,7 @@ method and similarly, the <code>Into&lt;T&gt;</code> trait has a single <code>in
 Implementing these traits is how a type expresses that it can be converted into
 another type.</p>
 <p>The standard library has an implementation of <code>From&lt;i8&gt; for i16</code>, which means
-that we can convert a variable <code>x</code> of type <code>i8</code> to an <code>i16</code> by calling 
+that we can convert a variable <code>x</code> of type <code>i8</code> to an <code>i16</code> by calling
 <code>i16::from(x)</code>. Or, simpler, with <code>x.into()</code>, because <code>From&lt;i8&gt; for i16</code>
 implementation automatically create an implementation of <code>Into&lt;i16&gt; for i8</code>.</p>
 <p>The same applies for your own <code>From</code> implementations for your own types, so it is
