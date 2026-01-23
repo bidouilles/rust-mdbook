@@ -1,0 +1,46 @@
+[package]
+name = "comprehensive-rust"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[[bin]]
+name = "for-loops"
+path = "course-1/for-loops.rs"
+
+[[bin]]
+name = "book-library"
+path = "course-2/book-library.rs"
+
+[[bin]]
+name = "points-polygons"
+path = "course-3/points-polygons.rs"
+
+[[bin]]
+name = "luhn"
+path = "course-4/luhn.rs"
+
+[[bin]]
+name = "strings-iterators"
+path = "course-4/strings-iterators.rs"
+
+[[bin]]
+name = "safe-ffi-wrapper"
+path = "course-6/safe-ffi-wrapper.rs"
+
+[[bin]]
+name = "simple-gui"
+path = "course-5/simple-gui.rs"
+
+[[bin]]
+name = "dining-philosophers"
+path = "course-7/dining-philosophers.rs"
+
+[[bin]]
+name = "link-checker"
+path = "course-7/link-checker.rs"
+
+[dependencies]
+reqwest = { version = "0.11.12", features = ["blocking"] }
+scraper = "0.13.0"
+thiserror = "1.0.37"
