@@ -153,7 +153,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="send-and-sync"><a class="header" href="#send-and-sync"><code>Send</code> and <code>Sync</code></a></h1>
-<p>How does Rust know to forbid shared access across thread? The answer is in two traits:</p>
+<p>How does Rust know to forbid shared access across threads? The answer is in two traits:</p>
 <ul>
 <li><a href="https://doc.rust-lang.org/std/marker/trait.Send.html"><code>Send</code></a>: a type <code>T</code> is <code>Send</code> if it is safe to move a <code>T</code> across a thread
 boundary.</li>

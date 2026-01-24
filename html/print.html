@@ -748,7 +748,7 @@ error.</p>
 </ul>
 <details>
 <p><code>r</code> is used to denote raw string literals. Raw string literals do not process any escapes.
-It is followed by <code>(#)+</code>, then <code>&quot;</code>, the litteral, <code>&quot;</code> and <code>(#)+</code>, where <code>+</code> means one or more occurences.</p>
+It is followed by <code>(#)+</code>, then <code>&quot;</code>, the literal, <code>&quot;</code> and <code>(#)+</code>, where <code>+</code> means one or more occurrences.</p>
 <p><code>r#&quot;&quot;foo&quot;&quot;#</code> stands for <code>&quot;foo&quot;</code>.</p>
 <p><code>r##&quot;foo #&quot;# bar&quot;##</code> stands for <code>foo #&quot;# bar</code>.
 Each character in a raw string literal is represented as a Unicode scalar value.
@@ -1648,7 +1648,7 @@ runtime overhead and less predictable performance.</li>
 <p>Heap: Storage of values outside of function calls.</p>
 <ul>
 <li>Values have dynamic sizes determined at runtime.</li>
-<li>Slightly slower than the stack: some book-keeping needed.</li>
+<li>Slightly slower than the stack: some bookkeeping needed.</li>
 <li>No guarantee of memory locality.</li>
 </ul>
 </li>
@@ -2171,11 +2171,11 @@ fn main() {
 <p>The Rust compiler can do return value optimization (RVO).</p>
 </li>
 </ul>
-<p>See <a href="https://darkcoding.net/software/return-value-optimization-in-rust/">Grapham King's &quot;Return Value Optimization in Rust&quot; post</a></p>
+<p>See <a href="https://darkcoding.net/software/return-value-optimization-in-rust/">Graham King's &quot;Return Value Optimization in Rust&quot; post</a></p>
 <ul>
 <li>In C++, copy elision has to be defined in the language specification because constructors can have side effects. In Rust, this is not an issue at all. If RVO did not happen, Rust will always performs a simple and efficient <code>memcpy</code> copy.</li>
 </ul>
-<p>Elision means dropping, omitting, cutting. It is used for a sound that is not pronounced in a work, for example.</p>
+<p>Elision means dropping, omitting, cutting. It is used for a sound that is not pronounced in a word, for example.</p>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="shared-and-unique-borrows"><a class="header" href="#shared-and-unique-borrows">Shared and Unique Borrows</a></h1>
 <p>Rust puts constraints on the ways you can borrow values:</p>
@@ -2273,7 +2273,7 @@ lifetime <code>a</code>&quot;.
 <p>In the above example, try the following:</p>
 <ul>
 <li>
-<p>Move the declaration of <code>p2</code> and <code>p3</code> into a a new scope (<code>{ ... }</code>), resulting in the following code:</p>
+<p>Move the declaration of <code>p2</code> and <code>p3</code> into a new scope (<code>{ ... }</code>), resulting in the following code:</p>
 <pre><code class="language-rust ignore">#[derive(Debug)]
 struct Point(i32, i32);
 
@@ -2711,7 +2711,7 @@ Key Points:
 <li>Methods are defined in an <code>impl</code> block, which we will see in following slides.</li>
 <li>There are different types of structs.
 <ul>
-<li>Zero-sized structs <code>e.g., struct Foo;</code> `is a structure that does not require any memore. It might be used when implementing a trait on some type but don’t have any data that you want to store in the value itself.</li>
+<li>Zero-sized structs (e.g. <code>struct Foo;</code>) might be used when implementing a trait on some type but don't have any data that you want to store in the value itself.</li>
 <li>The next slide will introduce Tuple structs.</li>
 </ul>
 </li>
@@ -5203,7 +5203,7 @@ Discussion points:
 * Try replacing `drop(a)` with `a.drop()`.
 
 </details> --><div style="break-before: page; page-break-before: always;"></div><h1 id="generics"><a class="header" href="#generics">Generics</a></h1>
-<p>Rust support generics, which lets you abstract an algorithm (such as sorting)
+<p>Rust supports generics, which lets you abstract an algorithm (such as sorting)
 over the types used in the algorithm.</p>
 <details>
 <ul>
@@ -5940,7 +5940,7 @@ the common</p>
 <p>into the much simpler</p>
 <pre><code class="language-rust ignore">some_expression?
 </code></pre>
-<p>We can use this to simplify our error handing code:</p>
+<p>We can use this to simplify our error handling code:</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">use std::fs;
 use std::io::{self, Read};
 
@@ -7207,7 +7207,7 @@ fn main() {
 </code></pre></pre>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="send-and-sync"><a class="header" href="#send-and-sync"><code>Send</code> and <code>Sync</code></a></h1>
-<p>How does Rust know to forbid shared access across thread? The answer is in two traits:</p>
+<p>How does Rust know to forbid shared access across threads? The answer is in two traits:</p>
 <ul>
 <li><a href="https://doc.rust-lang.org/std/marker/trait.Send.html"><code>Send</code></a>: a type <code>T</code> is <code>Send</code> if it is safe to move a <code>T</code> across a thread
 boundary.</li>
