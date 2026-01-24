@@ -153,7 +153,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="references"><a class="header" href="#references">References</a></h1>
-<p>Like C++, Rust has references:</p>
+<p>Like C pointers, Rust has references:</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     let mut x: i32 = 10;
     let ref_x: &amp;mut i32 = &amp;mut x;
@@ -163,7 +163,7 @@
 </code></pre></pre>
 <p>Some notes:</p>
 <ul>
-<li>We must dereference <code>ref_x</code> when assigning to it, similar to C and C++ pointers.</li>
+<li>We must dereference <code>ref_x</code> when assigning to it, similar to C pointers.</li>
 <li>Rust will auto-dereference in some cases, in particular when invoking
 methods (try <code>ref_x.count_ones()</code>).</li>
 <li>References that are declared as <code>mut</code> can be bound to different values over their lifetime.</li>

@@ -157,7 +157,7 @@
 <ul>
 <li>Safe and correct like Java, but without a garbage collector.</li>
 <li>Depending on which abstraction (or combination of abstractions) you choose, can be a single unique pointer, reference counted, or atomically reference counted.</li>
-<li>Scope-based like C++, but the compiler enforces full adherence.</li>
+<li>Scope-based with automatic cleanup (like Python's <code>with</code>, but for everything).</li>
 <li>A Rust user can choose the right abstraction for the situation, some even have no cost at runtime like C.</li>
 </ul>
 <p>It achieves this by modeling <em>ownership</em> explicitly.</p>

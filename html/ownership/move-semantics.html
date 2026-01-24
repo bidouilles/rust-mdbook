@@ -169,14 +169,15 @@
 <li>There is always <em>exactly</em> one variable binding which owns a value.</li>
 </ul>
 <details>
+<p><strong>Key points for speakers:</strong></p>
 <ul>
-<li>
-<p>Mention that this is the opposite of the defaults in C++, which copies by value unless you use <code>std::move</code> (and the move constructor is defined!).</p>
-</li>
-<li>
-<p>In Rust, your clones are explicit (by using <code>clone</code>).</p>
-</li>
+<li>Move semantics are Rust's default for non-Copy types — no special syntax needed.</li>
+<li>This is different from Python, where assignment creates a new reference to the same object.</li>
+<li>In Rust, clones are always explicit (by using <code>clone</code>), making performance costs visible.</li>
 </ul>
+<p><strong>Comparison with Python:</strong>
+In Python, <code>s2 = s1</code> makes both variables point to the same object (shared reference).
+In Rust, <code>let s2 = s1</code> <em>moves</em> ownership — only <code>s2</code> is valid after this.</p>
 </details>
                     </main>
 

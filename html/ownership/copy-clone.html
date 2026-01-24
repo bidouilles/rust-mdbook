@@ -180,8 +180,7 @@ fn main() {
 <details>
 <p>Copying and cloning are not the same thing:</p>
 <ul>
-<li>Copying refers to bitwise copies of memory regions and does not work on arbitrary objects.</li>
-<li>Copying does not allow for custom logic (unlike copy constructors in C++).</li>
+<li>Copying refers to a simple bitwise copy of memory regions — no custom logic runs.</li>
 <li>Cloning is a more general operation and also allows for custom behavior by implementing the <code>Clone</code> trait.</li>
 <li>Copying does not work on types that implement the <code>Drop</code> trait.</li>
 </ul>

@@ -194,9 +194,13 @@ accepts the same format specification as <code>println!()</code>.</p>
 <p>You can borrow <code>&amp;str</code> slices from <code>String</code> via <code>&amp;</code> and optionally range selection.</p>
 </li>
 <li>
-<p>For C++ programmers: think of <code>&amp;str</code> as <code>const char*</code> from C++, but the one that always points
-to a valid string in memory. Rust <code>String</code> is a rough equivalent of <code>std::string</code> from C++
-(main difference: it can only contain UTF-8 encoded bytes and will never use a small-string optimization).</p>
+<p>For C programmers: think of <code>&amp;str</code> as <code>const char*</code> from C, but one that always points
+to a valid string in memory and knows its length (no null terminator needed).</p>
+</li>
+<li>
+<p>For Python programmers: <code>&amp;str</code> is like an immutable Python string, while <code>String</code> is like
+a mutable string buffer. The key difference from Python is that Rust distinguishes between
+owned strings (<code>String</code>) and borrowed views into strings (<code>&amp;str</code>).</p>
 </li>
 <li>
 <p>How do I modify s1? Here is an example built by iteratively following the guidelines of the compiler.</p>

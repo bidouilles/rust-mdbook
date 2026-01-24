@@ -171,7 +171,8 @@ a type such as <a href="https://doc.rust-lang.org/std/cell/index.html"><code>Cel
 context. Arc stands for &quot;Atomically Reference counted&quot;. If you need to mutate through Arc use <a href="https://doc.rust-lang.org/std/sync/struct.Mutex.html"><code>Mutex</code></a>, <a href="https://doc.rust-lang.org/std/sync/struct.RwLock.html"><code>RwLock</code></a>, or one of the <a href="https://doc.rust-lang.org/std/sync/atomic/index.html"><code>Atomic</code></a> types.</p>
 <details>
 <ul>
-<li>Like C++'s <code>std::shared_ptr</code>.</li>
+<li>Similar to Python's object model — Python uses reference counting internally for all objects.</li>
+<li>The difference: in Rust, you explicitly choose <code>Rc</code> when you need shared ownership; it's not the default.</li>
 <li><code>clone</code> is cheap: creates a pointer to the same allocation and increases the reference count.</li>
 <li><code>make_mut</code> actually clones the inner value if necessary (&quot;clone-on-write&quot;) and returns a mutable reference.</li>
 </ul>

@@ -173,7 +173,7 @@ enough.</li>
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>This is a compile-time error, not a runtime crash. Rust prevents the bug before the program runs.</li>
-<li>In C/C++, this code would compile and cause undefined behavior (use-after-free).</li>
+<li>In C, this code would compile and cause undefined behavior (use-after-free).</li>
 <li>The inner <code>x</code> is dropped when its scope ends (at the <code>}</code>), but <code>ref_x</code> still tries to reference it.</li>
 </ul>
 <p><strong>Common student questions:</strong></p>

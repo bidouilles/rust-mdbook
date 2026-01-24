@@ -164,7 +164,8 @@
 from <code>T</code> directly on a <code>Box&lt;T&gt;</code></a>.</p>
 <details>
 <ul>
-<li><code>Box</code> is like <code>std::unique_ptr</code> in C++.</li>
+<li><code>Box</code> is like <code>malloc</code> in C, but memory is automatically freed when the <code>Box</code> goes out of scope.</li>
+<li>Unlike C where you must call <code>free()</code>, Rust handles cleanup automatically.</li>
 <li>In the above example, you can even leave out the <code>*</code> in the <code>println!</code> statement thanks to <code>Deref</code>.</li>
 </ul>
 </details>

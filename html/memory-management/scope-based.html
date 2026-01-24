@@ -153,43 +153,61 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="scope-based-memory-management"><a class="header" href="#scope-based-memory-management">Scope-Based Memory Management</a></h1>
-<p>Constructors and destructors let you hook into the lifetime of an object.</p>
-<p>By wrapping a pointer in an object, you can free memory when the object is
-destroyed. The compiler guarantees that this happens, even if an exception is
-raised.</p>
-<p>This is often called <em>resource acquisition is initialization</em> (RAII) and gives
-you smart pointers.</p>
-<h2 id="c-example"><a class="header" href="#c-example">C++ Example</a></h2>
-<pre><code class="language-c++">void say_hello(std::unique_ptr&lt;Person&gt; person) {
-  std::cout &lt;&lt; &quot;Hello &quot; &lt;&lt; person-&gt;name &lt;&lt; std::endl;
+<p>The idea of <em>scope-based memory management</em> is to tie resource cleanup to the
+lifetime of a variable. When the variable goes out of scope, the resource is
+automatically released.</p>
+<p>This pattern is often called <em>resource acquisition is initialization</em> (RAII).</p>
+<h2 id="the-problem-with-manual-cleanup"><a class="header" href="#the-problem-with-manual-cleanup">The Problem with Manual Cleanup</a></h2>
+<p>In C, you must remember to call <code>free()</code> before returning:</p>
+<pre><code class="language-c">void process_data(size_t n) {
+    int* data = (int*)malloc(n * sizeof(int));
+    // ... process data ...
+    if (error_condition) {
+        free(data);  // Must remember to free!
+        return;
+    }
+    // ... more processing ...
+    free(data);  // Must free here too!
 }
 </code></pre>
-<ul>
-<li>The <code>std::unique_ptr</code> object is allocated on the stack, and points to
-memory allocated on the heap.</li>
-<li>At the end of <code>say_hello</code>, the <code>std::unique_ptr</code> destructor will run.</li>
-<li>The destructor frees the <code>Person</code> object it points to.</li>
-</ul>
-<p>Special move constructors are used when passing ownership to a function:</p>
-<pre><code class="language-c++">std::unique_ptr&lt;Person&gt; person = find_person(&quot;Carla&quot;);
-say_hello(std::move(person));
+<p>Every exit path needs cleanup code. This is error-prone.</p>
+<h2 id="pythons-approach-context-managers"><a class="header" href="#pythons-approach-context-managers">Python's Approach: Context Managers</a></h2>
+<p>Python solves this for files and resources with the <code>with</code> statement:</p>
+<pre><code class="language-python">with open(&quot;file.txt&quot;) as f:
+    data = f.read()
+# File is automatically closed here, even if an exception occurred
 </code></pre>
+<p>The file is closed automatically when leaving the <code>with</code> block, regardless of
+how you exit (normal return, exception, etc.).</p>
+<h2 id="rusts-approach-automatic-drop"><a class="header" href="#rusts-approach-automatic-drop">Rust's Approach: Automatic Drop</a></h2>
+<p>Rust applies this pattern to <em>all</em> values automatically:</p>
+<pre><pre class="playground"><code class="language-rust editable edition2021">fn say_hello(person: Box&lt;Person&gt;) {
+    println!(&quot;Hello {}&quot;, person.name);
+}
+// person is automatically freed here when it goes out of scope
+</code></pre></pre>
+<ul>
+<li>The <code>Box&lt;Person&gt;</code> is allocated on the heap.</li>
+<li>At the end of <code>say_hello</code>, <code>person</code> goes out of scope.</li>
+<li>Rust automatically calls the destructor (the <code>Drop</code> trait) and frees the memory.</li>
+</ul>
+<p>No explicit cleanup needed, and the compiler guarantees it happens.</p>
 <details>
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>RAII = &quot;Resource Acquisition Is Initialization&quot; — resources tied to object lifetime.</li>
-<li>This C++ pattern is the foundation for Rust's ownership model.</li>
-<li>In C++, RAII is a convention. In Rust, it's enforced by the compiler.</li>
-<li><code>std::move</code> in C++ is similar to Rust's move semantics, but C++ doesn't prevent use-after-move.</li>
+<li>Python's <code>with</code> statement is a limited form of RAII (only for explicitly managed resources).</li>
+<li>Rust applies this automatically to ALL values — no special syntax needed.</li>
+<li>The compiler enforces this — you can't forget to clean up.</li>
 </ul>
 <p><strong>Common student questions:</strong></p>
 <ul>
-<li><em>&quot;What if I forget std::move in C++?&quot;</em> - It might compile but do the wrong thing (copy instead of move, or compile error depending on type).</li>
-<li><em>&quot;How is Rust different?&quot;</em> - In Rust, moves are the default, and the compiler prevents use-after-move.</li>
-<li><em>&quot;What resources besides memory use RAII?&quot;</em> - File handles, network sockets, mutex locks, database connections — anything that needs cleanup.</li>
+<li><em>&quot;How is Rust different from Python's with?&quot;</em> - In Python, you must explicitly use <code>with</code>. In Rust, ALL values get automatic cleanup. Also, Rust has no garbage collector — cleanup happens immediately when scope ends.</li>
+<li><em>&quot;What resources besides memory use this pattern?&quot;</em> - File handles, network sockets, mutex locks, database connections — anything that needs cleanup.</li>
+<li><em>&quot;When does cleanup happen?&quot;</em> - Immediately when the variable goes out of scope, not later during garbage collection.</li>
 </ul>
 <p><strong>Teaching tip:</strong>
-This slide sets up <em>why</em> Rust's approach is valuable. Emphasize that C++ has the right idea but can't fully enforce it.</p>
+Emphasize that Rust makes the &quot;safe by default&quot; behavior automatic, unlike Python where you must remember to use <code>with</code>.</p>
 </details>
 
                     </main>

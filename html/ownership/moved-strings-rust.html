@@ -178,7 +178,7 @@
 <ul>
 <li><em>&quot;What happens if I try to use s1 after the move?&quot;</em> - Compile error! Rust prevents use-after-move at compile time.</li>
 <li><em>&quot;Why not just copy the data?&quot;</em> - Copying could be expensive for large data. Move is always cheap (fixed size metadata).</li>
-<li><em>&quot;Is this like C++ std::move?&quot;</em> - Similar concept, but Rust's move is the default for non-Copy types, and the compiler enforces you can't use the moved-from value.</li>
+<li><em>&quot;How is this different from Python?&quot;</em> - In Python, <code>s2 = s1</code> creates two references to the same object. In Rust, ownership transfers and <code>s1</code> becomes invalid.</li>
 <li><em>&quot;When would I want to copy instead?&quot;</em> - Use <code>.clone()</code> explicitly when you need independent copies.</li>
 </ul>
 <p><strong>Teaching tip:</strong>
@@ -192,7 +192,7 @@ Walk through what happens at each line: creation, assignment (move), and going o
                             <a rel="prev" href="../ownership/move-semantics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next prefetch" href="../ownership/double-free-modern-cpp.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../ownership/double-free-problem.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -204,7 +204,7 @@ Walk through what happens at each line: creation, assignment (move), and going o
                     <a rel="prev" href="../ownership/move-semantics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next prefetch" href="../ownership/double-free-modern-cpp.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../ownership/double-free-problem.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

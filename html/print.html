@@ -160,11 +160,10 @@ about Rust and aim to:</p>
 <li>Show interoperability with C</li>
 </ul>
 <h2 id="assumptions"><a class="header" href="#assumptions">Assumptions</a></h2>
-<p>The course assumes that you already know how to program. Rust is a statically
-typed language and we will sometimes make comparisons with C and C++ to better
-explain or contrast the Rust approach.</p>
-<p>If you know how to program in a dynamically typed language such as Python or
-JavaScript, then you will be able to follow along just fine too.</p>
+<p>The course assumes that you already know how to program in C and Python. Rust is a statically
+typed language and we will sometimes make comparisons with C (for low-level concepts like
+memory management and pointers) and Python (for higher-level concepts like iterators and
+error handling) to better explain or contrast the Rust approach.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="course-structure"><a class="header" href="#course-structure">Course Structure</a></h1>
 <p>The course is fast paced and covers a lot of ground:</p>
 <ul>
@@ -438,7 +437,7 @@ we recommend a break every hour!
  --><div style="break-before: page; page-break-before: always;"></div><h1 id="what-is-rust"><a class="header" href="#what-is-rust">What is Rust?</a></h1>
 <p>Rust is a new programming language which had its <a href="https://blog.rust-lang.org/2015/05/15/Rust-1.0.html">1.0 release in 2015</a>:</p>
 <ul>
-<li>Rust is a statically compiled language in a similar role as C++
+<li>Rust is a statically compiled language in a similar role as C
 <ul>
 <li><code>rustc</code> uses LLVM as its backend.</li>
 </ul>
@@ -461,7 +460,7 @@ architectures</a>:
 </li>
 </ul>
 <details>
-<p>Rust fits in the same area as C++:</p>
+<p>Rust fits in the same area as C:</p>
 <ul>
 <li>High flexibility.</li>
 <li>High level of control.</li>
@@ -480,7 +479,7 @@ program:</p>
 <p>What you see:</p>
 <ul>
 <li>Functions are introduced with <code>fn</code>.</li>
-<li>Blocks are delimited by curly braces like in C and C++.</li>
+<li>Blocks are delimited by curly braces like in C.</li>
 <li>The <code>main</code> function is the entry point of the program.</li>
 <li>Rust has hygienic macros, <code>println!</code> is an example of this.</li>
 <li>Rust strings are UTF-8 encoded and can contain any Unicode character.</li>
@@ -491,7 +490,7 @@ a ton of it over the next four days so we start small with something familiar.</
 <p>Key points:</p>
 <ul>
 <li>
-<p>Rust is very much like other languages in the C/C++/Java tradition. It is
+<p>Rust is very much like other languages in the C tradition. It is
 imperative (not functional) and it doesn't try to reinvent things unless
 absolutely necessary.</p>
 </li>
@@ -556,19 +555,18 @@ students become familiar with searching in the standard library.</p>
 <li>Modern language features.</li>
 </ul>
 <details>
-<p>Make sure to ask the class which languages they have experience with. Depending
-on the answer you can highlight different features of Rust:</p>
+<p>Key points to highlight for students with C and Python experience:</p>
 <ul>
 <li>
-<p>Experience with C or C++: Rust eliminates a whole class of <em>runtime errors</em>
-via the borrow checker. You get performance like in C and C++, but you don't
+<p>Coming from C: Rust eliminates a whole class of <em>runtime errors</em>
+via the borrow checker. You get performance like in C, but you don't
 have the memory unsafety issues. In addition, you get a modern language with
 constructs like pattern matching and built-in dependency management.</p>
 </li>
 <li>
-<p>Experience with Java, Go, Python, JavaScript...: You get the same memory safety
-as in those languages, plus a similar high-level language feeling. In addition
-you get fast and predictable performance like C and C++ (no garbage collector)
+<p>Coming from Python: You get similar memory safety as in Python, plus a similar
+high-level language feeling with iterators, pattern matching, and expressive syntax.
+In addition you get fast and predictable performance like C (no garbage collector)
 as well as access to low-level hardware (should you need it)</p>
 </li>
 </ul>
@@ -683,7 +681,7 @@ IDEs and text editors.</p>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="basic-syntax"><a class="header" href="#basic-syntax">Basic Syntax</a></h1>
-<p>Much of the Rust syntax will be familiar to you from C, C++ or Java:</p>
+<p>Much of the Rust syntax will be familiar to you from C and Python:</p>
 <ul>
 <li>Blocks and scopes are delimited by curly braces.</li>
 <li>Line comments are started with <code>//</code>, block comments are delimited by <code>/* ... */</code>.</li>
@@ -823,7 +821,7 @@ programming languages.</li>
 <p>T is a generic type</p>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="references"><a class="header" href="#references">References</a></h1>
-<p>Like C++, Rust has references:</p>
+<p>Like C pointers, Rust has references:</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     let mut x: i32 = 10;
     let ref_x: &amp;mut i32 = &amp;mut x;
@@ -833,7 +831,7 @@ programming languages.</li>
 </code></pre></pre>
 <p>Some notes:</p>
 <ul>
-<li>We must dereference <code>ref_x</code> when assigning to it, similar to C and C++ pointers.</li>
+<li>We must dereference <code>ref_x</code> when assigning to it, similar to C pointers.</li>
 <li>Rust will auto-dereference in some cases, in particular when invoking
 methods (try <code>ref_x.count_ones()</code>).</li>
 <li>References that are declared as <code>mut</code> can be bound to different values over their lifetime.</li>
@@ -866,7 +864,7 @@ enough.</li>
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>This is a compile-time error, not a runtime crash. Rust prevents the bug before the program runs.</li>
-<li>In C/C++, this code would compile and cause undefined behavior (use-after-free).</li>
+<li>In C, this code would compile and cause undefined behavior (use-after-free).</li>
 <li>The inner <code>x</code> is dropped when its scope ends (at the <code>}</code>), but <code>ref_x</code> still tries to reference it.</li>
 </ul>
 <p><strong>Common student questions:</strong></p>
@@ -979,9 +977,13 @@ accepts the same format specification as <code>println!()</code>.</p>
 <p>You can borrow <code>&amp;str</code> slices from <code>String</code> via <code>&amp;</code> and optionally range selection.</p>
 </li>
 <li>
-<p>For C++ programmers: think of <code>&amp;str</code> as <code>const char*</code> from C++, but the one that always points
-to a valid string in memory. Rust <code>String</code> is a rough equivalent of <code>std::string</code> from C++
-(main difference: it can only contain UTF-8 encoded bytes and will never use a small-string optimization).</p>
+<p>For C programmers: think of <code>&amp;str</code> as <code>const char*</code> from C, but one that always points
+to a valid string in memory and knows its length (no null terminator needed).</p>
+</li>
+<li>
+<p>For Python programmers: <code>&amp;str</code> is like an immutable Python string, while <code>String</code> is like
+a mutable string buffer. The key difference from Python is that Rust distinguishes between
+owned strings (<code>String</code>) and borrowed views into strings (<code>&amp;str</code>).</p>
 </li>
 <li>
 <p>How do I modify s1? Here is an example built by iteratively following the guidelines of the compiler.</p>
@@ -1167,8 +1169,8 @@ their state if you navigate away from the page.</p>
 <!-- [solutions]: solutions-morning.md -->
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="implicit-conversions"><a class="header" href="#implicit-conversions">Implicit Conversions</a></h1>
-<p>Rust will not automatically apply <em>implicit conversions</em> between types (<a href="https://en.cppreference.com/w/cpp/language/implicit_conversion">unlike
-C++</a>). You can see this in a program like this:</p>
+<p>Rust will not automatically apply <em>implicit conversions</em> between types (<a href="https://en.cppreference.com/w/c/language/conversion">unlike
+C</a>). You can see this in a program like this:</p>
 <pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">fn multiply(x: i16, y: i16) -&gt; i16 {
     x * y
 }
@@ -1614,7 +1616,7 @@ same scope:</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="memory-management"><a class="header" href="#memory-management">Memory Management</a></h1>
 <p>Traditionally, languages have fallen into two broad categories:</p>
 <ul>
-<li>Full control via manual memory management: C, C++, Pascal, ...</li>
+<li>Full control via manual memory management: C, Pascal, ...</li>
 <li>Full safety via automatic memory management at runtime: Java, Python, Go, Haskell, ...</li>
 </ul>
 <p>Rust offers a new mix:</p>
@@ -1626,7 +1628,7 @@ management.</p>
 <p>First, let's refresh how memory management works.</p>
 <details>
 <ul>
-<li>C/C++ give full control but require manual memory management, leading to bugs
+<li>C gives full control but requires manual memory management, leading to bugs
 like use-after-free, double-free, and memory leaks.</li>
 <li>Languages with garbage collection (Java, Go, Python) are safe but have
 runtime overhead and less predictable performance.</li>
@@ -1705,7 +1707,7 @@ pointer is lost and we cannot deallocate the memory.</p>
 <ul>
 <li>Manual memory management requires perfect discipline — every malloc needs a free.</li>
 <li>Common bugs: use-after-free, double-free, memory leaks, buffer overflows.</li>
-<li>These bugs cause security vulnerabilities (CVEs) in C/C++ codebases regularly.</li>
+<li>These bugs cause security vulnerabilities (CVEs) in C codebases regularly.</li>
 <li>Error paths make manual management especially error-prone.</li>
 </ul>
 <p><strong>Common student questions:</strong></p>
@@ -1719,43 +1721,61 @@ pointer is lost and we cannot deallocate the memory.</p>
 Microsoft reports ~70% of their security vulnerabilities are memory safety issues. This is why Rust's memory safety without GC is revolutionary.</p>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scope-based-memory-management"><a class="header" href="#scope-based-memory-management">Scope-Based Memory Management</a></h1>
-<p>Constructors and destructors let you hook into the lifetime of an object.</p>
-<p>By wrapping a pointer in an object, you can free memory when the object is
-destroyed. The compiler guarantees that this happens, even if an exception is
-raised.</p>
-<p>This is often called <em>resource acquisition is initialization</em> (RAII) and gives
-you smart pointers.</p>
-<h2 id="c-example-1"><a class="header" href="#c-example-1">C++ Example</a></h2>
-<pre><code class="language-c++">void say_hello(std::unique_ptr&lt;Person&gt; person) {
-  std::cout &lt;&lt; &quot;Hello &quot; &lt;&lt; person-&gt;name &lt;&lt; std::endl;
+<p>The idea of <em>scope-based memory management</em> is to tie resource cleanup to the
+lifetime of a variable. When the variable goes out of scope, the resource is
+automatically released.</p>
+<p>This pattern is often called <em>resource acquisition is initialization</em> (RAII).</p>
+<h2 id="the-problem-with-manual-cleanup"><a class="header" href="#the-problem-with-manual-cleanup">The Problem with Manual Cleanup</a></h2>
+<p>In C, you must remember to call <code>free()</code> before returning:</p>
+<pre><code class="language-c">void process_data(size_t n) {
+    int* data = (int*)malloc(n * sizeof(int));
+    // ... process data ...
+    if (error_condition) {
+        free(data);  // Must remember to free!
+        return;
+    }
+    // ... more processing ...
+    free(data);  // Must free here too!
 }
 </code></pre>
-<ul>
-<li>The <code>std::unique_ptr</code> object is allocated on the stack, and points to
-memory allocated on the heap.</li>
-<li>At the end of <code>say_hello</code>, the <code>std::unique_ptr</code> destructor will run.</li>
-<li>The destructor frees the <code>Person</code> object it points to.</li>
-</ul>
-<p>Special move constructors are used when passing ownership to a function:</p>
-<pre><code class="language-c++">std::unique_ptr&lt;Person&gt; person = find_person(&quot;Carla&quot;);
-say_hello(std::move(person));
+<p>Every exit path needs cleanup code. This is error-prone.</p>
+<h2 id="pythons-approach-context-managers"><a class="header" href="#pythons-approach-context-managers">Python's Approach: Context Managers</a></h2>
+<p>Python solves this for files and resources with the <code>with</code> statement:</p>
+<pre><code class="language-python">with open(&quot;file.txt&quot;) as f:
+    data = f.read()
+# File is automatically closed here, even if an exception occurred
 </code></pre>
+<p>The file is closed automatically when leaving the <code>with</code> block, regardless of
+how you exit (normal return, exception, etc.).</p>
+<h2 id="rusts-approach-automatic-drop"><a class="header" href="#rusts-approach-automatic-drop">Rust's Approach: Automatic Drop</a></h2>
+<p>Rust applies this pattern to <em>all</em> values automatically:</p>
+<pre><pre class="playground"><code class="language-rust editable edition2021">fn say_hello(person: Box&lt;Person&gt;) {
+    println!(&quot;Hello {}&quot;, person.name);
+}
+// person is automatically freed here when it goes out of scope
+</code></pre></pre>
+<ul>
+<li>The <code>Box&lt;Person&gt;</code> is allocated on the heap.</li>
+<li>At the end of <code>say_hello</code>, <code>person</code> goes out of scope.</li>
+<li>Rust automatically calls the destructor (the <code>Drop</code> trait) and frees the memory.</li>
+</ul>
+<p>No explicit cleanup needed, and the compiler guarantees it happens.</p>
 <details>
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>RAII = &quot;Resource Acquisition Is Initialization&quot; — resources tied to object lifetime.</li>
-<li>This C++ pattern is the foundation for Rust's ownership model.</li>
-<li>In C++, RAII is a convention. In Rust, it's enforced by the compiler.</li>
-<li><code>std::move</code> in C++ is similar to Rust's move semantics, but C++ doesn't prevent use-after-move.</li>
+<li>Python's <code>with</code> statement is a limited form of RAII (only for explicitly managed resources).</li>
+<li>Rust applies this automatically to ALL values — no special syntax needed.</li>
+<li>The compiler enforces this — you can't forget to clean up.</li>
 </ul>
 <p><strong>Common student questions:</strong></p>
 <ul>
-<li><em>&quot;What if I forget std::move in C++?&quot;</em> - It might compile but do the wrong thing (copy instead of move, or compile error depending on type).</li>
-<li><em>&quot;How is Rust different?&quot;</em> - In Rust, moves are the default, and the compiler prevents use-after-move.</li>
-<li><em>&quot;What resources besides memory use RAII?&quot;</em> - File handles, network sockets, mutex locks, database connections — anything that needs cleanup.</li>
+<li><em>&quot;How is Rust different from Python's with?&quot;</em> - In Python, you must explicitly use <code>with</code>. In Rust, ALL values get automatic cleanup. Also, Rust has no garbage collector — cleanup happens immediately when scope ends.</li>
+<li><em>&quot;What resources besides memory use this pattern?&quot;</em> - File handles, network sockets, mutex locks, database connections — anything that needs cleanup.</li>
+<li><em>&quot;When does cleanup happen?&quot;</em> - Immediately when the variable goes out of scope, not later during garbage collection.</li>
 </ul>
 <p><strong>Teaching tip:</strong>
-This slide sets up <em>why</em> Rust's approach is valuable. Emphasize that C++ has the right idea but can't fully enforce it.</p>
+Emphasize that Rust makes the &quot;safe by default&quot; behavior automatic, unlike Python where you must remember to use <code>with</code>.</p>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="automatic-memory-management"><a class="header" href="#automatic-memory-management">Automatic Memory Management</a></h1>
 <p>An alternative to manual and scope-based memory management is automatic memory
@@ -1791,7 +1811,7 @@ management:</p>
 <ul>
 <li>Safe and correct like Java, but without a garbage collector.</li>
 <li>Depending on which abstraction (or combination of abstractions) you choose, can be a single unique pointer, reference counted, or atomically reference counted.</li>
-<li>Scope-based like C++, but the compiler enforces full adherence.</li>
+<li>Scope-based with automatic cleanup (like Python's <code>with</code>, but for everything).</li>
 <li>A Rust user can choose the right abstraction for the situation, some even have no cost at runtime like C.</li>
 </ul>
 <p>It achieves this by modeling <em>ownership</em> explicitly.</p>
@@ -1828,7 +1848,7 @@ Emphasize that this is the &quot;aha moment&quot; — Rust gets the best of all 
 <li>Safe and correct.</li>
 </ul>
 </li>
-<li>Scope-based like C++:
+<li>Scope-based (RAII pattern):
 <ul>
 <li>Partially automatic.</li>
 <li>No runtime overhead.</li>
@@ -1857,7 +1877,7 @@ Emphasize that this is the &quot;aha moment&quot; — Rust gets the best of all 
 <li>Destructor delays.</li>
 </ul>
 </li>
-<li>Scope-based like C++:
+<li>Scope-based (RAII pattern):
 <ul>
 <li>Complex, opt-in by programmer.</li>
 <li>Potential for use-after-free.</li>
@@ -1930,14 +1950,15 @@ fn main() {
 <li>There is always <em>exactly</em> one variable binding which owns a value.</li>
 </ul>
 <details>
+<p><strong>Key points for speakers:</strong></p>
 <ul>
-<li>
-<p>Mention that this is the opposite of the defaults in C++, which copies by value unless you use <code>std::move</code> (and the move constructor is defined!).</p>
-</li>
-<li>
-<p>In Rust, your clones are explicit (by using <code>clone</code>).</p>
-</li>
+<li>Move semantics are Rust's default for non-Copy types — no special syntax needed.</li>
+<li>This is different from Python, where assignment creates a new reference to the same object.</li>
+<li>In Rust, clones are always explicit (by using <code>clone</code>), making performance costs visible.</li>
 </ul>
+<p><strong>Comparison with Python:</strong>
+In Python, <code>s2 = s1</code> makes both variables point to the same object (shared reference).
+In Rust, <code>let s2 = s1</code> <em>moves</em> ownership — only <code>s2</code> is valid after this.</p>
 </details><div style="break-before: page; page-break-before: always;"></div><h1 id="moved-strings-in-rust"><a class="header" href="#moved-strings-in-rust">Moved Strings in Rust</a></h1>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     let s1: String = String::from(&quot;Rust&quot;);
@@ -1964,43 +1985,71 @@ fn main() {
 <ul>
 <li><em>&quot;What happens if I try to use s1 after the move?&quot;</em> - Compile error! Rust prevents use-after-move at compile time.</li>
 <li><em>&quot;Why not just copy the data?&quot;</em> - Copying could be expensive for large data. Move is always cheap (fixed size metadata).</li>
-<li><em>&quot;Is this like C++ std::move?&quot;</em> - Similar concept, but Rust's move is the default for non-Copy types, and the compiler enforces you can't use the moved-from value.</li>
+<li><em>&quot;How is this different from Python?&quot;</em> - In Python, <code>s2 = s1</code> creates two references to the same object. In Rust, ownership transfers and <code>s1</code> becomes invalid.</li>
 <li><em>&quot;When would I want to copy instead?&quot;</em> - Use <code>.clone()</code> explicitly when you need independent copies.</li>
 </ul>
 <p><strong>Teaching tip:</strong>
 Walk through what happens at each line: creation, assignment (move), and going out of scope (drop of s2, nothing for s1).</p>
 </details>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="double-frees-in-modern-c"><a class="header" href="#double-frees-in-modern-c">Double Frees in Modern C++</a></h1>
-<p>Modern C++ solves this differently:</p>
-<pre><code class="language-c++">std::string s1 = &quot;Cpp&quot;;
-std::string s2 = s1;  // Duplicate the data in s1.
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-double-free-problem"><a class="header" href="#the-double-free-problem">The Double-Free Problem</a></h1>
+<p>To understand why Rust uses move semantics, let's look at how other languages
+handle this problem.</p>
+<h2 id="the-problem-in-c"><a class="header" href="#the-problem-in-c">The Problem in C</a></h2>
+<p>In C, if you copy a pointer, both copies point to the same memory:</p>
+<pre><code class="language-c">char* s1 = strdup(&quot;Hello&quot;);
+char* s2 = s1;  // Both point to the same memory!
+free(s1);
+free(s2);       // CRASH: double-free!
+</code></pre>
+<p>After this, you have two pointers to the same memory. If you free both, you get
+a <strong>double-free bug</strong> — undefined behavior that often causes crashes or security
+vulnerabilities.</p>
+<div style='width:100%; height:272px;'><style type="text/css">svg { width: 100% !important; }</style><svg xmlns="http://www.w3.org/2000/svg" width="480" height="272" class="svgbob"><style>.svgbob line, .svgbob path, .svgbob circle, .svgbob rect, .svgbob polygon {  stroke: var(--fg);  stroke-width: 2;  stroke-opacity: 1;  fill-opacity: 1;  stroke-linecap: round;  stroke-linejoin: miter;}.svgbob text {  white-space: pre;  fill: var(--fg);  font-family: Iosevka Fixed, monospace;  font-size: 14px;}.svgbob rect.backdrop {  stroke: none;  fill: transparent;}.svgbob .broken {  stroke-dasharray: 8;}.svgbob .filled {  fill: black;}.svgbob .bg_filled {  fill: transparent;  stroke-width: 1;}.svgbob .nofill {  fill: transparent;}.svgbob .end_marked_arrow {  marker-end: url(#arrow);}.svgbob .start_marked_arrow {  marker-start: url(#arrow);}.svgbob .end_marked_diamond {  marker-end: url(#diamond);}.svgbob .start_marked_diamond {  marker-start: url(#diamond);}.svgbob .end_marked_circle {  marker-end: url(#circle);}.svgbob .start_marked_circle {  marker-start: url(#circle);}.svgbob .end_marked_open_circle {  marker-end: url(#open_circle);}.svgbob .start_marked_open_circle {  marker-start: url(#open_circle);}.svgbob .end_marked_big_open_circle {  marker-end: url(#big_open_circle);}.svgbob .start_marked_big_open_circle {  marker-start: url(#big_open_circle);}</style><defs><marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 0,4 4,2 0,0"></polygon></marker><marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,2 2,0 4,2 2,4 0,2"></polygon></marker><marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="filled"></circle></marker><marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="bg_filled"></circle></marker><marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="3" class="bg_filled"></circle></marker></defs><rect class="backdrop" x="0" y="0" width="480" height="272"></rect><text x="10" y="12" >Stack</text><line x1="24" y1="24" x2="32" y2="24" class="solid"></line><line x1="40" y1="24" x2="48" y2="24" class="solid"></line><text x="282" y="12" >Heap</text><line x1="296" y1="24" x2="304" y2="24" class="solid"></line><line x1="312" y1="24" x2="320" y2="24" class="solid"></line><text x="42" y="60" >s1</text><text x="50" y="92" >ptr</text><line x1="176" y1="88" x2="164" y2="88" class="solid end_marked_open_circle"></line><polygon points="296,84 304,88 296,92" class="filled"></polygon><text x="322" y="92" >H</text><text x="354" y="92" >e</text><text x="386" y="92" >l</text><text x="418" y="92" >l</text><text x="42" y="140" >s2</text><text x="50" y="172" >ptr</text><line x1="176" y1="168" x2="164" y2="168" class="solid end_marked_open_circle"></line><line x1="56" y1="24" x2="64" y2="24" class="solid"></line><line x1="72" y1="24" x2="80" y2="24" class="solid"></line><line x1="88" y1="24" x2="96" y2="24" class="solid"></line><line x1="104" y1="24" x2="112" y2="24" class="solid"></line><line x1="120" y1="24" x2="128" y2="24" class="solid"></line><line x1="136" y1="24" x2="144" y2="24" class="solid"></line><line x1="152" y1="24" x2="160" y2="24" class="solid"></line><line x1="168" y1="24" x2="176" y2="24" class="solid"></line><line x1="184" y1="24" x2="192" y2="24" class="solid"></line><line x1="200" y1="24" x2="208" y2="24" class="solid"></line><line x1="328" y1="24" x2="336" y2="24" class="solid"></line><line x1="344" y1="24" x2="352" y2="24" class="solid"></line><line x1="360" y1="24" x2="368" y2="24" class="solid"></line><line x1="376" y1="24" x2="384" y2="24" class="solid"></line><line x1="392" y1="24" x2="400" y2="24" class="solid"></line><line x1="408" y1="24" x2="416" y2="24" class="solid"></line><line x1="424" y1="24" x2="432" y2="24" class="solid"></line><line x1="440" y1="24" x2="448" y2="24" class="solid"></line><line x1="296" y1="200" x2="304" y2="200" class="solid"></line><line x1="312" y1="200" x2="320" y2="200" class="solid"></line><line x1="328" y1="200" x2="336" y2="200" class="solid"></line><line x1="344" y1="200" x2="352" y2="200" class="solid"></line><line x1="360" y1="200" x2="368" y2="200" class="solid"></line><line x1="376" y1="200" x2="384" y2="200" class="solid"></line><line x1="392" y1="200" x2="400" y2="200" class="solid"></line><line x1="408" y1="200" x2="416" y2="200" class="solid"></line><line x1="424" y1="200" x2="432" y2="200" class="solid"></line><line x1="440" y1="200" x2="448" y2="200" class="solid"></line><line x1="24" y1="216" x2="32" y2="216" class="solid"></line><line x1="40" y1="216" x2="48" y2="216" class="solid"></line><line x1="56" y1="216" x2="64" y2="216" class="solid"></line><line x1="72" y1="216" x2="80" y2="216" class="solid"></line><line x1="88" y1="216" x2="96" y2="216" class="solid"></line><line x1="104" y1="216" x2="112" y2="216" class="solid"></line><line x1="120" y1="216" x2="128" y2="216" class="solid"></line><line x1="136" y1="216" x2="144" y2="216" class="solid"></line><line x1="152" y1="216" x2="160" y2="216" class="solid"></line><line x1="168" y1="216" x2="176" y2="216" class="solid"></line><line x1="184" y1="216" x2="192" y2="216" class="solid"></line><line x1="200" y1="216" x2="208" y2="216" class="solid"></line><text x="58" y="252" >Both</text><text x="98" y="252" >s1</text><text x="122" y="252" >and</text><text x="154" y="252" >s2</text><text x="178" y="252" >point</text><text x="226" y="252" >to</text><text x="250" y="252" >the</text><text x="282" y="252" >same</text><text x="322" y="252" >memory!</text><g><path d="M 8,24 A 4,4 0,0,0 4,28" class="nofill"></path><line x1="4" y1="28" x2="4" y2="212" class="broken"></line><line x1="8" y1="24" x2="16" y2="24" class="solid"></line><path d="M 4,212 A 4,4 0,0,0 8,216" class="nofill"></path><line x1="8" y1="216" x2="16" y2="216" class="solid"></line></g><g><line x1="216" y1="24" x2="224" y2="24" class="solid"></line><path d="M 224,24 A 4,4 0,0,1 228,28" class="nofill"></path><line x1="228" y1="28" x2="228" y2="212" class="broken"></line><line x1="216" y1="216" x2="224" y2="216" class="solid"></line><path d="M 228,212 A 4,4 0,0,1 224,216" class="nofill"></path></g><g><path d="M 280,24 A 4,4 0,0,0 276,28" class="nofill"></path><line x1="276" y1="28" x2="276" y2="196" class="broken"></line><line x1="280" y1="24" x2="288" y2="24" class="solid"></line><path d="M 276,196 A 4,4 0,0,0 280,200" class="nofill"></path><line x1="280" y1="200" x2="288" y2="200" class="solid"></line></g><g><line x1="36" y1="72" x2="196" y2="72" class="solid"></line><line x1="36" y1="72" x2="36" y2="104" class="solid"></line><line x1="132" y1="72" x2="132" y2="104" class="solid"></line><line x1="196" y1="72" x2="196" y2="104" class="solid"></line><line x1="36" y1="104" x2="196" y2="104" class="solid"></line></g><g><line x1="308" y1="72" x2="436" y2="72" class="solid"></line><line x1="308" y1="72" x2="308" y2="104" class="solid"></line><line x1="340" y1="72" x2="340" y2="104" class="solid"></line><line x1="372" y1="72" x2="372" y2="104" class="solid"></line><line x1="404" y1="72" x2="404" y2="104" class="solid"></line><line x1="436" y1="72" x2="436" y2="104" class="solid"></line><line x1="308" y1="104" x2="436" y2="104" class="solid"></line></g><g><line x1="176" y1="88" x2="296" y2="88" class="solid"></line><line x1="252" y1="88" x2="252" y2="164" class="solid"></line><line x1="176" y1="168" x2="248" y2="168" class="solid"></line><path d="M 252,164 A 4,4 0,0,1 248,168" class="nofill"></path></g><g><line x1="36" y1="152" x2="196" y2="152" class="solid"></line><line x1="36" y1="152" x2="36" y2="184" class="solid"></line><line x1="132" y1="152" x2="132" y2="184" class="solid"></line><line x1="196" y1="152" x2="196" y2="184" class="solid"></line><line x1="36" y1="184" x2="196" y2="184" class="solid"></line></g><g><line x1="456" y1="24" x2="464" y2="24" class="solid"></line><path d="M 464,24 A 4,4 0,0,1 468,28" class="nofill"></path><line x1="468" y1="28" x2="468" y2="196" class="broken"></line><line x1="456" y1="200" x2="464" y2="200" class="solid"></line><path d="M 468,196 A 4,4 0,0,1 464,200" class="nofill"></path></g></svg></div>
+<h2 id="pythons-solution-reference-counting"><a class="header" href="#pythons-solution-reference-counting">Python's Solution: Reference Counting</a></h2>
+<p>Python avoids this with automatic memory management:</p>
+<pre><code class="language-python">s1 = &quot;Hello&quot;
+s2 = s1  # Both reference the same object
+# Python tracks references and frees memory when count reaches 0
 </code></pre>
 <ul>
-<li>The heap data from <code>s1</code> is duplicated and <code>s2</code> gets its own independent copy.</li>
-<li>When <code>s1</code> and <code>s2</code> go out of scope, they each free their own memory.</li>
+<li>Python uses reference counting (and garbage collection for cycles).</li>
+<li>Memory is freed automatically when no references remain.</li>
+<li>Safe, but has runtime overhead (counting references, GC pauses).</li>
 </ul>
-<p>Before copy-assignment:</p>
-<div style='width:100%; height:192px;'><style type="text/css">svg { width: 100% !important; }</style><svg xmlns="http://www.w3.org/2000/svg" width="480" height="192" class="svgbob"><style>.svgbob line, .svgbob path, .svgbob circle, .svgbob rect, .svgbob polygon {  stroke: var(--fg);  stroke-width: 2;  stroke-opacity: 1;  fill-opacity: 1;  stroke-linecap: round;  stroke-linejoin: miter;}.svgbob text {  white-space: pre;  fill: var(--fg);  font-family: Iosevka Fixed, monospace;  font-size: 14px;}.svgbob rect.backdrop {  stroke: none;  fill: transparent;}.svgbob .broken {  stroke-dasharray: 8;}.svgbob .filled {  fill: black;}.svgbob .bg_filled {  fill: transparent;  stroke-width: 1;}.svgbob .nofill {  fill: transparent;}.svgbob .end_marked_arrow {  marker-end: url(#arrow);}.svgbob .start_marked_arrow {  marker-start: url(#arrow);}.svgbob .end_marked_diamond {  marker-end: url(#diamond);}.svgbob .start_marked_diamond {  marker-start: url(#diamond);}.svgbob .end_marked_circle {  marker-end: url(#circle);}.svgbob .start_marked_circle {  marker-start: url(#circle);}.svgbob .end_marked_open_circle {  marker-end: url(#open_circle);}.svgbob .start_marked_open_circle {  marker-start: url(#open_circle);}.svgbob .end_marked_big_open_circle {  marker-end: url(#big_open_circle);}.svgbob .start_marked_big_open_circle {  marker-start: url(#big_open_circle);}</style><defs><marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 0,4 4,2 0,0"></polygon></marker><marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,2 2,0 4,2 2,4 0,2"></polygon></marker><marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="filled"></circle></marker><marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="bg_filled"></circle></marker><marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="3" class="bg_filled"></circle></marker></defs><rect class="backdrop" x="0" y="0" width="480" height="192"></rect><text x="10" y="12" >Stack</text><line x1="24" y1="24" x2="32" y2="24" class="solid"></line><line x1="40" y1="24" x2="48" y2="24" class="solid"></line><text x="282" y="12" >Heap</text><line x1="296" y1="24" x2="304" y2="24" class="solid"></line><line x1="312" y1="24" x2="320" y2="24" class="solid"></line><text x="42" y="60" >s1</text><text x="50" y="92" >ptr</text><line x1="176" y1="88" x2="164" y2="88" class="solid end_marked_open_circle"></line><line x1="176" y1="88" x2="296" y2="88" class="solid"></line><polygon points="296,84 304,88 296,92" class="filled"></polygon><text x="322" y="92" >C</text><text x="362" y="92" >p</text><text x="402" y="92" >p</text><text x="50" y="108" >len</text><text x="178" y="108" >3</text><text x="50" y="124" >capacity</text><text x="178" y="124" >3</text><line x1="56" y1="24" x2="64" y2="24" class="solid"></line><line x1="72" y1="24" x2="80" y2="24" class="solid"></line><line x1="88" y1="24" x2="96" y2="24" class="solid"></line><line x1="104" y1="24" x2="112" y2="24" class="solid"></line><line x1="120" y1="24" x2="128" y2="24" class="solid"></line><line x1="136" y1="24" x2="144" y2="24" class="solid"></line><line x1="152" y1="24" x2="160" y2="24" class="solid"></line><line x1="168" y1="24" x2="176" y2="24" class="solid"></line><line x1="184" y1="24" x2="192" y2="24" class="solid"></line><line x1="200" y1="24" x2="208" y2="24" class="solid"></line><line x1="328" y1="24" x2="336" y2="24" class="solid"></line><line x1="344" y1="24" x2="352" y2="24" class="solid"></line><line x1="360" y1="24" x2="368" y2="24" class="solid"></line><line x1="376" y1="24" x2="384" y2="24" class="solid"></line><line x1="392" y1="24" x2="400" y2="24" class="solid"></line><line x1="408" y1="24" x2="416" y2="24" class="solid"></line><line x1="424" y1="24" x2="432" y2="24" class="solid"></line><line x1="440" y1="24" x2="448" y2="24" class="solid"></line><line x1="296" y1="152" x2="304" y2="152" class="solid"></line><line x1="312" y1="152" x2="320" y2="152" class="solid"></line><line x1="328" y1="152" x2="336" y2="152" class="solid"></line><line x1="344" y1="152" x2="352" y2="152" class="solid"></line><line x1="360" y1="152" x2="368" y2="152" class="solid"></line><line x1="376" y1="152" x2="384" y2="152" class="solid"></line><line x1="392" y1="152" x2="400" y2="152" class="solid"></line><line x1="408" y1="152" x2="416" y2="152" class="solid"></line><line x1="424" y1="152" x2="432" y2="152" class="solid"></line><line x1="440" y1="152" x2="448" y2="152" class="solid"></line><line x1="24" y1="168" x2="32" y2="168" class="solid"></line><line x1="40" y1="168" x2="48" y2="168" class="solid"></line><line x1="56" y1="168" x2="64" y2="168" class="solid"></line><line x1="72" y1="168" x2="80" y2="168" class="solid"></line><line x1="88" y1="168" x2="96" y2="168" class="solid"></line><line x1="104" y1="168" x2="112" y2="168" class="solid"></line><line x1="120" y1="168" x2="128" y2="168" class="solid"></line><line x1="136" y1="168" x2="144" y2="168" class="solid"></line><line x1="152" y1="168" x2="160" y2="168" class="solid"></line><line x1="168" y1="168" x2="176" y2="168" class="solid"></line><line x1="184" y1="168" x2="192" y2="168" class="solid"></line><line x1="200" y1="168" x2="208" y2="168" class="solid"></line><g><path d="M 8,24 A 4,4 0,0,0 4,28" class="nofill"></path><line x1="4" y1="28" x2="4" y2="164" class="broken"></line><line x1="8" y1="24" x2="16" y2="24" class="solid"></line><path d="M 4,164 A 4,4 0,0,0 8,168" class="nofill"></path><line x1="8" y1="168" x2="16" y2="168" class="solid"></line></g><g><line x1="216" y1="24" x2="224" y2="24" class="solid"></line><path d="M 224,24 A 4,4 0,0,1 228,28" class="nofill"></path><line x1="228" y1="28" x2="228" y2="164" class="broken"></line><line x1="216" y1="168" x2="224" y2="168" class="solid"></line><path d="M 228,164 A 4,4 0,0,1 224,168" class="nofill"></path></g><g><path d="M 280,24 A 4,4 0,0,0 276,28" class="nofill"></path><line x1="276" y1="28" x2="276" y2="148" class="broken"></line><line x1="280" y1="24" x2="288" y2="24" class="solid"></line><path d="M 276,148 A 4,4 0,0,0 280,152" class="nofill"></path><line x1="280" y1="152" x2="288" y2="152" class="solid"></line></g><g><line x1="36" y1="72" x2="196" y2="72" class="solid"></line><line x1="36" y1="72" x2="36" y2="136" class="solid"></line><line x1="132" y1="72" x2="132" y2="136" class="solid"></line><line x1="196" y1="72" x2="196" y2="136" class="solid"></line><line x1="36" y1="136" x2="196" y2="136" class="solid"></line></g><g><line x1="308" y1="72" x2="428" y2="72" class="solid"></line><line x1="308" y1="72" x2="308" y2="104" class="solid"></line><line x1="348" y1="72" x2="348" y2="104" class="solid"></line><line x1="388" y1="72" x2="388" y2="104" class="solid"></line><line x1="428" y1="72" x2="428" y2="104" class="solid"></line><line x1="308" y1="104" x2="428" y2="104" class="solid"></line></g><g><line x1="456" y1="24" x2="464" y2="24" class="solid"></line><path d="M 464,24 A 4,4 0,0,1 468,28" class="nofill"></path><line x1="468" y1="28" x2="468" y2="148" class="broken"></line><line x1="456" y1="152" x2="464" y2="152" class="solid"></line><path d="M 468,148 A 4,4 0,0,1 464,152" class="nofill"></path></g></svg></div>
-<p>After copy-assignment:</p>
-<div style='width:100%; height:304px;'><style type="text/css">svg { width: 100% !important; }</style><svg xmlns="http://www.w3.org/2000/svg" width="480" height="304" class="svgbob"><style>.svgbob line, .svgbob path, .svgbob circle, .svgbob rect, .svgbob polygon {  stroke: var(--fg);  stroke-width: 2;  stroke-opacity: 1;  fill-opacity: 1;  stroke-linecap: round;  stroke-linejoin: miter;}.svgbob text {  white-space: pre;  fill: var(--fg);  font-family: Iosevka Fixed, monospace;  font-size: 14px;}.svgbob rect.backdrop {  stroke: none;  fill: transparent;}.svgbob .broken {  stroke-dasharray: 8;}.svgbob .filled {  fill: black;}.svgbob .bg_filled {  fill: transparent;  stroke-width: 1;}.svgbob .nofill {  fill: transparent;}.svgbob .end_marked_arrow {  marker-end: url(#arrow);}.svgbob .start_marked_arrow {  marker-start: url(#arrow);}.svgbob .end_marked_diamond {  marker-end: url(#diamond);}.svgbob .start_marked_diamond {  marker-start: url(#diamond);}.svgbob .end_marked_circle {  marker-end: url(#circle);}.svgbob .start_marked_circle {  marker-start: url(#circle);}.svgbob .end_marked_open_circle {  marker-end: url(#open_circle);}.svgbob .start_marked_open_circle {  marker-start: url(#open_circle);}.svgbob .end_marked_big_open_circle {  marker-end: url(#big_open_circle);}.svgbob .start_marked_big_open_circle {  marker-start: url(#big_open_circle);}</style><defs><marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 0,4 4,2 0,0"></polygon></marker><marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,2 2,0 4,2 2,4 0,2"></polygon></marker><marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="filled"></circle></marker><marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="bg_filled"></circle></marker><marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="3" class="bg_filled"></circle></marker></defs><rect class="backdrop" x="0" y="0" width="480" height="304"></rect><text x="10" y="12" >Stack</text><line x1="24" y1="24" x2="32" y2="24" class="solid"></line><line x1="40" y1="24" x2="48" y2="24" class="solid"></line><text x="282" y="12" >Heap</text><line x1="296" y1="24" x2="304" y2="24" class="solid"></line><line x1="312" y1="24" x2="320" y2="24" class="solid"></line><text x="42" y="60" >s1</text><text x="50" y="92" >ptr</text><line x1="176" y1="88" x2="164" y2="88" class="solid end_marked_open_circle"></line><line x1="176" y1="88" x2="296" y2="88" class="solid"></line><polygon points="296,84 304,88 296,92" class="filled"></polygon><text x="322" y="92" >C</text><text x="362" y="92" >p</text><text x="402" y="92" >p</text><text x="50" y="108" >len</text><text x="178" y="108" >3</text><text x="50" y="124" >capacity</text><text x="178" y="124" >3</text><text x="42" y="172" >s2</text><text x="50" y="204" >ptr</text><line x1="176" y1="200" x2="164" y2="200" class="solid end_marked_open_circle"></line><line x1="176" y1="200" x2="296" y2="200" class="solid"></line><polygon points="296,196 304,200 296,204" class="filled"></polygon><text x="322" y="204" >C</text><text x="362" y="204" >p</text><text x="402" y="204" >p</text><text x="50" y="220" >len</text><text x="178" y="220" >3</text><text x="50" y="236" >capacity</text><text x="178" y="236" >3</text><line x1="56" y1="24" x2="64" y2="24" class="solid"></line><line x1="72" y1="24" x2="80" y2="24" class="solid"></line><line x1="88" y1="24" x2="96" y2="24" class="solid"></line><line x1="104" y1="24" x2="112" y2="24" class="solid"></line><line x1="120" y1="24" x2="128" y2="24" class="solid"></line><line x1="136" y1="24" x2="144" y2="24" class="solid"></line><line x1="152" y1="24" x2="160" y2="24" class="solid"></line><line x1="168" y1="24" x2="176" y2="24" class="solid"></line><line x1="184" y1="24" x2="192" y2="24" class="solid"></line><line x1="200" y1="24" x2="208" y2="24" class="solid"></line><line x1="328" y1="24" x2="336" y2="24" class="solid"></line><line x1="344" y1="24" x2="352" y2="24" class="solid"></line><line x1="360" y1="24" x2="368" y2="24" class="solid"></line><line x1="376" y1="24" x2="384" y2="24" class="solid"></line><line x1="392" y1="24" x2="400" y2="24" class="solid"></line><line x1="408" y1="24" x2="416" y2="24" class="solid"></line><line x1="424" y1="24" x2="432" y2="24" class="solid"></line><line x1="440" y1="24" x2="448" y2="24" class="solid"></line><line x1="296" y1="264" x2="304" y2="264" class="solid"></line><line x1="312" y1="264" x2="320" y2="264" class="solid"></line><line x1="328" y1="264" x2="336" y2="264" class="solid"></line><line x1="344" y1="264" x2="352" y2="264" class="solid"></line><line x1="360" y1="264" x2="368" y2="264" class="solid"></line><line x1="376" y1="264" x2="384" y2="264" class="solid"></line><line x1="392" y1="264" x2="400" y2="264" class="solid"></line><line x1="408" y1="264" x2="416" y2="264" class="solid"></line><line x1="424" y1="264" x2="432" y2="264" class="solid"></line><line x1="440" y1="264" x2="448" y2="264" class="solid"></line><line x1="24" y1="280" x2="32" y2="280" class="solid"></line><line x1="40" y1="280" x2="48" y2="280" class="solid"></line><line x1="56" y1="280" x2="64" y2="280" class="solid"></line><line x1="72" y1="280" x2="80" y2="280" class="solid"></line><line x1="88" y1="280" x2="96" y2="280" class="solid"></line><line x1="104" y1="280" x2="112" y2="280" class="solid"></line><line x1="120" y1="280" x2="128" y2="280" class="solid"></line><line x1="136" y1="280" x2="144" y2="280" class="solid"></line><line x1="152" y1="280" x2="160" y2="280" class="solid"></line><line x1="168" y1="280" x2="176" y2="280" class="solid"></line><line x1="184" y1="280" x2="192" y2="280" class="solid"></line><line x1="200" y1="280" x2="208" y2="280" class="solid"></line><g><path d="M 8,24 A 4,4 0,0,0 4,28" class="nofill"></path><line x1="4" y1="28" x2="4" y2="276" class="broken"></line><line x1="8" y1="24" x2="16" y2="24" class="solid"></line><path d="M 4,276 A 4,4 0,0,0 8,280" class="nofill"></path><line x1="8" y1="280" x2="16" y2="280" class="solid"></line></g><g><line x1="216" y1="24" x2="224" y2="24" class="solid"></line><path d="M 224,24 A 4,4 0,0,1 228,28" class="nofill"></path><line x1="228" y1="28" x2="228" y2="276" class="broken"></line><line x1="216" y1="280" x2="224" y2="280" class="solid"></line><path d="M 228,276 A 4,4 0,0,1 224,280" class="nofill"></path></g><g><path d="M 280,24 A 4,4 0,0,0 276,28" class="nofill"></path><line x1="276" y1="28" x2="276" y2="260" class="broken"></line><line x1="280" y1="24" x2="288" y2="24" class="solid"></line><path d="M 276,260 A 4,4 0,0,0 280,264" class="nofill"></path><line x1="280" y1="264" x2="288" y2="264" class="solid"></line></g><g><line x1="36" y1="72" x2="196" y2="72" class="solid"></line><line x1="36" y1="72" x2="36" y2="136" class="solid"></line><line x1="132" y1="72" x2="132" y2="136" class="solid"></line><line x1="196" y1="72" x2="196" y2="136" class="solid"></line><line x1="36" y1="136" x2="196" y2="136" class="solid"></line></g><g><line x1="308" y1="72" x2="428" y2="72" class="solid"></line><line x1="308" y1="72" x2="308" y2="104" class="solid"></line><line x1="348" y1="72" x2="348" y2="104" class="solid"></line><line x1="388" y1="72" x2="388" y2="104" class="solid"></line><line x1="428" y1="72" x2="428" y2="104" class="solid"></line><line x1="308" y1="104" x2="428" y2="104" class="solid"></line></g><g><line x1="36" y1="184" x2="196" y2="184" class="solid"></line><line x1="36" y1="184" x2="36" y2="248" class="solid"></line><line x1="132" y1="184" x2="132" y2="248" class="solid"></line><line x1="196" y1="184" x2="196" y2="248" class="solid"></line><line x1="36" y1="248" x2="196" y2="248" class="solid"></line></g><g><line x1="308" y1="184" x2="428" y2="184" class="solid"></line><line x1="308" y1="184" x2="308" y2="216" class="solid"></line><line x1="348" y1="184" x2="348" y2="216" class="solid"></line><line x1="388" y1="184" x2="388" y2="216" class="solid"></line><line x1="428" y1="184" x2="428" y2="216" class="solid"></line><line x1="308" y1="216" x2="428" y2="216" class="solid"></line></g><g><line x1="456" y1="24" x2="464" y2="24" class="solid"></line><path d="M 464,24 A 4,4 0,0,1 468,28" class="nofill"></path><line x1="468" y1="28" x2="468" y2="260" class="broken"></line><line x1="456" y1="264" x2="464" y2="264" class="solid"></line><path d="M 468,260 A 4,4 0,0,1 464,264" class="nofill"></path></g></svg></div>
+<h2 id="rusts-solution-move-semantics"><a class="header" href="#rusts-solution-move-semantics">Rust's Solution: Move Semantics</a></h2>
+<p>Rust takes a different approach — <strong>ownership transfer</strong>:</p>
+<pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
+    let s1 = String::from(&quot;Hello&quot;);
+    let s2 = s1;  // Ownership MOVES to s2
+    // println!(&quot;{s1}&quot;);  // ERROR: s1 is no longer valid!
+    println!(&quot;{s2}&quot;);    // OK: s2 owns the data
+}
+</code></pre></pre>
+<ul>
+<li>After <code>let s2 = s1</code>, only <code>s2</code> is valid.</li>
+<li>The compiler prevents use of <code>s1</code> — no runtime checks needed.</li>
+<li>Memory is freed exactly once, when <code>s2</code> goes out of scope.</li>
+</ul>
 <details>
 <p><strong>Key points for speakers:</strong></p>
 <ul>
-<li>C++ copies by default — this is safe but can be expensive.</li>
-<li>After assignment, <code>s1</code> and <code>s2</code> are completely independent.</li>
-<li>This diagram contrasts with Rust's move semantics shown in the previous slide.</li>
-<li>C++ requires explicit <code>std::move</code> to get move semantics.</li>
+<li>C gives you control but lets you make mistakes (double-free, use-after-free).</li>
+<li>Python is safe but has runtime overhead (reference counting, GC).</li>
+<li>Rust achieves C's performance with Python's safety via compile-time ownership tracking.</li>
 </ul>
 <p><strong>Common student questions:</strong></p>
 <ul>
-<li><em>&quot;Isn't copying safer?&quot;</em> - It avoids some bugs but introduces overhead. For large data, implicit copying is a performance trap.</li>
-<li><em>&quot;How does Rust avoid the copy?&quot;</em> - By moving instead. If you need a copy, you explicitly call <code>.clone()</code>.</li>
-<li><em>&quot;Can C++ do moves like Rust?&quot;</em> - Yes, with <code>std::move</code>, but C++ doesn't prevent use-after-move. The compiler won't stop you from accessing the moved-from object.</li>
-<li><em>&quot;Which is better?&quot;</em> - Rust's approach: safe by default, explicit when you want copies. C++ copies by default, which can be surprising and expensive.</li>
+<li><em>&quot;Why doesn't Rust just use reference counting like Python?&quot;</em> - Reference counting has overhead (incrementing/decrementing counts). Rust's compile-time approach has zero runtime cost.</li>
+<li><em>&quot;What if I need shared ownership?&quot;</em> - Use <code>Rc&lt;T&gt;</code> (single-threaded) or <code>Arc&lt;T&gt;</code> (multi-threaded) — Rust offers reference counting when you need it.</li>
+<li><em>&quot;Isn't the move confusing?&quot;</em> - It takes getting used to, but the compiler guides you. You'll never have a double-free bug.</li>
 </ul>
-<p><strong>Comparison point:</strong>
-In Rust, <code>let s2 = s1;</code> moves. In C++, <code>std::string s2 = s1;</code> copies. Different defaults!</p>
-</details>
+<p><strong>Comparison summary:</strong></p>
+<div class="table-wrapper"><table><thead><tr><th>Language</th><th>Approach</th><th>Safety</th><th>Performance</th></tr></thead><tbody>
+<tr><td>C</td><td>Manual</td><td>Unsafe</td><td>Fast</td></tr>
+<tr><td>Python</td><td>Reference counting + GC</td><td>Safe</td><td>Runtime overhead</td></tr>
+<tr><td>Rust</td><td>Compile-time ownership</td><td>Safe</td><td>Fast</td></tr>
+</tbody></table>
+</div></details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="moves-in-function-calls"><a class="header" href="#moves-in-function-calls">Moves in Function Calls</a></h1>
 <p>When you pass a value to a function, the value is assigned to the function
 parameter. This transfers ownership:</p>
@@ -2044,7 +2093,7 @@ fn main() {
 }
 </code></pre></pre>
 <ul>
-<li>Rust makes it harder than C++ to inadvertently create copies by making move semantics the default, and by forcing programmers to make clones explicit.</li>
+<li>Rust makes it easy to see where copies happen by making move semantics the default. If you need a copy, you must explicitly call <code>.clone()</code>.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="copying-and-cloning"><a class="header" href="#copying-and-cloning">Copying and Cloning</a></h1>
@@ -2075,8 +2124,7 @@ fn main() {
 <details>
 <p>Copying and cloning are not the same thing:</p>
 <ul>
-<li>Copying refers to bitwise copies of memory regions and does not work on arbitrary objects.</li>
-<li>Copying does not allow for custom logic (unlike copy constructors in C++).</li>
+<li>Copying refers to a simple bitwise copy of memory regions — no custom logic runs.</li>
 <li>Cloning is a more general operation and also allows for custom behavior by implementing the <code>Clone</code> trait.</li>
 <li>Copying does not work on types that implement the <code>Drop</code> trait.</li>
 </ul>
@@ -2173,7 +2221,7 @@ fn main() {
 </ul>
 <p>See <a href="https://darkcoding.net/software/return-value-optimization-in-rust/">Graham King's &quot;Return Value Optimization in Rust&quot; post</a></p>
 <ul>
-<li>In C++, copy elision has to be defined in the language specification because constructors can have side effects. In Rust, this is not an issue at all. If RVO did not happen, Rust will always performs a simple and efficient <code>memcpy</code> copy.</li>
+<li>If return value optimization (RVO) did not happen, Rust would simply perform an efficient <code>memcpy</code> copy — there are no constructors with side effects to worry about.</li>
 </ul>
 <p>Elision means dropping, omitting, cutting. It is used for a sound that is not pronounced in a word, for example.</p>
 </details>
@@ -2676,7 +2724,7 @@ fn main() {
 
 * Modules: visibility, paths, and filesystem hierarchy. -->
 <div style="break-before: page; page-break-before: always;"></div><h1 id="structs"><a class="header" href="#structs">Structs</a></h1>
-<p>Like C and C++, Rust has support for custom structs:</p>
+<p>Like C, Rust has support for custom structs:</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">struct Person {
     name: String,
     age: u8,
@@ -2702,10 +2750,10 @@ fn main() {
 <details>
 Key Points: 
 <ul>
-<li>Structs work like in C or C++.
+<li>Structs work like in C.
 <ul>
-<li>Like in C++, and unlike in C, no typedef is needed to define a type.</li>
-<li>Unlike in C++, there is no inheritance between structs.</li>
+<li>Unlike in C, no <code>typedef</code> is needed to define a type — just use the struct name directly.</li>
+<li>Rust structs have no inheritance (unlike Python classes).</li>
 </ul>
 </li>
 <li>Methods are defined in an <code>impl</code> block, which we will see in following slides.</li>
@@ -3036,7 +3084,7 @@ fn main() {
 <div style="break-before: page; page-break-before: always;"></div><h1 id="pattern-matching"><a class="header" href="#pattern-matching">Pattern Matching</a></h1>
 <p>The <code>match</code> keyword let you match a value against one or more <em>patterns</em>. The
 comparisons are done from top to bottom and the first match wins.</p>
-<p>The patterns can be simple values, similarly to <code>switch</code> in C and C++:</p>
+<p>The patterns can be simple values, similarly to <code>switch</code> in C (or <code>match</code> in Python 3.10+):</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     let input = 'x';
 
@@ -4078,7 +4126,8 @@ HashMap implements <code>From&lt;[(K, V); N]&gt;</code>:</p>
 from <code>T</code> directly on a <code>Box&lt;T&gt;</code></a>.</p>
 <details>
 <ul>
-<li><code>Box</code> is like <code>std::unique_ptr</code> in C++.</li>
+<li><code>Box</code> is like <code>malloc</code> in C, but memory is automatically freed when the <code>Box</code> goes out of scope.</li>
+<li>Unlike C where you must call <code>free()</code>, Rust handles cleanup automatically.</li>
 <li>In the above example, you can even leave out the <code>*</code> in the <code>println!</code> statement thanks to <code>Deref</code>.</li>
 </ul>
 </details>
@@ -4160,7 +4209,8 @@ a type such as <a href="https://doc.rust-lang.org/std/cell/index.html"><code>Cel
 context. Arc stands for &quot;Atomically Reference counted&quot;. If you need to mutate through Arc use <a href="https://doc.rust-lang.org/std/sync/struct.Mutex.html"><code>Mutex</code></a>, <a href="https://doc.rust-lang.org/std/sync/struct.RwLock.html"><code>RwLock</code></a>, or one of the <a href="https://doc.rust-lang.org/std/sync/atomic/index.html"><code>Atomic</code></a> types.</p>
 <details>
 <ul>
-<li>Like C++'s <code>std::shared_ptr</code>.</li>
+<li>Similar to Python's object model — Python uses reference counting internally for all objects.</li>
+<li>The difference: in Rust, you explicitly choose <code>Rc</code> when you need shared ownership; it's not the default.</li>
 <li><code>clone</code> is cheap: creates a pointer to the same allocation and increases the reference count.</li>
 <li><code>make_mut</code> actually clones the inner value if necessary (&quot;clone-on-write&quot;) and returns a mutable reference.</li>
 </ul>
@@ -6608,7 +6658,7 @@ fn main() {
 <li><em>&quot;How do I link to a C library?&quot;</em> - Use <code>#[link(name = &quot;library&quot;)]</code> or configure in Cargo.toml with build scripts.</li>
 </ul>
 <p><strong>Teaching tip:</strong>
-Point out that this is how Rust interoperates with existing C/C++ codebases — essential for systems programming.</p>
+Point out that this is how Rust interoperates with existing C codebases — essential for systems programming.</p>
 <p><strong>Example extension:</strong></p>
 <pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {

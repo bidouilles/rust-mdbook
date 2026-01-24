@@ -153,7 +153,7 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="structs"><a class="header" href="#structs">Structs</a></h1>
-<p>Like C and C++, Rust has support for custom structs:</p>
+<p>Like C, Rust has support for custom structs:</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">struct Person {
     name: String,
     age: u8,
@@ -179,10 +179,10 @@ fn main() {
 <details>
 Key Points: 
 <ul>
-<li>Structs work like in C or C++.
+<li>Structs work like in C.
 <ul>
-<li>Like in C++, and unlike in C, no typedef is needed to define a type.</li>
-<li>Unlike in C++, there is no inheritance between structs.</li>
+<li>Unlike in C, no <code>typedef</code> is needed to define a type — just use the struct name directly.</li>
+<li>Rust structs have no inheritance (unlike Python classes).</li>
 </ul>
 </li>
 <li>Methods are defined in an <code>impl</code> block, which we will see in following slides.</li>
