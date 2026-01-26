@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Multi-threaded Link Checker - Rust-LINFO2315</title>
+        <title>Exercises - Rust-LINFO2315</title>
         <!-- Custom HTML head -->
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +124,7 @@
                         <a href="https://github.com/cpelsser/rust-mdbook" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/exercises/course-7/link-checker.md" title="Suggest an edit" aria-label="Suggest an edit"
+                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/exercises/course-8/exercises.md" title="Suggest an edit" aria-label="Suggest an edit"
                            target="_blank">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
@@ -152,132 +152,29 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="multi-threaded-link-checker"><a class="header" href="#multi-threaded-link-checker">Multi-threaded Link Checker</a></h1>
-<p>Let us use our new knowledge to create a multi-threaded link checker. It should
-start at a webpage and check that links on the page are valid. It should
-recursively check other pages on the same domain and keep doing this until all
-pages have been validated.</p>
-<p>For this, you will need an HTTP client such as <a href="https://docs.rs/reqwest/"><code>reqwest</code></a>. Create a new
-Cargo project and <code>reqwest</code> it as a dependency with:</p>
-<pre><code class="language-shell">$ cargo new link-checker
-$ cd link-checker
-$ cargo add --features blocking,rustls-tls reqwest
-</code></pre>
-<blockquote>
-<p>If <code>cargo add</code> fails with <code>error: no such subcommand</code>, then please edit the
-<code>Cargo.toml</code> file by hand. Add the dependencies listed below.</p>
-</blockquote>
-<p>You will also need a way to find links. We can use <a href="https://docs.rs/scraper/"><code>scraper</code></a> for that:</p>
-<pre><code class="language-shell">$ cargo add scraper
-</code></pre>
-<p>Finally, we'll need some way of handling errors. We use <a href="https://docs.rs/thiserror/"><code>thiserror</code></a> for
-that:</p>
-<pre><code class="language-shell">$ cargo add thiserror
-</code></pre>
-<p>The <code>cargo add</code> calls will update the <code>Cargo.toml</code> file to look like this:</p>
-<pre><code class="language-toml">[dependencies]
-reqwest = { version = &quot;0.11.12&quot;, features = [&quot;blocking&quot;, &quot;rustls-tls&quot;] }
-scraper = &quot;0.13.0&quot;
-thiserror = &quot;1.0.37&quot;
-</code></pre>
-<p>You can now download the start page. Try with a small site such as
-<code>https://www.google.org/</code>.</p>
-<p>Your <code>src/main.rs</code> file should look something like this:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail edition2021">use reqwest::blocking::{get, Response};
-use reqwest::Url;
-use scraper::{Html, Selector};
-use thiserror::Error;
-
-#[derive(Error, Debug)]
-enum Error {
-    #[error(&quot;request error: {0}&quot;)]
-    ReqwestError(#[from] reqwest::Error),
-}
-
-fn extract_links(response: Response) -&gt; Result&lt;Vec&lt;Url&gt;, Error&gt; {
-    let base_url = response.url().to_owned();
-    let document = response.text()?;
-    let html = Html::parse_document(&amp;document);
-    let selector = Selector::parse(&quot;a&quot;).unwrap();
-
-    let mut valid_urls = Vec::new();
-    for element in html.select(&amp;selector) {
-        if let Some(href) = element.value().attr(&quot;href&quot;) {
-            match base_url.join(href) {
-                Ok(url) =&gt; valid_urls.push(url),
-                Err(err) =&gt; {
-                    println!(&quot;On {base_url}: could not parse {href:?}: {err} (ignored)&quot;,);
-                }
-            }
-        }
-    }
-
-    Ok(valid_urls)
-}
-
-fn main() {
-    let start_url = Url::parse(&quot;https://www.google.org&quot;).unwrap();
-    let response = get(start_url).unwrap();
-    match extract_links(response) {
-        Ok(links) =&gt; println!(&quot;Links: {links:#?}&quot;),
-        Err(err) =&gt; println!(&quot;Could not extract links: {err:#}&quot;),
-    }
-}
-</code></pre></pre>
-<p>Run the code in <code>src/main.rs</code> with</p>
-<pre><code class="language-shell">$ cargo run
-</code></pre>
-<h2 id="tasks"><a class="header" href="#tasks">Tasks</a></h2>
+                        <h1 id="exercises"><a class="header" href="#exercises">Exercises</a></h1>
+<p>Time to put it together! In this exercise, you'll combine LEDs and buttons
+to create an interactive LED pattern controller.</p>
+<h2 id="exercise-led-pattern-controller"><a class="header" href="#exercise-led-pattern-controller">Exercise: LED Pattern Controller</a></h2>
+<p><a href="led-pattern.html">LED Pattern Controller</a></p>
+<p>Build a program that:</p>
+<ol>
+<li>Displays patterns on the LED matrix</li>
+<li>Uses buttons to control the display</li>
+</ol>
+<p>This exercise practices:</p>
 <ul>
-<li>Use threads to check the links in parallel: send the URLs to be checked to a
-channel and let a few threads check the URLs in parallel.</li>
-<li>Extend this to recursively extract links from all pages on the
-<code>www.google.org</code> domain. Put an upper limit of 100 pages or so so that you
-don't end up being blocked by the site.</li>
+<li>GPIO output (LEDs)</li>
+<li>GPIO input (buttons)</li>
+<li>State management without heap allocation</li>
+<li>Embedded Rust program structure</li>
 </ul>
 <details>
-<p><strong>Exercise guidance for speakers:</strong></p>
+<p><strong>Tips:</strong></p>
 <ul>
-<li>This is a capstone exercise combining threads, channels, and real networking.</li>
-<li>Start simple: single-threaded, then add parallelism.</li>
-<li>Careful with URL handling: relative vs absolute, same-domain filtering.</li>
-<li>Use a HashSet to track visited URLs and avoid cycles.</li>
-</ul>
-<p><strong>Key concepts practiced:</strong></p>
-<ol>
-<li>HTTP requests with <code>reqwest</code>.</li>
-<li>HTML parsing with <code>scraper</code>.</li>
-<li>Thread pools and work distribution via channels.</li>
-<li>Error handling with <code>thiserror</code>.</li>
-</ol>
-<p><strong>Architecture suggestions:</strong></p>
-<pre><code>Main Thread              Worker Threads
-    |                         |
-    v                         v
-[URL Queue] --channel--&gt; [Fetch &amp; Parse]
-    ^                         |
-    |                         v
-    +-------- results --------+
-</code></pre>
-<p><strong>Hints to give if stuck:</strong></p>
-<ul>
-<li>Use <code>mpsc::channel</code> for URL distribution.</li>
-<li><code>HashSet&lt;Url&gt;</code> tracks visited pages.</li>
-<li>Filter to same domain: <code>url.host() == start_url.host()</code>.</li>
-<li>Handle relative URLs with <code>base_url.join(relative)</code>.</li>
-</ul>
-<p><strong>Common challenges:</strong></p>
-<ul>
-<li>Rate limiting (add delays between requests).</li>
-<li>Error handling for failed requests.</li>
-<li>Graceful shutdown when queue is empty.</li>
-<li>Memory management for large crawls.</li>
-</ul>
-<p><strong>Extension ideas:</strong></p>
-<ul>
-<li>Add retry logic for failed requests.</li>
-<li>Report broken links (404s).</li>
-<li>Respect robots.txt.</li>
+<li>Start simple - get one pattern working first</li>
+<li>Use arrays to store patterns (they're stack-allocated)</li>
+<li>Test button logic separately before combining with LEDs</li>
 </ul>
 </details>
 
@@ -285,10 +182,10 @@ don't end up being blocked by the site.</li>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../exercises/course-7/dining-philosophers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../bare-metal/buttons.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next prefetch" href="../../course-8.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../exercises/course-8/led-pattern.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -297,10 +194,10 @@ don't end up being blocked by the site.</li>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../exercises/course-7/dining-philosophers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../bare-metal/buttons.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next prefetch" href="../../course-8.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../exercises/course-8/led-pattern.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

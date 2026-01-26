@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Course Structure - Rust-LINFO2315</title>
+        <title>What is no_std? - Rust-LINFO2315</title>
         <!-- Custom HTML head -->
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +124,7 @@
                         <a href="https://github.com/cpelsser/rust-mdbook" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/running-the-course/course-structure.md" title="Suggest an edit" aria-label="Suggest an edit"
+                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/bare-metal/no-std.md" title="Suggest an edit" aria-label="Suggest an edit"
                            target="_blank">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
@@ -152,27 +152,92 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="course-structure"><a class="header" href="#course-structure">Course Structure</a></h1>
-<p>The course is fast paced and covers a lot of ground:</p>
+                        <h1 id="what-is-no_std"><a class="header" href="#what-is-no_std">What is <code>no_std</code>?</a></h1>
+<p>Rust's standard library is divided into three layers:</p>
+<table>
+<tr>
+<th>
+<p><code>core</code></p>
+</th>
+<th>
+<p><code>alloc</code></p>
+</th>
+<th>
+<p><code>std</code></p>
+</th>
+</tr>
+<tr valign="top">
+<td>
 <ul>
-<li>Course 1: Basic Rust.</li>
-<li>Course 2: Ownership and the borrow checker.</li>
-<li>Course 3: Compound data types,  pattern matching.</li>
-<li>Course 4: The standard library.</li>
-<li>Course 5: Traits and generics, error handling</li>
-<li>Course 6: Testing, unsafe Rust.</li>
-<li>Course 7: Concurrency in Rust and interoperability with other languages</li>
-<li>Course 8: Bare metal Rust with micro:bit</li>
+<li>Slices, <code>&amp;str</code></li>
+<li><code>Option</code>, <code>Result</code></li>
+<li><code>Iterator</code></li>
+<li><code>Display</code>, <code>Debug</code>, <code>write!</code></li>
+<li><code>panic!</code>, <code>assert!</code></li>
+<li><code>Future</code> and <code>async</code>/<code>await</code></li>
+<li><code>AtomicBool</code>, <code>AtomicU32</code>...</li>
+<li><code>Duration</code></li>
 </ul>
+</td>
+<td>
+<ul>
+<li><code>Box</code>, <code>Arc</code>, <code>Rc</code></li>
+<li><code>Vec</code>, <code>VecDeque</code></li>
+<li><code>BTreeMap</code>, <code>BinaryHeap</code></li>
+<li><code>String</code>, <code>format!</code></li>
+</ul>
+</td>
+<td>
+<ul>
+<li><code>HashMap</code></li>
+<li><code>Mutex</code>, <code>RwLock</code>, <code>mpsc</code></li>
+<li><code>File</code> and <code>fs</code></li>
+<li><code>println!</code>, <code>Read</code>, <code>Write</code></li>
+<li><code>Path</code>, <code>OsString</code></li>
+<li><code>net</code></li>
+<li><code>spawn</code>, <code>sleep</code>, <code>thread</code></li>
+<li><code>SystemTime</code>, <code>Instant</code></li>
+</ul>
+</td>
+</tr>
+</table>
+<h2 id="what-each-layer-provides"><a class="header" href="#what-each-layer-provides">What Each Layer Provides</a></h2>
+<ul>
+<li><strong><code>core</code></strong> - Always available, works everywhere (even bare metal)</li>
+<li><strong><code>alloc</code></strong> - Needs a memory allocator (heap)</li>
+<li><strong><code>std</code></strong> - Needs an operating system</li>
+</ul>
+<h2 id="declaring-no_std"><a class="header" href="#declaring-no_std">Declaring <code>no_std</code></a></h2>
+<p>To write bare metal code, add this to your crate root:</p>
+<pre><code class="language-rust ignore">#![no_std]
+</code></pre>
+<p>This tells Rust not to link the standard library. You can still use
+everything from <code>core</code>.</p>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li><code>no_std</code> doesn't mean &quot;no libraries&quot; - you get all of <code>core</code></li>
+<li>Most of what you learned still applies: <code>Option</code>, <code>Result</code>, iterators</li>
+<li><code>HashMap</code> depends on random number generation (for security)</li>
+<li><code>std</code> re-exports the contents of both <code>core</code> and <code>alloc</code></li>
+</ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;Can I use <code>Vec</code> on bare metal?&quot;</em> - Yes, if you provide a global allocator.
+Many embedded projects avoid dynamic allocation entirely.</li>
+<li><em>&quot;What about <code>println!</code>?&quot;</em> - You can implement your own using UART/serial,
+or use RTT (Real-Time Transfer) for debugging.</li>
+</ul>
+</details>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../welcome.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../bare-metal.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../bare-metal/ecosystem.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -181,10 +246,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../welcome.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../bare-metal.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../bare-metal/ecosystem.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

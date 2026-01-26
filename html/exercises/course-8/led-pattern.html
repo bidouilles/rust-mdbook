@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Multi-threaded Link Checker - Rust-LINFO2315</title>
+        <title>LED Pattern Controller - Rust-LINFO2315</title>
         <!-- Custom HTML head -->
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +124,7 @@
                         <a href="https://github.com/cpelsser/rust-mdbook" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/exercises/course-7/link-checker.md" title="Suggest an edit" aria-label="Suggest an edit"
+                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/exercises/course-8/led-pattern.md" title="Suggest an edit" aria-label="Suggest an edit"
                            target="_blank">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
@@ -152,143 +152,184 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="multi-threaded-link-checker"><a class="header" href="#multi-threaded-link-checker">Multi-threaded Link Checker</a></h1>
-<p>Let us use our new knowledge to create a multi-threaded link checker. It should
-start at a webpage and check that links on the page are valid. It should
-recursively check other pages on the same domain and keep doing this until all
-pages have been validated.</p>
-<p>For this, you will need an HTTP client such as <a href="https://docs.rs/reqwest/"><code>reqwest</code></a>. Create a new
-Cargo project and <code>reqwest</code> it as a dependency with:</p>
-<pre><code class="language-shell">$ cargo new link-checker
-$ cd link-checker
-$ cargo add --features blocking,rustls-tls reqwest
-</code></pre>
-<blockquote>
-<p>If <code>cargo add</code> fails with <code>error: no such subcommand</code>, then please edit the
-<code>Cargo.toml</code> file by hand. Add the dependencies listed below.</p>
-</blockquote>
-<p>You will also need a way to find links. We can use <a href="https://docs.rs/scraper/"><code>scraper</code></a> for that:</p>
-<pre><code class="language-shell">$ cargo add scraper
-</code></pre>
-<p>Finally, we'll need some way of handling errors. We use <a href="https://docs.rs/thiserror/"><code>thiserror</code></a> for
-that:</p>
-<pre><code class="language-shell">$ cargo add thiserror
-</code></pre>
-<p>The <code>cargo add</code> calls will update the <code>Cargo.toml</code> file to look like this:</p>
-<pre><code class="language-toml">[dependencies]
-reqwest = { version = &quot;0.11.12&quot;, features = [&quot;blocking&quot;, &quot;rustls-tls&quot;] }
-scraper = &quot;0.13.0&quot;
-thiserror = &quot;1.0.37&quot;
-</code></pre>
-<p>You can now download the start page. Try with a small site such as
-<code>https://www.google.org/</code>.</p>
-<p>Your <code>src/main.rs</code> file should look something like this:</p>
-<pre><pre class="playground"><code class="language-rust compile_fail edition2021">use reqwest::blocking::{get, Response};
-use reqwest::Url;
-use scraper::{Html, Selector};
-use thiserror::Error;
+                        <h1 id="led-pattern-controller"><a class="header" href="#led-pattern-controller">LED Pattern Controller</a></h1>
+<p>Create a program that displays LED patterns and responds to button input.</p>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<ol>
+<li><strong>Display patterns</strong> on the 5x5 LED matrix</li>
+<li><strong>Button A</strong> cycles through 3 different patterns</li>
+<li><strong>Button B</strong> toggles the display on/off</li>
+</ol>
+<h2 id="starter-code"><a class="header" href="#starter-code">Starter Code</a></h2>
+<p>Copy this to <code>src/exercises/course-8/src/bin/led-pattern.rs</code>:</p>
+<pre><pre class="playground"><code class="language-rust compile_fail edition2021">#![no_main]
+#![no_std]
 
-#[derive(Error, Debug)]
-enum Error {
-    #[error(&quot;request error: {0}&quot;)]
-    ReqwestError(#[from] reqwest::Error),
-}
+extern crate panic_halt as _;
+use cortex_m::asm::delay;
+use cortex_m_rt::entry;
+use microbit::Board;
+use embedded_hal::digital::{InputPin, OutputPin};
 
-fn extract_links(response: Response) -&gt; Result&lt;Vec&lt;Url&gt;, Error&gt; {
-    let base_url = response.url().to_owned();
-    let document = response.text()?;
-    let html = Html::parse_document(&amp;document);
-    let selector = Selector::parse(&quot;a&quot;).unwrap();
+// Simple 5x5 patterns (1 = LED on, 0 = LED off)
+const PATTERN_HEART: [[u8; 5]; 5] = [
+    [0, 1, 0, 1, 0],
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1],
+    [0, 1, 1, 1, 0],
+    [0, 0, 1, 0, 0],
+];
 
-    let mut valid_urls = Vec::new();
-    for element in html.select(&amp;selector) {
-        if let Some(href) = element.value().attr(&quot;href&quot;) {
-            match base_url.join(href) {
-                Ok(url) =&gt; valid_urls.push(url),
-                Err(err) =&gt; {
-                    println!(&quot;On {base_url}: could not parse {href:?}: {err} (ignored)&quot;,);
-                }
-            }
-        }
+const PATTERN_SMILE: [[u8; 5]; 5] = [
+    [0, 0, 0, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 1],
+    [0, 1, 1, 1, 0],
+];
+
+const PATTERN_CROSS: [[u8; 5]; 5] = [
+    [1, 0, 0, 0, 1],
+    [0, 1, 0, 1, 0],
+    [0, 0, 1, 0, 0],
+    [0, 1, 0, 1, 0],
+    [1, 0, 0, 0, 1],
+];
+
+#[entry]
+fn main() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    let mut current_pattern: usize = 0;
+    let mut display_on: bool = true;
+    let mut button_a_was_pressed = false;
+    let mut button_b_was_pressed = false;
+
+    loop {
+        // TODO: Check button A for pattern change
+        // Hint: Detect button press (transition from not pressed to pressed)
+        // to avoid cycling through patterns while button is held
+        let button_a_pressed = board.buttons.button_a.is_low().unwrap();
+
+        // TODO: Implement pattern cycling logic here
+
+        // TODO: Check button B for display toggle
+        let button_b_pressed = board.buttons.button_b.is_low().unwrap();
+
+        // TODO: Implement display toggle logic here
+
+        // TODO: Display the current pattern if display_on is true
+        // Hint: You'll need to iterate through rows and columns
+        // For each LED position, check the pattern array
+
+        // Update previous button states
+        button_a_was_pressed = button_a_pressed;
+        button_b_was_pressed = button_b_pressed;
+
+        // Small delay for button debouncing
+        delay(10_000);
     }
-
-    Ok(valid_urls)
 }
 
-fn main() {
-    let start_url = Url::parse(&quot;https://www.google.org&quot;).unwrap();
-    let response = get(start_url).unwrap();
-    match extract_links(response) {
-        Ok(links) =&gt; println!(&quot;Links: {links:#?}&quot;),
-        Err(err) =&gt; println!(&quot;Could not extract links: {err:#}&quot;),
+// Helper function to get the current pattern
+fn get_pattern(index: usize) -&gt; &amp;'static [[u8; 5]; 5] {
+    match index {
+        0 =&gt; &amp;PATTERN_HEART,
+        1 =&gt; &amp;PATTERN_SMILE,
+        _ =&gt; &amp;PATTERN_CROSS,
     }
 }
 </code></pre></pre>
-<p>Run the code in <code>src/main.rs</code> with</p>
-<pre><code class="language-shell">$ cargo run
-</code></pre>
-<h2 id="tasks"><a class="header" href="#tasks">Tasks</a></h2>
-<ul>
-<li>Use threads to check the links in parallel: send the URLs to be checked to a
-channel and let a few threads check the URLs in parallel.</li>
-<li>Extend this to recursively extract links from all pages on the
-<code>www.google.org</code> domain. Put an upper limit of 100 pages or so so that you
-don't end up being blocked by the site.</li>
-</ul>
+<h2 id="hints"><a class="header" href="#hints">Hints</a></h2>
 <details>
-<p><strong>Exercise guidance for speakers:</strong></p>
-<ul>
-<li>This is a capstone exercise combining threads, channels, and real networking.</li>
-<li>Start simple: single-threaded, then add parallelism.</li>
-<li>Careful with URL handling: relative vs absolute, same-domain filtering.</li>
-<li>Use a HashSet to track visited URLs and avoid cycles.</li>
-</ul>
-<p><strong>Key concepts practiced:</strong></p>
-<ol>
-<li>HTTP requests with <code>reqwest</code>.</li>
-<li>HTML parsing with <code>scraper</code>.</li>
-<li>Thread pools and work distribution via channels.</li>
-<li>Error handling with <code>thiserror</code>.</li>
-</ol>
-<p><strong>Architecture suggestions:</strong></p>
-<pre><code>Main Thread              Worker Threads
-    |                         |
-    v                         v
-[URL Queue] --channel--&gt; [Fetch &amp; Parse]
-    ^                         |
-    |                         v
-    +-------- results --------+
+<summary>Hint 1: Button Edge Detection</summary>
+<p>To detect a button <em>press</em> (not just held), check for a transition:</p>
+<pre><code class="language-rust ignore">if button_a_pressed &amp;&amp; !button_a_was_pressed {
+    // Button was just pressed
+    current_pattern = (current_pattern + 1) % 3;
+}
 </code></pre>
-<p><strong>Hints to give if stuck:</strong></p>
-<ul>
-<li>Use <code>mpsc::channel</code> for URL distribution.</li>
-<li><code>HashSet&lt;Url&gt;</code> tracks visited pages.</li>
-<li>Filter to same domain: <code>url.host() == start_url.host()</code>.</li>
-<li>Handle relative URLs with <code>base_url.join(relative)</code>.</li>
-</ul>
-<p><strong>Common challenges:</strong></p>
-<ul>
-<li>Rate limiting (add delays between requests).</li>
-<li>Error handling for failed requests.</li>
-<li>Graceful shutdown when queue is empty.</li>
-<li>Memory management for large crawls.</li>
-</ul>
-<p><strong>Extension ideas:</strong></p>
-<ul>
-<li>Add retry logic for failed requests.</li>
-<li>Report broken links (404s).</li>
-<li>Respect robots.txt.</li>
-</ul>
+</details>
+<details>
+<summary>Hint 2: Displaying a Pattern</summary>
+<p>The LED matrix needs row scanning. A simplified approach for one row:</p>
+<pre><code class="language-rust ignore">let pattern = get_pattern(current_pattern);
+
+// Display row 0
+if display_on &amp;&amp; pattern[0][0] == 1 {
+    board.display_pins.col1.set_low().unwrap();
+} else {
+    board.display_pins.col1.set_high().unwrap();
+}
+board.display_pins.row1.set_high().unwrap();
+delay(1000);
+board.display_pins.row1.set_low().unwrap();
+
+// Repeat for other rows...
+</code></pre>
+</details>
+<details>
+<summary>Hint 3: Full Display Loop</summary>
+<p>For a complete display, scan all rows rapidly:</p>
+<pre><code class="language-rust ignore">let cols = [
+    &amp;mut board.display_pins.col1,
+    &amp;mut board.display_pins.col2,
+    &amp;mut board.display_pins.col3,
+    &amp;mut board.display_pins.col4,
+    &amp;mut board.display_pins.col5,
+];
+
+let rows = [
+    &amp;mut board.display_pins.row1,
+    &amp;mut board.display_pins.row2,
+    &amp;mut board.display_pins.row3,
+    &amp;mut board.display_pins.row4,
+    &amp;mut board.display_pins.row5,
+];
+
+// You'll need to work around the borrow checker here!
+// Consider using the microbit::display module for easier access.
+</code></pre>
+</details>
+<h2 id="bonus-challenges"><a class="header" href="#bonus-challenges">Bonus Challenges</a></h2>
+<ol>
+<li><strong>Animation</strong>: Make the pattern scroll or animate</li>
+<li><strong>Brightness</strong>: Use PWM to control LED brightness with buttons</li>
+<li><strong>Sound</strong>: Add a beep when changing patterns (use the speaker)</li>
+</ol>
+<h2 id="running-the-exercise"><a class="header" href="#running-the-exercise">Running the Exercise</a></h2>
+<pre><code class="language-bash">cargo embed --bin led-pattern
+</code></pre>
+<details>
+<p><strong>Solution approach:</strong></p>
+<p>The key insight is that you need:</p>
+<ol>
+<li>Edge detection for buttons (not level detection)</li>
+<li>Row scanning for the LED matrix (or use a timer interrupt)</li>
+<li>State variables that persist across loop iterations</li>
+</ol>
+<p><strong>Why manual row scanning?</strong></p>
+<p>We implement row scanning manually here to understand how LED matrices work
+at a low level. In real projects, use the <code>Display</code> API which handles this
+automatically:</p>
+<pre><code class="language-rust ignore">use microbit::{display::blocking::Display, hal::Timer};
+
+let mut display = Display::new(board.display_pins);
+let mut timer = Timer::new(board.TIMER0);
+
+// Much simpler! Handles row scanning internally
+display.show(&amp;mut timer, pattern, 1000);
+</code></pre>
 </details>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../exercises/course-7/dining-philosophers.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../exercises/course-8/exercises.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next prefetch" href="../../course-8.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../bare-metal/next-steps.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -297,10 +338,10 @@ don't end up being blocked by the site.</li>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../exercises/course-7/dining-philosophers.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../exercises/course-8/exercises.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next prefetch" href="../../course-8.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../bare-metal/next-steps.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

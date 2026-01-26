@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Course Structure - Rust-LINFO2315</title>
+        <title>Development Setup - Rust-LINFO2315</title>
         <!-- Custom HTML head -->
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +124,7 @@
                         <a href="https://github.com/cpelsser/rust-mdbook" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/running-the-course/course-structure.md" title="Suggest an edit" aria-label="Suggest an edit"
+                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/bare-metal/setup.md" title="Suggest an edit" aria-label="Suggest an edit"
                            target="_blank">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
@@ -152,27 +152,66 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="course-structure"><a class="header" href="#course-structure">Course Structure</a></h1>
-<p>The course is fast paced and covers a lot of ground:</p>
+                        <h1 id="development-setup"><a class="header" href="#development-setup">Development Setup</a></h1>
+<p>Before the session, install the required tools. This takes 10-15 minutes.</p>
+<h2 id="1-install-the-arm-target"><a class="header" href="#1-install-the-arm-target">1. Install the ARM Target</a></h2>
+<p>The micro:bit uses an ARM Cortex-M4 processor:</p>
+<pre><code class="language-bash">rustup target add thumbv7em-none-eabihf
+</code></pre>
+<h2 id="2-install-probe-rs"><a class="header" href="#2-install-probe-rs">2. Install probe-rs</a></h2>
+<p><a href="https://probe.rs/">probe-rs</a> is a modern tool for flashing and debugging
+embedded devices:</p>
+<p><strong>Linux/macOS:</strong></p>
+<pre><code class="language-bash">curl --proto '=https' --tlsv1.2 -LsSf \
+  https://github.com/probe-rs/probe-rs/releases/latest/download/probe-rs-tools-installer.sh | sh
+</code></pre>
+<p><strong>Windows:</strong></p>
+<pre><code class="language-powershell">irm https://github.com/probe-rs/probe-rs/releases/latest/download/probe-rs-tools-installer.ps1 | iex
+</code></pre>
+<h2 id="3-usb-permissions-linux-only"><a class="header" href="#3-usb-permissions-linux-only">3. USB Permissions (Linux only)</a></h2>
+<p>On Linux, add a udev rule to access the micro:bit without root:</p>
+<pre><code class="language-bash">echo 'SUBSYSTEM==&quot;hidraw&quot;, ATTRS{idVendor}==&quot;0d28&quot;, MODE=&quot;0660&quot;, GROUP=&quot;plugdev&quot;, TAG+=&quot;uaccess&quot;' | \
+  sudo tee /etc/udev/rules.d/50-microbit.rules
+sudo udevadm control --reload-rules
+</code></pre>
+<p>Then log out and back in, or run <code>sudo udevadm trigger</code>.</p>
+<h2 id="4-verify-the-setup"><a class="header" href="#4-verify-the-setup">4. Verify the Setup</a></h2>
+<p>Connect your micro:bit via USB and run:</p>
+<pre><code class="language-bash">probe-rs list
+</code></pre>
+<p>You should see something like:</p>
+<pre><code class="language-text">The following debug probes were found:
+[0]: BBC micro:bit CMSIS-DAP -- 0d28:0204:990636020005282030f1... (CMSIS-DAP)
+</code></pre>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Problem</th><th>Solution</th></tr></thead><tbody>
+<tr><td><code>probe-rs list</code> shows nothing</td><td>Try a different USB cable (some are charge-only)</td></tr>
+<tr><td>Permission denied (Linux)</td><td>Check udev rules, logout/login</td></tr>
+<tr><td>Device not found (macOS)</td><td>No special drivers needed, try different port</td></tr>
+<tr><td>Device not found (Windows)</td><td>Install <a href="https://zadig.akeo.ie/">Zadig</a> driver</td></tr>
+</tbody></table>
+</div><details>
+<p><strong>Key points:</strong></p>
 <ul>
-<li>Course 1: Basic Rust.</li>
-<li>Course 2: Ownership and the borrow checker.</li>
-<li>Course 3: Compound data types,  pattern matching.</li>
-<li>Course 4: The standard library.</li>
-<li>Course 5: Traits and generics, error handling</li>
-<li>Course 6: Testing, unsafe Rust.</li>
-<li>Course 7: Concurrency in Rust and interoperability with other languages</li>
-<li>Course 8: Bare metal Rust with micro:bit</li>
+<li><code>thumbv7em-none-eabihf</code> = Thumb instruction set, Cortex-M4, no OS, hardware float</li>
+<li>probe-rs replaces older tools like OpenOCD + GDB</li>
+<li>The micro:bit has a built-in debug probe (no extra hardware!)</li>
 </ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;What if I don't have a micro:bit?&quot;</em> - You can use QEMU for some examples,
+but hardware is recommended.</li>
+</ul>
+</details>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../welcome.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../bare-metal/microbit-hardware.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../bare-metal/first-program.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -181,10 +220,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../welcome.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../bare-metal/microbit-hardware.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../bare-metal/first-program.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

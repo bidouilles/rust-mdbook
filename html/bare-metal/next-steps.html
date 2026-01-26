@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Course Structure - Rust-LINFO2315</title>
+        <title>Where to Go Next - Rust-LINFO2315</title>
         <!-- Custom HTML head -->
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +124,7 @@
                         <a href="https://github.com/cpelsser/rust-mdbook" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/running-the-course/course-structure.md" title="Suggest an edit" aria-label="Suggest an edit"
+                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/bare-metal/next-steps.md" title="Suggest an edit" aria-label="Suggest an edit"
                            target="_blank">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
@@ -152,28 +152,104 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="course-structure"><a class="header" href="#course-structure">Course Structure</a></h1>
-<p>The course is fast paced and covers a lot of ground:</p>
+                        <h1 id="where-to-go-next"><a class="header" href="#where-to-go-next">Where to Go Next</a></h1>
+<p>Congratulations! You've written your first bare metal Rust programs. Here are
+some directions to continue your embedded journey.</p>
+<h2 id="try-touch-sensing-no-extra-hardware"><a class="header" href="#try-touch-sensing-no-extra-hardware">Try: Touch Sensing (No Extra Hardware!)</a></h2>
+<p>The micro:bit v2 logo has capacitive touch sensing built-in:</p>
+<pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+
+use cortex_m_rt::entry;
+use microbit::Board;
+use embedded_hal::digital::{InputPin, OutputPin};
+
+#[entry]
+fn main() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    // Configure logo pin for touch sensing
+    let touch = board.pins.p1_04.into_floating_input();
+
+    board.display_pins.col3.set_low().unwrap();
+
+    loop {
+        if touch.is_low().unwrap() {
+            // Logo is being touched - light center LED
+            board.display_pins.row3.set_high().unwrap();
+        } else {
+            board.display_pins.row3.set_low().unwrap();
+        }
+    }
+}
+</code></pre></pre>
+<p>Touch the gold logo and watch the LED respond!</p>
+<h2 id="built-in-features-to-explore"><a class="header" href="#built-in-features-to-explore">Built-in Features to Explore</a></h2>
+<p>The micro:bit v2 has many built-in peripherals you can experiment with:</p>
+<div class="table-wrapper"><table><thead><tr><th>Feature</th><th>Description</th><th>Complexity</th></tr></thead><tbody>
+<tr><td><strong>Temperature sensor</strong></td><td>Built into the nRF52833 chip</td><td>Easy</td></tr>
+<tr><td><strong>Accelerometer</strong></td><td>LSM303AGR via I2C</td><td>Medium</td></tr>
+<tr><td><strong>Compass</strong></td><td>LSM303AGR magnetometer</td><td>Medium</td></tr>
+<tr><td><strong>Speaker</strong></td><td>PWM-driven buzzer</td><td>Medium</td></tr>
+<tr><td><strong>Microphone</strong></td><td>PDM digital microphone</td><td>Advanced</td></tr>
+<tr><td><strong>Bluetooth</strong></td><td>BLE with SoftDevice</td><td>Advanced</td></tr>
+</tbody></table>
+</div>
+<h2 id="recommended-resources"><a class="header" href="#recommended-resources">Recommended Resources</a></h2>
+<h3 id="books-and-tutorials"><a class="header" href="#books-and-tutorials">Books and Tutorials</a></h3>
 <ul>
-<li>Course 1: Basic Rust.</li>
-<li>Course 2: Ownership and the borrow checker.</li>
-<li>Course 3: Compound data types,  pattern matching.</li>
-<li>Course 4: The standard library.</li>
-<li>Course 5: Traits and generics, error handling</li>
-<li>Course 6: Testing, unsafe Rust.</li>
-<li>Course 7: Concurrency in Rust and interoperability with other languages</li>
-<li>Course 8: Bare metal Rust with micro:bit</li>
+<li><a href="https://docs.rust-embedded.org/discovery-mb2/">Discovery Book (micro:bit v2)</a> -
+Official Rust Embedded WG tutorial, comprehensive</li>
+<li><a href="https://mb2.implrust.com/">impl Rust for Microbit</a> -
+Project-based learning with fun examples</li>
+<li><a href="https://docs.rust-embedded.org/book/">The Embedded Rust Book</a> -
+General embedded Rust concepts</li>
 </ul>
+<h3 id="frameworks"><a class="header" href="#frameworks">Frameworks</a></h3>
+<ul>
+<li><a href="https://embassy.dev/">Embassy</a> - Async embedded framework, great for
+complex applications with multiple tasks</li>
+<li><a href="https://rtic.rs/">RTIC</a> - Real-Time Interrupt-driven Concurrency framework</li>
+</ul>
+<h3 id="community"><a class="header" href="#community">Community</a></h3>
+<ul>
+<li><a href="https://matrix.to/#/#rust-embedded:matrix.org">Rust Embedded Matrix Chat</a></li>
+<li><a href="https://github.com/rust-embedded">Rust Embedded GitHub</a></li>
+<li><a href="https://github.com/rust-embedded/awesome-embedded-rust">awesome-embedded-rust</a> -
+Curated list of crates and resources</li>
+</ul>
+<h2 id="whats-different-in-production-code"><a class="header" href="#whats-different-in-production-code">What's Different in Production Code?</a></h2>
+<p>As you progress, you'll encounter more advanced patterns:</p>
+<div class="table-wrapper"><table><thead><tr><th>Learning Code</th><th>Production Code</th></tr></thead><tbody>
+<tr><td><code>delay()</code> busy-wait</td><td>Hardware timers, interrupts</td></tr>
+<tr><td>Polling buttons</td><td>Interrupt-driven input</td></tr>
+<tr><td>Blocking I/O</td><td>Async with Embassy</td></tr>
+<tr><td>Manual row scanning</td><td>Display driver crates</td></tr>
+<tr><td><code>panic_halt</code></td><td><code>defmt</code> + RTT for debugging</td></tr>
+</tbody></table>
+</div><details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>The micro:bit is a great platform to keep experimenting with</li>
+<li>Embassy makes complex async embedded code much easier</li>
+<li>The Discovery Book is the logical next step for deeper learning</li>
+</ul>
+<p><strong>For the instructor:</strong></p>
+<ul>
+<li>Demo the touch sensing if time permits - it's a crowd-pleaser</li>
+<li>Point students to the Discovery Book for self-study</li>
+<li>Embassy is the future of embedded Rust but adds complexity</li>
+</ul>
+</details>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../welcome.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../exercises/course-8/led-pattern.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
-                            </a>
-                            <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
                     </nav>
@@ -181,11 +257,8 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../welcome.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../exercises/course-8/led-pattern.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
-                    </a>
-                    <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
 

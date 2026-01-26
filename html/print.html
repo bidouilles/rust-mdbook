@@ -174,6 +174,7 @@ error handling) to better explain or contrast the Rust approach.</p>
 <li>Course 5: Traits and generics, error handling</li>
 <li>Course 6: Testing, unsafe Rust.</li>
 <li>Course 7: Concurrency in Rust and interoperability with other languages</li>
+<li>Course 8: Bare metal Rust with micro:bit</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="keyboard-shortcuts"><a class="header" href="#keyboard-shortcuts">Keyboard Shortcuts</a></h1>
 <p>There are several useful keyboard shortcuts in mdBook:</p>
@@ -7604,6 +7605,863 @@ don't end up being blocked by the site.</li>
 <li>Add retry logic for failed requests.</li>
 <li>Report broken links (404s).</li>
 <li>Respect robots.txt.</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="welcome-to-bare-metal-rust"><a class="header" href="#welcome-to-bare-metal-rust">Welcome to Bare Metal Rust</a></h1>
+<p>In this course, we'll explore <em>bare metal</em> programming: running Rust code directly
+on hardware without an operating system. This is how firmware, bootloaders, and
+embedded systems are built.</p>
+<h2 id="what-well-learn"><a class="header" href="#what-well-learn">What We'll Learn</a></h2>
+<ul>
+<li>What <code>no_std</code> means and what changes without an OS</li>
+<li>The embedded Rust ecosystem (PACs, HALs, BSPs)</li>
+<li>How to program the BBC micro:bit v2</li>
+<li>Reading inputs and controlling outputs</li>
+</ul>
+<h2 id="what-well-build"><a class="header" href="#what-well-build">What We'll Build</a></h2>
+<p>By the end of this session, you'll have a working program that:</p>
+<ol>
+<li>Lights up LEDs on the micro:bit display</li>
+<li>Responds to button presses</li>
+<li>Cycles through different LED patterns</li>
+</ol>
+<h2 id="why-rust-for-embedded"><a class="header" href="#why-rust-for-embedded">Why Rust for Embedded?</a></h2>
+<p>Rust is increasingly popular for embedded development because:</p>
+<ul>
+<li><strong>Memory safety without garbage collection</strong> - Critical for resource-constrained devices</li>
+<li><strong>Zero-cost abstractions</strong> - High-level code compiles to efficient machine code</li>
+<li><strong>No runtime</strong> - Rust can run on the bare metal</li>
+<li><strong>Strong type system</strong> - Catch hardware configuration errors at compile time</li>
+</ul>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li>Completed Courses 1-6 (especially ownership and traits)</li>
+<li>BBC micro:bit v2 hardware</li>
+<li>Development tools installed (see <a href="bare-metal/setup.html">Setup</a>)</li>
+</ul>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>Bare metal means no OS - your code is the only thing running</li>
+<li>Embedded Rust has grown significantly since 2018</li>
+<li>The micro:bit is ideal for learning: built-in LEDs, buttons, and debugger</li>
+</ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;Is this harder than regular Rust?&quot;</em> - Different, not harder. Less library support,
+but the core language is the same.</li>
+<li><em>&quot;Do I need electronics experience?&quot;</em> - No! The micro:bit requires no wiring.</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="bare-metal-basics"><a class="header" href="#bare-metal-basics">Bare Metal Basics</a></h1>
+<p>Before we start programming the micro:bit, let's understand what makes bare metal
+Rust different from regular Rust.</p>
+<p>When you write a normal Rust program, it runs on top of an operating system that
+provides:</p>
+<ul>
+<li>Memory allocation (heap)</li>
+<li>File system access</li>
+<li>Network stack</li>
+<li>Threads and synchronization</li>
+<li>Standard input/output</li>
+</ul>
+<p>On bare metal, <strong>none of this exists</strong>. Your program runs directly on the CPU,
+and you must handle everything yourself (or use libraries that do).</p>
+<p>This section covers:</p>
+<ul>
+<li><a href="bare-metal/no-std.html">What is <code>no_std</code>?</a> - What you keep and what you lose</li>
+<li><a href="bare-metal/ecosystem.html">The Embedded Ecosystem</a> - PACs, HALs, and BSPs</li>
+</ul>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>Bare metal doesn't mean &quot;hard&quot; - it means &quot;close to hardware&quot;</li>
+<li>You trade convenience for control and predictability</li>
+<li>The Rust embedded ecosystem provides excellent abstractions</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="what-is-no_std"><a class="header" href="#what-is-no_std">What is <code>no_std</code>?</a></h1>
+<p>Rust's standard library is divided into three layers:</p>
+<table>
+<tr>
+<th>
+<p><code>core</code></p>
+</th>
+<th>
+<p><code>alloc</code></p>
+</th>
+<th>
+<p><code>std</code></p>
+</th>
+</tr>
+<tr valign="top">
+<td>
+<ul>
+<li>Slices, <code>&amp;str</code></li>
+<li><code>Option</code>, <code>Result</code></li>
+<li><code>Iterator</code></li>
+<li><code>Display</code>, <code>Debug</code>, <code>write!</code></li>
+<li><code>panic!</code>, <code>assert!</code></li>
+<li><code>Future</code> and <code>async</code>/<code>await</code></li>
+<li><code>AtomicBool</code>, <code>AtomicU32</code>...</li>
+<li><code>Duration</code></li>
+</ul>
+</td>
+<td>
+<ul>
+<li><code>Box</code>, <code>Arc</code>, <code>Rc</code></li>
+<li><code>Vec</code>, <code>VecDeque</code></li>
+<li><code>BTreeMap</code>, <code>BinaryHeap</code></li>
+<li><code>String</code>, <code>format!</code></li>
+</ul>
+</td>
+<td>
+<ul>
+<li><code>HashMap</code></li>
+<li><code>Mutex</code>, <code>RwLock</code>, <code>mpsc</code></li>
+<li><code>File</code> and <code>fs</code></li>
+<li><code>println!</code>, <code>Read</code>, <code>Write</code></li>
+<li><code>Path</code>, <code>OsString</code></li>
+<li><code>net</code></li>
+<li><code>spawn</code>, <code>sleep</code>, <code>thread</code></li>
+<li><code>SystemTime</code>, <code>Instant</code></li>
+</ul>
+</td>
+</tr>
+</table>
+<h2 id="what-each-layer-provides"><a class="header" href="#what-each-layer-provides">What Each Layer Provides</a></h2>
+<ul>
+<li><strong><code>core</code></strong> - Always available, works everywhere (even bare metal)</li>
+<li><strong><code>alloc</code></strong> - Needs a memory allocator (heap)</li>
+<li><strong><code>std</code></strong> - Needs an operating system</li>
+</ul>
+<h2 id="declaring-no_std"><a class="header" href="#declaring-no_std">Declaring <code>no_std</code></a></h2>
+<p>To write bare metal code, add this to your crate root:</p>
+<pre><code class="language-rust ignore">#![no_std]
+</code></pre>
+<p>This tells Rust not to link the standard library. You can still use
+everything from <code>core</code>.</p>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li><code>no_std</code> doesn't mean &quot;no libraries&quot; - you get all of <code>core</code></li>
+<li>Most of what you learned still applies: <code>Option</code>, <code>Result</code>, iterators</li>
+<li><code>HashMap</code> depends on random number generation (for security)</li>
+<li><code>std</code> re-exports the contents of both <code>core</code> and <code>alloc</code></li>
+</ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;Can I use <code>Vec</code> on bare metal?&quot;</em> - Yes, if you provide a global allocator.
+Many embedded projects avoid dynamic allocation entirely.</li>
+<li><em>&quot;What about <code>println!</code>?&quot;</em> - You can implement your own using UART/serial,
+or use RTT (Real-Time Transfer) for debugging.</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="the-embedded-ecosystem"><a class="header" href="#the-embedded-ecosystem">The Embedded Ecosystem</a></h1>
+<p>Rust's embedded ecosystem is organized in layers, from low-level hardware access
+to high-level board support:</p>
+<div style='width:100%; height:256px;'><style type="text/css">svg { width: 100% !important; }</style><svg xmlns="http://www.w3.org/2000/svg" width="344" height="256" class="svgbob"><style>.svgbob line, .svgbob path, .svgbob circle, .svgbob rect, .svgbob polygon {  stroke: var(--fg);  stroke-width: 2;  stroke-opacity: 1;  fill-opacity: 1;  stroke-linecap: round;  stroke-linejoin: miter;}.svgbob text {  white-space: pre;  fill: var(--fg);  font-family: Iosevka Fixed, monospace;  font-size: 14px;}.svgbob rect.backdrop {  stroke: none;  fill: transparent;}.svgbob .broken {  stroke-dasharray: 8;}.svgbob .filled {  fill: black;}.svgbob .bg_filled {  fill: transparent;  stroke-width: 1;}.svgbob .nofill {  fill: transparent;}.svgbob .end_marked_arrow {  marker-end: url(#arrow);}.svgbob .start_marked_arrow {  marker-start: url(#arrow);}.svgbob .end_marked_diamond {  marker-end: url(#diamond);}.svgbob .start_marked_diamond {  marker-start: url(#diamond);}.svgbob .end_marked_circle {  marker-end: url(#circle);}.svgbob .start_marked_circle {  marker-start: url(#circle);}.svgbob .end_marked_open_circle {  marker-end: url(#open_circle);}.svgbob .start_marked_open_circle {  marker-start: url(#open_circle);}.svgbob .end_marked_big_open_circle {  marker-end: url(#big_open_circle);}.svgbob .start_marked_big_open_circle {  marker-start: url(#big_open_circle);}</style><defs><marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 0,4 4,2 0,0"></polygon></marker><marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,2 2,0 4,2 2,4 0,2"></polygon></marker><marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="filled"></circle></marker><marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="bg_filled"></circle></marker><marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="3" class="bg_filled"></circle></marker></defs><rect class="backdrop" x="0" y="0" width="344" height="256"></rect><text x="90" y="28" >Your</text><text x="130" y="28" >Application</text><text x="226" y="28" >Code</text><text x="74" y="60" >BSP</text><path d="M 112,48 A 16,16 0,0,0 112,64" class="nofill"></path><text x="114" y="60" >Board</text><text x="162" y="60" >Support</text><text x="226" y="60" >Package</text><path d="M 280,48 A 16,16 0,0,1 280,64" class="nofill"></path><text x="82" y="108" >HAL</text><path d="M 120,96 A 16,16 0,0,0 120,112" class="nofill"></path><text x="122" y="108" >Hardware</text><text x="194" y="108" >Abstraction</text><path d="M 280,96 A 16,16 0,0,1 280,112" class="nofill"></path><text x="90" y="156" >PAC</text><path d="M 128,144 A 16,16 0,0,0 128,160" class="nofill"></path><text x="130" y="156" >Peripheral</text><text x="218" y="156" >Access</text><path d="M 264,144 A 16,16 0,0,1 264,160" class="nofill"></path><text x="146" y="204" >Hardware</text><text x="106" y="220" >Nordic</text><text x="162" y="220" >nRF52833</text><text x="234" y="220" >chip</text><text x="122" y="76" >microbit-v2</text><text x="122" y="124" >nrf52833-hal</text><text x="122" y="172" >nrf52833-pac</text><g><path d="M 40,8 A 4,4 0,0,0 36,12" class="nofill"></path><line x1="36" y1="12" x2="36" y2="228" class="solid"></line><line x1="40" y1="8" x2="328" y2="8" class="solid"></line><path d="M 328,8 A 4,4 0,0,1 332,12" class="nofill"></path><line x1="332" y1="12" x2="332" y2="228" class="solid"></line><line x1="36" y1="40" x2="332" y2="40" class="solid"></line><line x1="36" y1="88" x2="332" y2="88" class="solid"></line><line x1="36" y1="136" x2="332" y2="136" class="solid"></line><line x1="36" y1="184" x2="332" y2="184" class="solid"></line><path d="M 36,228 A 4,4 0,0,0 40,232" class="nofill"></path><line x1="40" y1="232" x2="328" y2="232" class="solid"></line><path d="M 332,228 A 4,4 0,0,1 328,232" class="nofill"></path></g></svg></div>
+<h2 id="pac---peripheral-access-crate"><a class="header" href="#pac---peripheral-access-crate">PAC - Peripheral Access Crate</a></h2>
+<p>The lowest level. Auto-generated from vendor SVD files, provides raw register access:</p>
+<pre><code class="language-rust ignore">// Direct register manipulation - verbose and error-prone
+let peripherals = pac::Peripherals::take().unwrap();
+peripherals.P0.pin_cnf[21].write(|w| w.dir().output());
+peripherals.P0.outset.write(|w| w.pin21().set_bit());
+</code></pre>
+<h2 id="hal---hardware-abstraction-layer"><a class="header" href="#hal---hardware-abstraction-layer">HAL - Hardware Abstraction Layer</a></h2>
+<p>Wraps the PAC with safe, idiomatic Rust APIs:</p>
+<pre><code class="language-rust ignore">// HAL provides typed, safe access
+let gpio = p0::Parts::new(peripherals.P0);
+let mut led = gpio.p0_21.into_push_pull_output(Level::Low);
+led.set_high().unwrap();
+</code></pre>
+<h2 id="bsp---board-support-package"><a class="header" href="#bsp---board-support-package">BSP - Board Support Package</a></h2>
+<p>Provides board-specific conveniences and pin mappings:</p>
+<pre><code class="language-rust ignore">// BSP knows about the board layout
+let board = Board::take().unwrap();
+board.display_pins.row1.set_high().unwrap();
+</code></pre>
+<h2 id="embedded-hal-traits"><a class="header" href="#embedded-hal-traits"><code>embedded-hal</code> Traits</a></h2>
+<p>The <a href="https://crates.io/crates/embedded-hal"><code>embedded-hal</code></a> crate defines
+standard traits that all HALs implement:</p>
+<ul>
+<li><code>InputPin</code>, <code>OutputPin</code> - Digital I/O</li>
+<li><code>DelayNs</code> - Timing delays</li>
+<li><code>I2c</code>, <code>Spi</code> - Communication buses</li>
+</ul>
+<p>This allows writing <strong>portable drivers</strong> that work on any microcontroller!</p>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>Start with BSP for simplicity, drop to HAL/PAC when needed</li>
+<li><code>embedded-hal</code> traits enable code reuse across platforms</li>
+<li>The micro:bit BSP (<code>microbit-v2</code>) wraps <code>nrf52833-hal</code></li>
+</ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;Which layer should I use?&quot;</em> - Start with BSP. Use HAL for features
+the BSP doesn't expose. Use PAC only for advanced/undocumented features.</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="meet-the-microbit"><a class="header" href="#meet-the-microbit">Meet the micro:bit</a></h1>
+<p>The <a href="https://microbit.org/">BBC micro:bit</a> is a small computer designed for
+education. Version 2 is perfect for learning embedded Rust because:</p>
+<ul>
+<li><strong>Built-in peripherals</strong> - LEDs, buttons, sensors with no wiring</li>
+<li><strong>On-board debugger</strong> - Flash and debug with just a USB cable</li>
+<li><strong>Great Rust support</strong> - Well-maintained <code>microbit-v2</code> crate</li>
+<li><strong>Affordable</strong> - Around $15-20 USD</li>
+</ul>
+<p>This section covers:</p>
+<ul>
+<li><a href="bare-metal/microbit-hardware.html">Hardware Overview</a> - What's on the board</li>
+<li><a href="bare-metal/setup.html">Development Setup</a> - Installing the toolchain</li>
+</ul>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>The micro:bit v2 uses a Nordic nRF52833 chip (ARM Cortex-M4)</li>
+<li>No extra hardware (JTAG debugger, wires) needed</li>
+<li>Originally designed for BBC's &quot;Make It Digital&quot; campaign in the UK</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hardware-overview"><a class="header" href="#hardware-overview">Hardware Overview</a></h1>
+<p>The micro:bit v2 packs many features into a small board:</p>
+<div style='width:100%; height:304px;'><style type="text/css">svg { width: 100% !important; }</style><svg xmlns="http://www.w3.org/2000/svg" width="408" height="304" class="svgbob"><style>.svgbob line, .svgbob path, .svgbob circle, .svgbob rect, .svgbob polygon {  stroke: var(--fg);  stroke-width: 2;  stroke-opacity: 1;  fill-opacity: 1;  stroke-linecap: round;  stroke-linejoin: miter;}.svgbob text {  white-space: pre;  fill: var(--fg);  font-family: Iosevka Fixed, monospace;  font-size: 14px;}.svgbob rect.backdrop {  stroke: none;  fill: transparent;}.svgbob .broken {  stroke-dasharray: 8;}.svgbob .filled {  fill: black;}.svgbob .bg_filled {  fill: transparent;  stroke-width: 1;}.svgbob .nofill {  fill: transparent;}.svgbob .end_marked_arrow {  marker-end: url(#arrow);}.svgbob .start_marked_arrow {  marker-start: url(#arrow);}.svgbob .end_marked_diamond {  marker-end: url(#diamond);}.svgbob .start_marked_diamond {  marker-start: url(#diamond);}.svgbob .end_marked_circle {  marker-end: url(#circle);}.svgbob .start_marked_circle {  marker-start: url(#circle);}.svgbob .end_marked_open_circle {  marker-end: url(#open_circle);}.svgbob .start_marked_open_circle {  marker-start: url(#open_circle);}.svgbob .end_marked_big_open_circle {  marker-end: url(#big_open_circle);}.svgbob .start_marked_big_open_circle {  marker-start: url(#big_open_circle);}</style><defs><marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 0,4 4,2 0,0"></polygon></marker><marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,2 2,0 4,2 2,4 0,2"></polygon></marker><marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="filled"></circle></marker><marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="bg_filled"></circle></marker><marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="3" class="bg_filled"></circle></marker></defs><rect class="backdrop" x="0" y="0" width="408" height="304"></rect><rect x="52" y="40" width="344" height="224" class="solid nofill" rx="4"></rect><rect x="76" y="72" width="32" height="32" class="solid nofill" rx="0"></rect><text x="90" y="92" >A</text><rect x="340" y="72" width="32" height="32" class="solid nofill" rx="0"></rect><text x="354" y="92" >B</text><text x="210" y="252" >USB</text><text x="154" y="76" >O</text><text x="186" y="76" >O</text><text x="218" y="76" >O</text><text x="250" y="76" >O</text><text x="282" y="76" >O</text><text x="154" y="108" >O</text><text x="186" y="108" >O</text><text x="218" y="108" >O</text><text x="250" y="108" >O</text><text x="282" y="108" >O</text><text x="154" y="140" >O</text><text x="186" y="140" >O</text><text x="218" y="140" >O</text><text x="250" y="140" >O</text><text x="282" y="140" >O</text><text x="154" y="172" >O</text><text x="186" y="172" >O</text><text x="218" y="172" >O</text><text x="250" y="172" >O</text><text x="282" y="172" >O</text><text x="154" y="204" >O</text><text x="186" y="204" >O</text><text x="218" y="204" >O</text><text x="250" y="204" >O</text><text x="282" y="204" >O</text><text x="170" y="284" >5x5</text><text x="202" y="284" >LED</text><text x="234" y="284" >matrix</text><text x="178" y="12" >micro:bit v2</text><g><line x1="164" y1="232" x2="276" y2="232" class="solid"></line><line x1="164" y1="232" x2="164" y2="256" class="solid"></line><line x1="276" y1="232" x2="276" y2="256" class="solid"></line></g></svg></div>
+<h2 id="main-components"><a class="header" href="#main-components">Main Components</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Component</th><th>Description</th></tr></thead><tbody>
+<tr><td><strong>CPU</strong></td><td>Nordic nRF52833 (ARM Cortex-M4, 64MHz)</td></tr>
+<tr><td><strong>Memory</strong></td><td>128KB RAM, 512KB Flash</td></tr>
+<tr><td><strong>LEDs</strong></td><td>5x5 red LED matrix</td></tr>
+<tr><td><strong>Buttons</strong></td><td>A (left) and B (right)</td></tr>
+<tr><td><strong>Accelerometer</strong></td><td>LSM303AGR (motion sensing)</td></tr>
+<tr><td><strong>Compass</strong></td><td>LSM303AGR (magnetometer)</td></tr>
+<tr><td><strong>Speaker</strong></td><td>Built-in buzzer</td></tr>
+<tr><td><strong>Microphone</strong></td><td>MEMS microphone</td></tr>
+<tr><td><strong>Radio</strong></td><td>Bluetooth Low Energy, proprietary radio</td></tr>
+</tbody></table>
+</div>
+<h2 id="the-led-matrix"><a class="header" href="#the-led-matrix">The LED Matrix</a></h2>
+<p>The 5x5 LED display is controlled by a matrix of rows and columns:</p>
+<ul>
+<li>5 row pins + 5 column pins = 10 GPIO pins (not 25!)</li>
+<li>To light an LED: set its row HIGH and column LOW</li>
+<li>Only one row can be active at a time (multiplexing)</li>
+</ul>
+<p>For this course, we'll use the <code>microbit-v2</code> crate which handles this
+complexity for us.</p>
+<h2 id="the-buttons"><a class="header" href="#the-buttons">The Buttons</a></h2>
+<p>Two buttons on the front:</p>
+<ul>
+<li><strong>Button A</strong> - Connected to GPIO P0.14</li>
+<li><strong>Button B</strong> - Connected to GPIO P0.23</li>
+</ul>
+<p>Both are <em>active low</em>: pressing the button connects to ground (reads LOW).</p>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>The LED matrix uses multiplexing - advanced topic we'll skip</li>
+<li>Buttons are &quot;active low&quot; - pressed = logic 0</li>
+<li>The on-board debugger appears as a USB drive for easy flashing</li>
+</ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;Why active low?&quot;</em> - It's a common hardware design pattern that
+provides better noise immunity.</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="development-setup"><a class="header" href="#development-setup">Development Setup</a></h1>
+<p>Before the session, install the required tools. This takes 10-15 minutes.</p>
+<h2 id="1-install-the-arm-target"><a class="header" href="#1-install-the-arm-target">1. Install the ARM Target</a></h2>
+<p>The micro:bit uses an ARM Cortex-M4 processor:</p>
+<pre><code class="language-bash">rustup target add thumbv7em-none-eabihf
+</code></pre>
+<h2 id="2-install-probe-rs"><a class="header" href="#2-install-probe-rs">2. Install probe-rs</a></h2>
+<p><a href="https://probe.rs/">probe-rs</a> is a modern tool for flashing and debugging
+embedded devices:</p>
+<p><strong>Linux/macOS:</strong></p>
+<pre><code class="language-bash">curl --proto '=https' --tlsv1.2 -LsSf \
+  https://github.com/probe-rs/probe-rs/releases/latest/download/probe-rs-tools-installer.sh | sh
+</code></pre>
+<p><strong>Windows:</strong></p>
+<pre><code class="language-powershell">irm https://github.com/probe-rs/probe-rs/releases/latest/download/probe-rs-tools-installer.ps1 | iex
+</code></pre>
+<h2 id="3-usb-permissions-linux-only"><a class="header" href="#3-usb-permissions-linux-only">3. USB Permissions (Linux only)</a></h2>
+<p>On Linux, add a udev rule to access the micro:bit without root:</p>
+<pre><code class="language-bash">echo 'SUBSYSTEM==&quot;hidraw&quot;, ATTRS{idVendor}==&quot;0d28&quot;, MODE=&quot;0660&quot;, GROUP=&quot;plugdev&quot;, TAG+=&quot;uaccess&quot;' | \
+  sudo tee /etc/udev/rules.d/50-microbit.rules
+sudo udevadm control --reload-rules
+</code></pre>
+<p>Then log out and back in, or run <code>sudo udevadm trigger</code>.</p>
+<h2 id="4-verify-the-setup"><a class="header" href="#4-verify-the-setup">4. Verify the Setup</a></h2>
+<p>Connect your micro:bit via USB and run:</p>
+<pre><code class="language-bash">probe-rs list
+</code></pre>
+<p>You should see something like:</p>
+<pre><code class="language-text">The following debug probes were found:
+[0]: BBC micro:bit CMSIS-DAP -- 0d28:0204:990636020005282030f1... (CMSIS-DAP)
+</code></pre>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Problem</th><th>Solution</th></tr></thead><tbody>
+<tr><td><code>probe-rs list</code> shows nothing</td><td>Try a different USB cable (some are charge-only)</td></tr>
+<tr><td>Permission denied (Linux)</td><td>Check udev rules, logout/login</td></tr>
+<tr><td>Device not found (macOS)</td><td>No special drivers needed, try different port</td></tr>
+<tr><td>Device not found (Windows)</td><td>Install <a href="https://zadig.akeo.ie/">Zadig</a> driver</td></tr>
+</tbody></table>
+</div><details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li><code>thumbv7em-none-eabihf</code> = Thumb instruction set, Cortex-M4, no OS, hardware float</li>
+<li>probe-rs replaces older tools like OpenOCD + GDB</li>
+<li>The micro:bit has a built-in debug probe (no extra hardware!)</li>
+</ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;What if I don't have a micro:bit?&quot;</em> - You can use QEMU for some examples,
+but hardware is recommended.</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="your-first-bare-metal-program"><a class="header" href="#your-first-bare-metal-program">Your First Bare Metal Program</a></h1>
+<p>Now let's write code! We'll start with the absolute minimum and build up to
+blinking LEDs and reading buttons.</p>
+<p>A bare metal Rust program has a different structure than regular Rust:</p>
+<pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+
+use cortex_m_rt::entry;
+
+#[entry]
+fn main() -&gt; ! {
+    loop {
+        // Your code here
+    }
+}
+</code></pre></pre>
+<h2 id="whats-different"><a class="header" href="#whats-different">What's Different?</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>#![no_main]</code></td><td>We provide our own entry point, not the standard <code>main</code></td></tr>
+<tr><td><code>#![no_std]</code></td><td>Don't link the standard library</td></tr>
+<tr><td><code>-&gt; !</code></td><td>Function never returns (infinite loop)</td></tr>
+<tr><td><code>#[entry]</code></td><td>Marks this as the program entry point</td></tr>
+</tbody></table>
+</div>
+<h2 id="the-panic-handler"><a class="header" href="#the-panic-handler">The Panic Handler</a></h2>
+<p>When something goes wrong (like <code>unwrap()</code> on <code>None</code>), Rust needs a panic
+handler. The <code>panic_halt</code> crate provides a simple one that just halts the CPU:</p>
+<pre><code class="language-rust ignore">extern crate panic_halt as _;  // Import for side effects (panic handler)
+</code></pre>
+<h2 id="why---"><a class="header" href="#why---">Why <code>-&gt; !</code>?</a></h2>
+<p>The <code>!</code> return type means &quot;never returns&quot;. On bare metal, there's nowhere to
+return to! Your program runs until:</p>
+<ul>
+<li>Power is removed</li>
+<li>The chip is reset</li>
+<li>It enters an infinite loop (intended or not)</li>
+</ul>
+<p>This section covers:</p>
+<ul>
+<li><a href="bare-metal/blink.html">Blink an LED</a> - Output: controlling hardware</li>
+<li><a href="bare-metal/buttons.html">Reading Button Input</a> - Input: responding to the world</li>
+</ul>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>Every bare metal program needs <code>#![no_std]</code> and <code>#![no_main]</code></li>
+<li>The panic handler is required - <code>panic_halt</code> is simplest</li>
+<li>The main loop runs forever - that's normal!</li>
+</ul>
+<p><strong>Why <code>extern crate</code> instead of <code>use</code>?</strong></p>
+<pre><code class="language-rust ignore">extern crate panic_halt as _;  // Traditional embedded style
+use panic_halt as _;           // Also works in Rust 2018+
+</code></pre>
+<p>Both work, but <code>extern crate</code> is more explicit about intent: &quot;link this crate
+for its side effects (the panic handler), don't import anything into scope.&quot;</p>
+<p>The <code>panic_halt</code> crate provides a <code>#[panic_handler]</code> function. We don't call
+any functions from it - we just need it linked into our binary. The <code>as _</code>
+means &quot;import nothing into the namespace.&quot;</p>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;What happens after <code>main</code> returns?&quot;</em> - It can't return! The <code>-&gt; !</code> type
+enforces this at compile time.</li>
+<li><em>&quot;Why <code>as _</code>?&quot;</em> - We need the crate linked (for its panic handler) but
+don't need to use any of its items by name.</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="blink-an-led"><a class="header" href="#blink-an-led">Blink an LED</a></h1>
+<p>Let's make something happen! We'll turn on an LED, then make it blink.</p>
+<h2 id="turn-on-a-single-led"><a class="header" href="#turn-on-a-single-led">Turn On a Single LED</a></h2>
+<p>The <code>microbit-v2</code> crate provides easy access to the board's hardware:</p>
+<pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+use cortex_m_rt::entry;
+use microbit::Board;
+use embedded_hal::digital::OutputPin;
+
+#[entry]
+fn main() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    // The LED matrix needs column LOW and row HIGH
+    board.display_pins.col1.set_low().unwrap();
+    board.display_pins.row1.set_high().unwrap();
+
+    loop {}
+}
+</code></pre></pre>
+<p>Run this with:</p>
+<pre><code class="language-bash">cargo embed --bin blink
+</code></pre>
+<p>You should see the top-left LED light up!</p>
+<h2 id="understanding-the-code"><a class="header" href="#understanding-the-code">Understanding the Code</a></h2>
+<ol>
+<li><strong><code>Board::take()</code></strong> - Gets ownership of all board peripherals (can only be
+called once)</li>
+<li><strong><code>display_pins</code></strong> - Access to the LED matrix pins</li>
+<li><strong><code>set_low()</code> / <code>set_high()</code></strong> - Control the pin voltage</li>
+</ol>
+<h2 id="adding-a-delay"><a class="header" href="#adding-a-delay">Adding a Delay</a></h2>
+<p>A static LED is boring. Let's make it blink using a simple delay:</p>
+<pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+use cortex_m::asm::delay;
+use cortex_m_rt::entry;
+use microbit::Board;
+use embedded_hal::digital::OutputPin;
+
+#[entry]
+fn main() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    board.display_pins.col1.set_low().unwrap();
+
+    loop {
+        board.display_pins.row1.set_high().unwrap();
+        delay(64_000_000);  // Approximately 1 second at 64MHz
+
+        board.display_pins.row1.set_low().unwrap();
+        delay(64_000_000);
+    }
+}
+</code></pre></pre>
+<p>The <code>delay()</code> function burns CPU cycles - one cycle per count. The nRF52833
+runs at 64 MHz (64 million cycles per second), so <code>delay(64_000_000)</code> waits
+roughly 1 second. It's not precise due to loop overhead, but it works for
+learning! For precise timing in real applications, use a hardware timer.</p>
+<blockquote>
+<p><strong>Note:</strong> We use <code>cortex_m::asm::delay</code> here to demonstrate bare metal
+programming with minimal dependencies. For real projects, use the HAL's
+<code>Timer</code> with <code>DelayNs</code> trait for precise, portable timing:</p>
+<pre><code class="language-rust ignore">use embedded_hal::delay::DelayNs;
+use microbit::hal::Timer;
+let mut timer = Timer::new(board.TIMER0);
+timer.delay_ms(1000);  // Precise 1 second delay
+</code></pre>
+</blockquote>
+<h2 id="try-it-yourself"><a class="header" href="#try-it-yourself">Try It Yourself</a></h2>
+<ol>
+<li>Change the delay to make it blink faster or slower</li>
+<li>Light up a different LED (try <code>col2</code>/<code>row2</code>)</li>
+<li>Create a pattern with multiple LEDs</li>
+</ol>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li><code>Board::take()</code> follows the singleton pattern - peripherals can only be
+taken once</li>
+<li><code>embedded_hal::digital::OutputPin</code> is a trait - same code works on any chip</li>
+<li><code>delay()</code> is a busy-wait loop, not a proper timer</li>
+</ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;Why <code>unwrap()</code> everywhere?&quot;</em> - These operations can't really fail on
+this hardware, but the traits return <code>Result</code> for portability.</li>
+<li><em>&quot;Is busy-waiting bad?&quot;</em> - For blinking an LED, it's fine. For real
+applications, use hardware timers or interrupts.</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="reading-button-input"><a class="header" href="#reading-button-input">Reading Button Input</a></h1>
+<p>Now let's respond to the real world by reading button presses.</p>
+<h2 id="basic-button-reading"><a class="header" href="#basic-button-reading">Basic Button Reading</a></h2>
+<p>The buttons are inputs, so we use the <code>InputPin</code> trait:</p>
+<pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+use cortex_m_rt::entry;
+use microbit::Board;
+use embedded_hal::digital::{InputPin, OutputPin};
+
+#[entry]
+fn main() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    // Set up one LED
+    board.display_pins.col1.set_low().unwrap();
+
+    loop {
+        // Button is &quot;active low&quot; - pressed = is_low()
+        if board.buttons.button_a.is_low().unwrap() {
+            board.display_pins.row1.set_high().unwrap();
+        } else {
+            board.display_pins.row1.set_low().unwrap();
+        }
+    }
+}
+</code></pre></pre>
+<p>Press button A and the LED lights up!</p>
+<h2 id="active-low-buttons"><a class="header" href="#active-low-buttons">Active Low Buttons</a></h2>
+<p>The micro:bit buttons are <em>active low</em>:</p>
+<div class="table-wrapper"><table><thead><tr><th>Button State</th><th><code>is_low()</code></th><th><code>is_high()</code></th></tr></thead><tbody>
+<tr><td>Pressed</td><td><code>true</code></td><td><code>false</code></td></tr>
+<tr><td>Released</td><td><code>false</code></td><td><code>true</code></td></tr>
+</tbody></table>
+</div>
+<p>This is a common hardware design - when not pressed, the pin is pulled high
+internally.</p>
+<h2 id="using-both-buttons"><a class="header" href="#using-both-buttons">Using Both Buttons</a></h2>
+<p>Let's use button A and button B for different actions:</p>
+<pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+use cortex_m_rt::entry;
+use microbit::Board;
+use embedded_hal::digital::{InputPin, OutputPin};
+
+#[entry]
+fn main() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    // Set up two columns of LEDs
+    board.display_pins.col1.set_low().unwrap();
+    board.display_pins.col5.set_low().unwrap();
+
+    loop {
+        // Button A controls left LED
+        if board.buttons.button_a.is_low().unwrap() {
+            board.display_pins.row1.set_high().unwrap();
+        } else {
+            board.display_pins.row1.set_low().unwrap();
+        }
+
+        // Button B controls right LED
+        if board.buttons.button_b.is_low().unwrap() {
+            board.display_pins.row5.set_high().unwrap();
+        } else {
+            board.display_pins.row5.set_low().unwrap();
+        }
+    }
+}
+</code></pre></pre>
+<h2 id="button-debouncing"><a class="header" href="#button-debouncing">Button Debouncing</a></h2>
+<p>Real buttons &quot;bounce&quot; - they rapidly switch on/off when pressed. For this
+course, we'll keep it simple. In production code, you'd add debouncing logic.</p>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>Buttons are inputs - use <code>InputPin</code> trait</li>
+<li>Active low is common in hardware - pressed means LOW</li>
+<li>The main loop polls continuously - works but uses CPU</li>
+</ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;Why active low?&quot;</em> - Better noise immunity and simpler circuit design.</li>
+<li><em>&quot;What about interrupts?&quot;</em> - You can trigger code on button press without
+polling, but that's an advanced topic.</li>
+</ul>
+<p><strong>Demo suggestion:</strong></p>
+<p>Show what happens without debouncing by counting button presses - you'll
+often get multiple counts per press.</p>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="exercises-1"><a class="header" href="#exercises-1">Exercises</a></h1>
+<p>Time to put it together! In this exercise, you'll combine LEDs and buttons
+to create an interactive LED pattern controller.</p>
+<h2 id="exercise-led-pattern-controller"><a class="header" href="#exercise-led-pattern-controller">Exercise: LED Pattern Controller</a></h2>
+<p><a href="exercises/course-8/led-pattern.html">LED Pattern Controller</a></p>
+<p>Build a program that:</p>
+<ol>
+<li>Displays patterns on the LED matrix</li>
+<li>Uses buttons to control the display</li>
+</ol>
+<p>This exercise practices:</p>
+<ul>
+<li>GPIO output (LEDs)</li>
+<li>GPIO input (buttons)</li>
+<li>State management without heap allocation</li>
+<li>Embedded Rust program structure</li>
+</ul>
+<details>
+<p><strong>Tips:</strong></p>
+<ul>
+<li>Start simple - get one pattern working first</li>
+<li>Use arrays to store patterns (they're stack-allocated)</li>
+<li>Test button logic separately before combining with LEDs</li>
+</ul>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="led-pattern-controller"><a class="header" href="#led-pattern-controller">LED Pattern Controller</a></h1>
+<p>Create a program that displays LED patterns and responds to button input.</p>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<ol>
+<li><strong>Display patterns</strong> on the 5x5 LED matrix</li>
+<li><strong>Button A</strong> cycles through 3 different patterns</li>
+<li><strong>Button B</strong> toggles the display on/off</li>
+</ol>
+<h2 id="starter-code"><a class="header" href="#starter-code">Starter Code</a></h2>
+<p>Copy this to <code>src/exercises/course-8/src/bin/led-pattern.rs</code>:</p>
+<pre><pre class="playground"><code class="language-rust compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+use cortex_m::asm::delay;
+use cortex_m_rt::entry;
+use microbit::Board;
+use embedded_hal::digital::{InputPin, OutputPin};
+
+// Simple 5x5 patterns (1 = LED on, 0 = LED off)
+const PATTERN_HEART: [[u8; 5]; 5] = [
+    [0, 1, 0, 1, 0],
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1],
+    [0, 1, 1, 1, 0],
+    [0, 0, 1, 0, 0],
+];
+
+const PATTERN_SMILE: [[u8; 5]; 5] = [
+    [0, 0, 0, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 1],
+    [0, 1, 1, 1, 0],
+];
+
+const PATTERN_CROSS: [[u8; 5]; 5] = [
+    [1, 0, 0, 0, 1],
+    [0, 1, 0, 1, 0],
+    [0, 0, 1, 0, 0],
+    [0, 1, 0, 1, 0],
+    [1, 0, 0, 0, 1],
+];
+
+#[entry]
+fn main() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    let mut current_pattern: usize = 0;
+    let mut display_on: bool = true;
+    let mut button_a_was_pressed = false;
+    let mut button_b_was_pressed = false;
+
+    loop {
+        // TODO: Check button A for pattern change
+        // Hint: Detect button press (transition from not pressed to pressed)
+        // to avoid cycling through patterns while button is held
+        let button_a_pressed = board.buttons.button_a.is_low().unwrap();
+
+        // TODO: Implement pattern cycling logic here
+
+        // TODO: Check button B for display toggle
+        let button_b_pressed = board.buttons.button_b.is_low().unwrap();
+
+        // TODO: Implement display toggle logic here
+
+        // TODO: Display the current pattern if display_on is true
+        // Hint: You'll need to iterate through rows and columns
+        // For each LED position, check the pattern array
+
+        // Update previous button states
+        button_a_was_pressed = button_a_pressed;
+        button_b_was_pressed = button_b_pressed;
+
+        // Small delay for button debouncing
+        delay(10_000);
+    }
+}
+
+// Helper function to get the current pattern
+fn get_pattern(index: usize) -&gt; &amp;'static [[u8; 5]; 5] {
+    match index {
+        0 =&gt; &amp;PATTERN_HEART,
+        1 =&gt; &amp;PATTERN_SMILE,
+        _ =&gt; &amp;PATTERN_CROSS,
+    }
+}
+</code></pre></pre>
+<h2 id="hints"><a class="header" href="#hints">Hints</a></h2>
+<details>
+<summary>Hint 1: Button Edge Detection</summary>
+<p>To detect a button <em>press</em> (not just held), check for a transition:</p>
+<pre><code class="language-rust ignore">if button_a_pressed &amp;&amp; !button_a_was_pressed {
+    // Button was just pressed
+    current_pattern = (current_pattern + 1) % 3;
+}
+</code></pre>
+</details>
+<details>
+<summary>Hint 2: Displaying a Pattern</summary>
+<p>The LED matrix needs row scanning. A simplified approach for one row:</p>
+<pre><code class="language-rust ignore">let pattern = get_pattern(current_pattern);
+
+// Display row 0
+if display_on &amp;&amp; pattern[0][0] == 1 {
+    board.display_pins.col1.set_low().unwrap();
+} else {
+    board.display_pins.col1.set_high().unwrap();
+}
+board.display_pins.row1.set_high().unwrap();
+delay(1000);
+board.display_pins.row1.set_low().unwrap();
+
+// Repeat for other rows...
+</code></pre>
+</details>
+<details>
+<summary>Hint 3: Full Display Loop</summary>
+<p>For a complete display, scan all rows rapidly:</p>
+<pre><code class="language-rust ignore">let cols = [
+    &amp;mut board.display_pins.col1,
+    &amp;mut board.display_pins.col2,
+    &amp;mut board.display_pins.col3,
+    &amp;mut board.display_pins.col4,
+    &amp;mut board.display_pins.col5,
+];
+
+let rows = [
+    &amp;mut board.display_pins.row1,
+    &amp;mut board.display_pins.row2,
+    &amp;mut board.display_pins.row3,
+    &amp;mut board.display_pins.row4,
+    &amp;mut board.display_pins.row5,
+];
+
+// You'll need to work around the borrow checker here!
+// Consider using the microbit::display module for easier access.
+</code></pre>
+</details>
+<h2 id="bonus-challenges"><a class="header" href="#bonus-challenges">Bonus Challenges</a></h2>
+<ol>
+<li><strong>Animation</strong>: Make the pattern scroll or animate</li>
+<li><strong>Brightness</strong>: Use PWM to control LED brightness with buttons</li>
+<li><strong>Sound</strong>: Add a beep when changing patterns (use the speaker)</li>
+</ol>
+<h2 id="running-the-exercise"><a class="header" href="#running-the-exercise">Running the Exercise</a></h2>
+<pre><code class="language-bash">cargo embed --bin led-pattern
+</code></pre>
+<details>
+<p><strong>Solution approach:</strong></p>
+<p>The key insight is that you need:</p>
+<ol>
+<li>Edge detection for buttons (not level detection)</li>
+<li>Row scanning for the LED matrix (or use a timer interrupt)</li>
+<li>State variables that persist across loop iterations</li>
+</ol>
+<p><strong>Why manual row scanning?</strong></p>
+<p>We implement row scanning manually here to understand how LED matrices work
+at a low level. In real projects, use the <code>Display</code> API which handles this
+automatically:</p>
+<pre><code class="language-rust ignore">use microbit::{display::blocking::Display, hal::Timer};
+
+let mut display = Display::new(board.display_pins);
+let mut timer = Timer::new(board.TIMER0);
+
+// Much simpler! Handles row scanning internally
+display.show(&amp;mut timer, pattern, 1000);
+</code></pre>
+</details>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="where-to-go-next"><a class="header" href="#where-to-go-next">Where to Go Next</a></h1>
+<p>Congratulations! You've written your first bare metal Rust programs. Here are
+some directions to continue your embedded journey.</p>
+<h2 id="try-touch-sensing-no-extra-hardware"><a class="header" href="#try-touch-sensing-no-extra-hardware">Try: Touch Sensing (No Extra Hardware!)</a></h2>
+<p>The micro:bit v2 logo has capacitive touch sensing built-in:</p>
+<pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+
+use cortex_m_rt::entry;
+use microbit::Board;
+use embedded_hal::digital::{InputPin, OutputPin};
+
+#[entry]
+fn main() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    // Configure logo pin for touch sensing
+    let touch = board.pins.p1_04.into_floating_input();
+
+    board.display_pins.col3.set_low().unwrap();
+
+    loop {
+        if touch.is_low().unwrap() {
+            // Logo is being touched - light center LED
+            board.display_pins.row3.set_high().unwrap();
+        } else {
+            board.display_pins.row3.set_low().unwrap();
+        }
+    }
+}
+</code></pre></pre>
+<p>Touch the gold logo and watch the LED respond!</p>
+<h2 id="built-in-features-to-explore"><a class="header" href="#built-in-features-to-explore">Built-in Features to Explore</a></h2>
+<p>The micro:bit v2 has many built-in peripherals you can experiment with:</p>
+<div class="table-wrapper"><table><thead><tr><th>Feature</th><th>Description</th><th>Complexity</th></tr></thead><tbody>
+<tr><td><strong>Temperature sensor</strong></td><td>Built into the nRF52833 chip</td><td>Easy</td></tr>
+<tr><td><strong>Accelerometer</strong></td><td>LSM303AGR via I2C</td><td>Medium</td></tr>
+<tr><td><strong>Compass</strong></td><td>LSM303AGR magnetometer</td><td>Medium</td></tr>
+<tr><td><strong>Speaker</strong></td><td>PWM-driven buzzer</td><td>Medium</td></tr>
+<tr><td><strong>Microphone</strong></td><td>PDM digital microphone</td><td>Advanced</td></tr>
+<tr><td><strong>Bluetooth</strong></td><td>BLE with SoftDevice</td><td>Advanced</td></tr>
+</tbody></table>
+</div>
+<h2 id="recommended-resources"><a class="header" href="#recommended-resources">Recommended Resources</a></h2>
+<h3 id="books-and-tutorials"><a class="header" href="#books-and-tutorials">Books and Tutorials</a></h3>
+<ul>
+<li><a href="https://docs.rust-embedded.org/discovery-mb2/">Discovery Book (micro:bit v2)</a> -
+Official Rust Embedded WG tutorial, comprehensive</li>
+<li><a href="https://mb2.implrust.com/">impl Rust for Microbit</a> -
+Project-based learning with fun examples</li>
+<li><a href="https://docs.rust-embedded.org/book/">The Embedded Rust Book</a> -
+General embedded Rust concepts</li>
+</ul>
+<h3 id="frameworks"><a class="header" href="#frameworks">Frameworks</a></h3>
+<ul>
+<li><a href="https://embassy.dev/">Embassy</a> - Async embedded framework, great for
+complex applications with multiple tasks</li>
+<li><a href="https://rtic.rs/">RTIC</a> - Real-Time Interrupt-driven Concurrency framework</li>
+</ul>
+<h3 id="community"><a class="header" href="#community">Community</a></h3>
+<ul>
+<li><a href="https://matrix.to/#/#rust-embedded:matrix.org">Rust Embedded Matrix Chat</a></li>
+<li><a href="https://github.com/rust-embedded">Rust Embedded GitHub</a></li>
+<li><a href="https://github.com/rust-embedded/awesome-embedded-rust">awesome-embedded-rust</a> -
+Curated list of crates and resources</li>
+</ul>
+<h2 id="whats-different-in-production-code"><a class="header" href="#whats-different-in-production-code">What's Different in Production Code?</a></h2>
+<p>As you progress, you'll encounter more advanced patterns:</p>
+<div class="table-wrapper"><table><thead><tr><th>Learning Code</th><th>Production Code</th></tr></thead><tbody>
+<tr><td><code>delay()</code> busy-wait</td><td>Hardware timers, interrupts</td></tr>
+<tr><td>Polling buttons</td><td>Interrupt-driven input</td></tr>
+<tr><td>Blocking I/O</td><td>Async with Embassy</td></tr>
+<tr><td>Manual row scanning</td><td>Display driver crates</td></tr>
+<tr><td><code>panic_halt</code></td><td><code>defmt</code> + RTT for debugging</td></tr>
+</tbody></table>
+</div><details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>The micro:bit is a great platform to keep experimenting with</li>
+<li>Embassy makes complex async embedded code much easier</li>
+<li>The Discovery Book is the logical next step for deeper learning</li>
+</ul>
+<p><strong>For the instructor:</strong></p>
+<ul>
+<li>Demo the touch sensing if time permits - it's a crowd-pleaser</li>
+<li>Point students to the Discovery Book for self-study</li>
+<li>Embassy is the future of embedded Rust but adds complexity</li>
 </ul>
 </details>
 

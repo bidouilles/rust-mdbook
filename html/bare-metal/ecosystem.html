@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Course Structure - Rust-LINFO2315</title>
+        <title>The Embedded Ecosystem - Rust-LINFO2315</title>
         <!-- Custom HTML head -->
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +124,7 @@
                         <a href="https://github.com/cpelsser/rust-mdbook" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/running-the-course/course-structure.md" title="Suggest an edit" aria-label="Suggest an edit"
+                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/bare-metal/ecosystem.md" title="Suggest an edit" aria-label="Suggest an edit"
                            target="_blank">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
@@ -152,27 +152,61 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="course-structure"><a class="header" href="#course-structure">Course Structure</a></h1>
-<p>The course is fast paced and covers a lot of ground:</p>
+                        <h1 id="the-embedded-ecosystem"><a class="header" href="#the-embedded-ecosystem">The Embedded Ecosystem</a></h1>
+<p>Rust's embedded ecosystem is organized in layers, from low-level hardware access
+to high-level board support:</p>
+<div style='width:100%; height:256px;'><style type="text/css">svg { width: 100% !important; }</style><svg xmlns="http://www.w3.org/2000/svg" width="344" height="256" class="svgbob"><style>.svgbob line, .svgbob path, .svgbob circle, .svgbob rect, .svgbob polygon {  stroke: var(--fg);  stroke-width: 2;  stroke-opacity: 1;  fill-opacity: 1;  stroke-linecap: round;  stroke-linejoin: miter;}.svgbob text {  white-space: pre;  fill: var(--fg);  font-family: Iosevka Fixed, monospace;  font-size: 14px;}.svgbob rect.backdrop {  stroke: none;  fill: transparent;}.svgbob .broken {  stroke-dasharray: 8;}.svgbob .filled {  fill: black;}.svgbob .bg_filled {  fill: transparent;  stroke-width: 1;}.svgbob .nofill {  fill: transparent;}.svgbob .end_marked_arrow {  marker-end: url(#arrow);}.svgbob .start_marked_arrow {  marker-start: url(#arrow);}.svgbob .end_marked_diamond {  marker-end: url(#diamond);}.svgbob .start_marked_diamond {  marker-start: url(#diamond);}.svgbob .end_marked_circle {  marker-end: url(#circle);}.svgbob .start_marked_circle {  marker-start: url(#circle);}.svgbob .end_marked_open_circle {  marker-end: url(#open_circle);}.svgbob .start_marked_open_circle {  marker-start: url(#open_circle);}.svgbob .end_marked_big_open_circle {  marker-end: url(#big_open_circle);}.svgbob .start_marked_big_open_circle {  marker-start: url(#big_open_circle);}</style><defs><marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 0,4 4,2 0,0"></polygon></marker><marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,2 2,0 4,2 2,4 0,2"></polygon></marker><marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="filled"></circle></marker><marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="bg_filled"></circle></marker><marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="3" class="bg_filled"></circle></marker></defs><rect class="backdrop" x="0" y="0" width="344" height="256"></rect><text x="90" y="28" >Your</text><text x="130" y="28" >Application</text><text x="226" y="28" >Code</text><text x="74" y="60" >BSP</text><path d="M 112,48 A 16,16 0,0,0 112,64" class="nofill"></path><text x="114" y="60" >Board</text><text x="162" y="60" >Support</text><text x="226" y="60" >Package</text><path d="M 280,48 A 16,16 0,0,1 280,64" class="nofill"></path><text x="82" y="108" >HAL</text><path d="M 120,96 A 16,16 0,0,0 120,112" class="nofill"></path><text x="122" y="108" >Hardware</text><text x="194" y="108" >Abstraction</text><path d="M 280,96 A 16,16 0,0,1 280,112" class="nofill"></path><text x="90" y="156" >PAC</text><path d="M 128,144 A 16,16 0,0,0 128,160" class="nofill"></path><text x="130" y="156" >Peripheral</text><text x="218" y="156" >Access</text><path d="M 264,144 A 16,16 0,0,1 264,160" class="nofill"></path><text x="146" y="204" >Hardware</text><text x="106" y="220" >Nordic</text><text x="162" y="220" >nRF52833</text><text x="234" y="220" >chip</text><text x="122" y="76" >microbit-v2</text><text x="122" y="124" >nrf52833-hal</text><text x="122" y="172" >nrf52833-pac</text><g><path d="M 40,8 A 4,4 0,0,0 36,12" class="nofill"></path><line x1="36" y1="12" x2="36" y2="228" class="solid"></line><line x1="40" y1="8" x2="328" y2="8" class="solid"></line><path d="M 328,8 A 4,4 0,0,1 332,12" class="nofill"></path><line x1="332" y1="12" x2="332" y2="228" class="solid"></line><line x1="36" y1="40" x2="332" y2="40" class="solid"></line><line x1="36" y1="88" x2="332" y2="88" class="solid"></line><line x1="36" y1="136" x2="332" y2="136" class="solid"></line><line x1="36" y1="184" x2="332" y2="184" class="solid"></line><path d="M 36,228 A 4,4 0,0,0 40,232" class="nofill"></path><line x1="40" y1="232" x2="328" y2="232" class="solid"></line><path d="M 332,228 A 4,4 0,0,1 328,232" class="nofill"></path></g></svg></div>
+<h2 id="pac---peripheral-access-crate"><a class="header" href="#pac---peripheral-access-crate">PAC - Peripheral Access Crate</a></h2>
+<p>The lowest level. Auto-generated from vendor SVD files, provides raw register access:</p>
+<pre><code class="language-rust ignore">// Direct register manipulation - verbose and error-prone
+let peripherals = pac::Peripherals::take().unwrap();
+peripherals.P0.pin_cnf[21].write(|w| w.dir().output());
+peripherals.P0.outset.write(|w| w.pin21().set_bit());
+</code></pre>
+<h2 id="hal---hardware-abstraction-layer"><a class="header" href="#hal---hardware-abstraction-layer">HAL - Hardware Abstraction Layer</a></h2>
+<p>Wraps the PAC with safe, idiomatic Rust APIs:</p>
+<pre><code class="language-rust ignore">// HAL provides typed, safe access
+let gpio = p0::Parts::new(peripherals.P0);
+let mut led = gpio.p0_21.into_push_pull_output(Level::Low);
+led.set_high().unwrap();
+</code></pre>
+<h2 id="bsp---board-support-package"><a class="header" href="#bsp---board-support-package">BSP - Board Support Package</a></h2>
+<p>Provides board-specific conveniences and pin mappings:</p>
+<pre><code class="language-rust ignore">// BSP knows about the board layout
+let board = Board::take().unwrap();
+board.display_pins.row1.set_high().unwrap();
+</code></pre>
+<h2 id="embedded-hal-traits"><a class="header" href="#embedded-hal-traits"><code>embedded-hal</code> Traits</a></h2>
+<p>The <a href="https://crates.io/crates/embedded-hal"><code>embedded-hal</code></a> crate defines
+standard traits that all HALs implement:</p>
 <ul>
-<li>Course 1: Basic Rust.</li>
-<li>Course 2: Ownership and the borrow checker.</li>
-<li>Course 3: Compound data types,  pattern matching.</li>
-<li>Course 4: The standard library.</li>
-<li>Course 5: Traits and generics, error handling</li>
-<li>Course 6: Testing, unsafe Rust.</li>
-<li>Course 7: Concurrency in Rust and interoperability with other languages</li>
-<li>Course 8: Bare metal Rust with micro:bit</li>
+<li><code>InputPin</code>, <code>OutputPin</code> - Digital I/O</li>
+<li><code>DelayNs</code> - Timing delays</li>
+<li><code>I2c</code>, <code>Spi</code> - Communication buses</li>
 </ul>
+<p>This allows writing <strong>portable drivers</strong> that work on any microcontroller!</p>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>Start with BSP for simplicity, drop to HAL/PAC when needed</li>
+<li><code>embedded-hal</code> traits enable code reuse across platforms</li>
+<li>The micro:bit BSP (<code>microbit-v2</code>) wraps <code>nrf52833-hal</code></li>
+</ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;Which layer should I use?&quot;</em> - Start with BSP. Use HAL for features
+the BSP doesn't expose. Use PAC only for advanced/undocumented features.</li>
+</ul>
+</details>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../welcome.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../bare-metal/no-std.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../bare-metal/microbit.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -181,10 +215,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../welcome.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../bare-metal/no-std.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../bare-metal/microbit.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

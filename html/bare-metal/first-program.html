@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Course Structure - Rust-LINFO2315</title>
+        <title>Your First Bare Metal Program - Rust-LINFO2315</title>
         <!-- Custom HTML head -->
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +124,7 @@
                         <a href="https://github.com/cpelsser/rust-mdbook" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/running-the-course/course-structure.md" title="Suggest an edit" aria-label="Suggest an edit"
+                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/bare-metal/first-program.md" title="Suggest an edit" aria-label="Suggest an edit"
                            target="_blank">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
@@ -152,27 +152,83 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="course-structure"><a class="header" href="#course-structure">Course Structure</a></h1>
-<p>The course is fast paced and covers a lot of ground:</p>
+                        <h1 id="your-first-bare-metal-program"><a class="header" href="#your-first-bare-metal-program">Your First Bare Metal Program</a></h1>
+<p>Now let's write code! We'll start with the absolute minimum and build up to
+blinking LEDs and reading buttons.</p>
+<p>A bare metal Rust program has a different structure than regular Rust:</p>
+<pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+
+use cortex_m_rt::entry;
+
+#[entry]
+fn main() -&gt; ! {
+    loop {
+        // Your code here
+    }
+}
+</code></pre></pre>
+<h2 id="whats-different"><a class="header" href="#whats-different">What's Different?</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Attribute</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>#![no_main]</code></td><td>We provide our own entry point, not the standard <code>main</code></td></tr>
+<tr><td><code>#![no_std]</code></td><td>Don't link the standard library</td></tr>
+<tr><td><code>-&gt; !</code></td><td>Function never returns (infinite loop)</td></tr>
+<tr><td><code>#[entry]</code></td><td>Marks this as the program entry point</td></tr>
+</tbody></table>
+</div>
+<h2 id="the-panic-handler"><a class="header" href="#the-panic-handler">The Panic Handler</a></h2>
+<p>When something goes wrong (like <code>unwrap()</code> on <code>None</code>), Rust needs a panic
+handler. The <code>panic_halt</code> crate provides a simple one that just halts the CPU:</p>
+<pre><code class="language-rust ignore">extern crate panic_halt as _;  // Import for side effects (panic handler)
+</code></pre>
+<h2 id="why---"><a class="header" href="#why---">Why <code>-&gt; !</code>?</a></h2>
+<p>The <code>!</code> return type means &quot;never returns&quot;. On bare metal, there's nowhere to
+return to! Your program runs until:</p>
 <ul>
-<li>Course 1: Basic Rust.</li>
-<li>Course 2: Ownership and the borrow checker.</li>
-<li>Course 3: Compound data types,  pattern matching.</li>
-<li>Course 4: The standard library.</li>
-<li>Course 5: Traits and generics, error handling</li>
-<li>Course 6: Testing, unsafe Rust.</li>
-<li>Course 7: Concurrency in Rust and interoperability with other languages</li>
-<li>Course 8: Bare metal Rust with micro:bit</li>
+<li>Power is removed</li>
+<li>The chip is reset</li>
+<li>It enters an infinite loop (intended or not)</li>
 </ul>
+<p>This section covers:</p>
+<ul>
+<li><a href="blink.html">Blink an LED</a> - Output: controlling hardware</li>
+<li><a href="buttons.html">Reading Button Input</a> - Input: responding to the world</li>
+</ul>
+<details>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>Every bare metal program needs <code>#![no_std]</code> and <code>#![no_main]</code></li>
+<li>The panic handler is required - <code>panic_halt</code> is simplest</li>
+<li>The main loop runs forever - that's normal!</li>
+</ul>
+<p><strong>Why <code>extern crate</code> instead of <code>use</code>?</strong></p>
+<pre><code class="language-rust ignore">extern crate panic_halt as _;  // Traditional embedded style
+use panic_halt as _;           // Also works in Rust 2018+
+</code></pre>
+<p>Both work, but <code>extern crate</code> is more explicit about intent: &quot;link this crate
+for its side effects (the panic handler), don't import anything into scope.&quot;</p>
+<p>The <code>panic_halt</code> crate provides a <code>#[panic_handler]</code> function. We don't call
+any functions from it - we just need it linked into our binary. The <code>as _</code>
+means &quot;import nothing into the namespace.&quot;</p>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;What happens after <code>main</code> returns?&quot;</em> - It can't return! The <code>-&gt; !</code> type
+enforces this at compile time.</li>
+<li><em>&quot;Why <code>as _</code>?&quot;</em> - We need the crate linked (for its panic handler) but
+don't need to use any of its items by name.</li>
+</ul>
+</details>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../welcome.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../bare-metal/setup.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../bare-metal/blink.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -181,10 +237,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../welcome.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../bare-metal/setup.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../bare-metal/blink.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Course Structure - Rust-LINFO2315</title>
+        <title>Blink an LED - Rust-LINFO2315</title>
         <!-- Custom HTML head -->
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,7 +124,7 @@
                         <a href="https://github.com/cpelsser/rust-mdbook" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/running-the-course/course-structure.md" title="Suggest an edit" aria-label="Suggest an edit"
+                        <a href="https://github.com/cpelsser/rust-mdbook/edit/main/src/bare-metal/blink.md" title="Suggest an edit" aria-label="Suggest an edit"
                            target="_blank">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
@@ -152,27 +152,111 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="course-structure"><a class="header" href="#course-structure">Course Structure</a></h1>
-<p>The course is fast paced and covers a lot of ground:</p>
+                        <h1 id="blink-an-led"><a class="header" href="#blink-an-led">Blink an LED</a></h1>
+<p>Let's make something happen! We'll turn on an LED, then make it blink.</p>
+<h2 id="turn-on-a-single-led"><a class="header" href="#turn-on-a-single-led">Turn On a Single LED</a></h2>
+<p>The <code>microbit-v2</code> crate provides easy access to the board's hardware:</p>
+<pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+use cortex_m_rt::entry;
+use microbit::Board;
+use embedded_hal::digital::OutputPin;
+
+#[entry]
+fn main() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    // The LED matrix needs column LOW and row HIGH
+    board.display_pins.col1.set_low().unwrap();
+    board.display_pins.row1.set_high().unwrap();
+
+    loop {}
+}
+</code></pre></pre>
+<p>Run this with:</p>
+<pre><code class="language-bash">cargo embed --bin blink
+</code></pre>
+<p>You should see the top-left LED light up!</p>
+<h2 id="understanding-the-code"><a class="header" href="#understanding-the-code">Understanding the Code</a></h2>
+<ol>
+<li><strong><code>Board::take()</code></strong> - Gets ownership of all board peripherals (can only be
+called once)</li>
+<li><strong><code>display_pins</code></strong> - Access to the LED matrix pins</li>
+<li><strong><code>set_low()</code> / <code>set_high()</code></strong> - Control the pin voltage</li>
+</ol>
+<h2 id="adding-a-delay"><a class="header" href="#adding-a-delay">Adding a Delay</a></h2>
+<p>A static LED is boring. Let's make it blink using a simple delay:</p>
+<pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">#![no_main]
+#![no_std]
+
+extern crate panic_halt as _;
+use cortex_m::asm::delay;
+use cortex_m_rt::entry;
+use microbit::Board;
+use embedded_hal::digital::OutputPin;
+
+#[entry]
+fn main() -&gt; ! {
+    let mut board = Board::take().unwrap();
+
+    board.display_pins.col1.set_low().unwrap();
+
+    loop {
+        board.display_pins.row1.set_high().unwrap();
+        delay(64_000_000);  // Approximately 1 second at 64MHz
+
+        board.display_pins.row1.set_low().unwrap();
+        delay(64_000_000);
+    }
+}
+</code></pre></pre>
+<p>The <code>delay()</code> function burns CPU cycles - one cycle per count. The nRF52833
+runs at 64 MHz (64 million cycles per second), so <code>delay(64_000_000)</code> waits
+roughly 1 second. It's not precise due to loop overhead, but it works for
+learning! For precise timing in real applications, use a hardware timer.</p>
+<blockquote>
+<p><strong>Note:</strong> We use <code>cortex_m::asm::delay</code> here to demonstrate bare metal
+programming with minimal dependencies. For real projects, use the HAL's
+<code>Timer</code> with <code>DelayNs</code> trait for precise, portable timing:</p>
+<pre><code class="language-rust ignore">use embedded_hal::delay::DelayNs;
+use microbit::hal::Timer;
+let mut timer = Timer::new(board.TIMER0);
+timer.delay_ms(1000);  // Precise 1 second delay
+</code></pre>
+</blockquote>
+<h2 id="try-it-yourself"><a class="header" href="#try-it-yourself">Try It Yourself</a></h2>
+<ol>
+<li>Change the delay to make it blink faster or slower</li>
+<li>Light up a different LED (try <code>col2</code>/<code>row2</code>)</li>
+<li>Create a pattern with multiple LEDs</li>
+</ol>
+<details>
+<p><strong>Key points:</strong></p>
 <ul>
-<li>Course 1: Basic Rust.</li>
-<li>Course 2: Ownership and the borrow checker.</li>
-<li>Course 3: Compound data types,  pattern matching.</li>
-<li>Course 4: The standard library.</li>
-<li>Course 5: Traits and generics, error handling</li>
-<li>Course 6: Testing, unsafe Rust.</li>
-<li>Course 7: Concurrency in Rust and interoperability with other languages</li>
-<li>Course 8: Bare metal Rust with micro:bit</li>
+<li><code>Board::take()</code> follows the singleton pattern - peripherals can only be
+taken once</li>
+<li><code>embedded_hal::digital::OutputPin</code> is a trait - same code works on any chip</li>
+<li><code>delay()</code> is a busy-wait loop, not a proper timer</li>
 </ul>
+<p><strong>Common questions:</strong></p>
+<ul>
+<li><em>&quot;Why <code>unwrap()</code> everywhere?&quot;</em> - These operations can't really fail on
+this hardware, but the traits return <code>Result</code> for portability.</li>
+<li><em>&quot;Is busy-waiting bad?&quot;</em> - For blinking an LED, it's fine. For real
+applications, use hardware timers or interrupts.</li>
+</ul>
+</details>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../welcome.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../bare-metal/first-program.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../bare-metal/buttons.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -181,10 +265,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../welcome.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../bare-metal/first-program.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next prefetch" href="../running-the-course/keyboard-shortcuts.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../bare-metal/buttons.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
