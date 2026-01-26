@@ -170,11 +170,26 @@ to create an interactive LED pattern controller.</p>
 <li>Embedded Rust program structure</li>
 </ul>
 <details>
-<p><strong>Tips:</strong></p>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>This exercise combines input (buttons) and output (LEDs) in one program</li>
+<li>State management without heap allocation is a key embedded skill</li>
+<li>Row scanning demonstrates how real LED matrices work</li>
+</ul>
+<p><strong>Tips for students:</strong></p>
 <ul>
 <li>Start simple - get one pattern working first</li>
 <li>Use arrays to store patterns (they're stack-allocated)</li>
 <li>Test button logic separately before combining with LEDs</li>
+</ul>
+<p><strong>Common student questions:</strong></p>
+<ul>
+<li><em>&quot;Why does my display flicker?&quot;</em> - The row scanning delay might be too long. Try
+reducing the delay between rows.</li>
+<li><em>&quot;The button seems to register multiple presses&quot;</em> - You need edge detection (check
+for transition from unpressed to pressed), not just level detection.</li>
+<li><em>&quot;Can I use a loop instead of repeating code for each row?&quot;</em> - Yes, but the borrow
+checker makes it tricky. The Display API handles this for you.</li>
 </ul>
 </details>
 

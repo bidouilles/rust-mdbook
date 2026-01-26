@@ -236,11 +236,21 @@ Curated list of crates and resources</li>
 <li>Embassy makes complex async embedded code much easier</li>
 <li>The Discovery Book is the logical next step for deeper learning</li>
 </ul>
-<p><strong>For the instructor:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
-<li>Demo the touch sensing if time permits - it's a crowd-pleaser</li>
-<li>Point students to the Discovery Book for self-study</li>
-<li>Embassy is the future of embedded Rust but adds complexity</li>
+<li><em>&quot;Should I learn Embassy or RTIC next?&quot;</em> - Embassy is more beginner-friendly and
+uses familiar async/await syntax. RTIC is powerful but has a steeper learning curve.</li>
+<li><em>&quot;Can I use the accelerometer/compass today?&quot;</em> - They require I2C communication,
+which is a bit more complex. The Discovery Book covers this well.</li>
+<li><em>&quot;How do I debug when things go wrong?&quot;</em> - Use <code>defmt</code> + RTT for printf-style
+debugging, or use probe-rs with VS Code for breakpoints.</li>
+<li><em>&quot;Is this how real embedded products are built?&quot;</em> - Production code uses interrupts,
+DMA, and proper power management. This course teaches the foundations.</li>
+</ul>
+<p><strong>Demo suggestion:</strong></p>
+<ul>
+<li>Show the touch sensing example if time permits - it's a crowd-pleaser!</li>
+<li>The logo touch requires no extra hardware and surprises students.</li>
 </ul>
 </details>
 

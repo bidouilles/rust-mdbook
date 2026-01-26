@@ -212,12 +212,16 @@ for its side effects (the panic handler), don't import anything into scope.&quot
 <p>The <code>panic_halt</code> crate provides a <code>#[panic_handler]</code> function. We don't call
 any functions from it - we just need it linked into our binary. The <code>as _</code>
 means &quot;import nothing into the namespace.&quot;</p>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;What happens after <code>main</code> returns?&quot;</em> - It can't return! The <code>-&gt; !</code> type
 enforces this at compile time.</li>
 <li><em>&quot;Why <code>as _</code>?&quot;</em> - We need the crate linked (for its panic handler) but
 don't need to use any of its items by name.</li>
+<li><em>&quot;What does <code>panic_halt</code> actually do?&quot;</em> - It defines a function that runs
+when a panic occurs. It simply enters an infinite loop, halting the CPU.</li>
+<li><em>&quot;Are there other panic handlers?&quot;</em> - Yes! <code>panic-probe</code> prints via the
+debugger, <code>panic-rtt-target</code> uses RTT. For learning, <code>panic_halt</code> is simplest.</li>
 </ul>
 </details>
 

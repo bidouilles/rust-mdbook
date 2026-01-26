@@ -221,12 +221,14 @@ everything from <code>core</code>.</p>
 <li><code>HashMap</code> depends on random number generation (for security)</li>
 <li><code>std</code> re-exports the contents of both <code>core</code> and <code>alloc</code></li>
 </ul>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;Can I use <code>Vec</code> on bare metal?&quot;</em> - Yes, if you provide a global allocator.
 Many embedded projects avoid dynamic allocation entirely.</li>
 <li><em>&quot;What about <code>println!</code>?&quot;</em> - You can implement your own using UART/serial,
 or use RTT (Real-Time Transfer) for debugging.</li>
+<li><em>&quot;Why avoid dynamic allocation?&quot;</em> - Heap fragmentation and allocation failures
+are hard to handle in safety-critical systems. Fixed-size buffers are predictable.</li>
 </ul>
 </details>
 

@@ -197,10 +197,14 @@ sudo udevadm control --reload-rules
 <li>probe-rs replaces older tools like OpenOCD + GDB</li>
 <li>The micro:bit has a built-in debug probe (no extra hardware!)</li>
 </ul>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;What if I don't have a micro:bit?&quot;</em> - You can use QEMU for some examples,
 but hardware is recommended.</li>
+<li><em>&quot;Why <code>thumbv7em-none-eabihf</code>?&quot;</em> - <code>thumb</code> = instruction set, <code>v7em</code> = Cortex-M4,
+<code>none</code> = no OS, <code>eabihf</code> = embedded ABI with hardware floating-point.</li>
+<li><em>&quot;Can I use OpenOCD instead of probe-rs?&quot;</em> - Yes, but probe-rs is simpler to
+set up and is the modern standard for Rust embedded development.</li>
 </ul>
 </details>
 

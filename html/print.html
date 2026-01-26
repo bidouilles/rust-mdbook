@@ -7635,7 +7635,7 @@ embedded systems are built.</p>
 </ul>
 <h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
 <ul>
-<li>Completed Courses 1-6 (especially ownership and traits)</li>
+<li>Completed Courses 1-7 (especially ownership and traits)</li>
 <li>BBC micro:bit v2 hardware</li>
 <li>Development tools installed (see <a href="bare-metal/setup.html">Setup</a>)</li>
 </ul>
@@ -7646,11 +7646,13 @@ embedded systems are built.</p>
 <li>Embedded Rust has grown significantly since 2018</li>
 <li>The micro:bit is ideal for learning: built-in LEDs, buttons, and debugger</li>
 </ul>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;Is this harder than regular Rust?&quot;</em> - Different, not harder. Less library support,
 but the core language is the same.</li>
 <li><em>&quot;Do I need electronics experience?&quot;</em> - No! The micro:bit requires no wiring.</li>
+<li><em>&quot;Will this work on other microcontrollers?&quot;</em> - The concepts transfer! The specific
+crates differ (e.g., <code>esp-hal</code> for ESP32), but <code>embedded-hal</code> traits are universal.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="bare-metal-basics"><a class="header" href="#bare-metal-basics">Bare Metal Basics</a></h1>
@@ -7678,6 +7680,15 @@ and you must handle everything yourself (or use libraries that do).</p>
 <li>Bare metal doesn't mean &quot;hard&quot; - it means &quot;close to hardware&quot;</li>
 <li>You trade convenience for control and predictability</li>
 <li>The Rust embedded ecosystem provides excellent abstractions</li>
+</ul>
+<p><strong>Common student questions:</strong></p>
+<ul>
+<li><em>&quot;Why would I choose bare metal over an OS?&quot;</em> - For real-time guarantees, minimal
+resource usage, or when no OS exists for your hardware.</li>
+<li><em>&quot;Is embedded Rust production-ready?&quot;</em> - Yes! Companies use Rust in production
+embedded systems. The ecosystem has matured significantly since 2018.</li>
+<li><em>&quot;Can I use my favorite crates?&quot;</em> - Many crates work with <code>no_std</code>. Check for
+<code>#![no_std]</code> support in the crate documentation.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="what-is-no_std"><a class="header" href="#what-is-no_std">What is <code>no_std</code>?</a></h1>
@@ -7749,12 +7760,14 @@ everything from <code>core</code>.</p>
 <li><code>HashMap</code> depends on random number generation (for security)</li>
 <li><code>std</code> re-exports the contents of both <code>core</code> and <code>alloc</code></li>
 </ul>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;Can I use <code>Vec</code> on bare metal?&quot;</em> - Yes, if you provide a global allocator.
 Many embedded projects avoid dynamic allocation entirely.</li>
 <li><em>&quot;What about <code>println!</code>?&quot;</em> - You can implement your own using UART/serial,
 or use RTT (Real-Time Transfer) for debugging.</li>
+<li><em>&quot;Why avoid dynamic allocation?&quot;</em> - Heap fragmentation and allocation failures
+are hard to handle in safety-critical systems. Fixed-size buffers are predictable.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="the-embedded-ecosystem"><a class="header" href="#the-embedded-ecosystem">The Embedded Ecosystem</a></h1>
@@ -7797,10 +7810,14 @@ standard traits that all HALs implement:</p>
 <li><code>embedded-hal</code> traits enable code reuse across platforms</li>
 <li>The micro:bit BSP (<code>microbit-v2</code>) wraps <code>nrf52833-hal</code></li>
 </ul>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;Which layer should I use?&quot;</em> - Start with BSP. Use HAL for features
 the BSP doesn't expose. Use PAC only for advanced/undocumented features.</li>
+<li><em>&quot;What's an SVD file?&quot;</em> - System View Description, an XML file from chip vendors
+that describes all registers. Tools like <code>svd2rust</code> generate PACs from it.</li>
+<li><em>&quot;Can I mix layers?&quot;</em> - Yes! You might use BSP for buttons and HAL for timers.
+The BSP re-exports HAL types, so they're compatible.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="meet-the-microbit"><a class="header" href="#meet-the-microbit">Meet the micro:bit</a></h1>
@@ -7823,6 +7840,15 @@ education. Version 2 is perfect for learning embedded Rust because:</p>
 <li>The micro:bit v2 uses a Nordic nRF52833 chip (ARM Cortex-M4)</li>
 <li>No extra hardware (JTAG debugger, wires) needed</li>
 <li>Originally designed for BBC's &quot;Make It Digital&quot; campaign in the UK</li>
+</ul>
+<p><strong>Common student questions:</strong></p>
+<ul>
+<li><em>&quot;Can I use micro:bit v1?&quot;</em> - This course targets v2. The v1 has a different chip
+(nRF51822) and less memory. Code won't be directly compatible.</li>
+<li><em>&quot;Where can I buy one?&quot;</em> - Official resellers at microbit.org, or Amazon/electronics
+retailers. Around $15-20 USD.</li>
+<li><em>&quot;What if I break it?&quot;</em> - The micro:bit is quite robust. The most common issue is
+using a charge-only USB cable that doesn't transfer data.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="hardware-overview"><a class="header" href="#hardware-overview">Hardware Overview</a></h1>
@@ -7864,10 +7890,14 @@ complexity for us.</p>
 <li>Buttons are &quot;active low&quot; - pressed = logic 0</li>
 <li>The on-board debugger appears as a USB drive for easy flashing</li>
 </ul>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;Why active low?&quot;</em> - It's a common hardware design pattern that
 provides better noise immunity.</li>
+<li><em>&quot;Why only 10 pins for 25 LEDs?&quot;</em> - Multiplexing! By rapidly switching rows,
+we create the illusion of all LEDs being on simultaneously.</li>
+<li><em>&quot;What's GPIO?&quot;</em> - General Purpose Input/Output. Pins that can be configured
+as either inputs (read signals) or outputs (send signals).</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="development-setup"><a class="header" href="#development-setup">Development Setup</a></h1>
@@ -7915,10 +7945,14 @@ sudo udevadm control --reload-rules
 <li>probe-rs replaces older tools like OpenOCD + GDB</li>
 <li>The micro:bit has a built-in debug probe (no extra hardware!)</li>
 </ul>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;What if I don't have a micro:bit?&quot;</em> - You can use QEMU for some examples,
 but hardware is recommended.</li>
+<li><em>&quot;Why <code>thumbv7em-none-eabihf</code>?&quot;</em> - <code>thumb</code> = instruction set, <code>v7em</code> = Cortex-M4,
+<code>none</code> = no OS, <code>eabihf</code> = embedded ABI with hardware floating-point.</li>
+<li><em>&quot;Can I use OpenOCD instead of probe-rs?&quot;</em> - Yes, but probe-rs is simpler to
+set up and is the modern standard for Rust embedded development.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="your-first-bare-metal-program"><a class="header" href="#your-first-bare-metal-program">Your First Bare Metal Program</a></h1>
@@ -7981,12 +8015,16 @@ for its side effects (the panic handler), don't import anything into scope.&quot
 <p>The <code>panic_halt</code> crate provides a <code>#[panic_handler]</code> function. We don't call
 any functions from it - we just need it linked into our binary. The <code>as _</code>
 means &quot;import nothing into the namespace.&quot;</p>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;What happens after <code>main</code> returns?&quot;</em> - It can't return! The <code>-&gt; !</code> type
 enforces this at compile time.</li>
 <li><em>&quot;Why <code>as _</code>?&quot;</em> - We need the crate linked (for its panic handler) but
 don't need to use any of its items by name.</li>
+<li><em>&quot;What does <code>panic_halt</code> actually do?&quot;</em> - It defines a function that runs
+when a panic occurs. It simply enters an infinite loop, halting the CPU.</li>
+<li><em>&quot;Are there other panic handlers?&quot;</em> - Yes! <code>panic-probe</code> prints via the
+debugger, <code>panic-rtt-target</code> uses RTT. For learning, <code>panic_halt</code> is simplest.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="blink-an-led"><a class="header" href="#blink-an-led">Blink an LED</a></h1>
@@ -8077,12 +8115,17 @@ taken once</li>
 <li><code>embedded_hal::digital::OutputPin</code> is a trait - same code works on any chip</li>
 <li><code>delay()</code> is a busy-wait loop, not a proper timer</li>
 </ul>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;Why <code>unwrap()</code> everywhere?&quot;</em> - These operations can't really fail on
 this hardware, but the traits return <code>Result</code> for portability.</li>
 <li><em>&quot;Is busy-waiting bad?&quot;</em> - For blinking an LED, it's fine. For real
 applications, use hardware timers or interrupts.</li>
+<li><em>&quot;Why set column LOW and row HIGH?&quot;</em> - The LED matrix uses this convention.
+Current flows from row (high) through LED to column (low). Setting both
+high or both low means no current flows.</li>
+<li><em>&quot;Can I control brightness?&quot;</em> - Yes, using PWM (Pulse Width Modulation).
+Rapidly toggling the LED faster than the eye can see creates apparent dimming.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="reading-button-input"><a class="header" href="#reading-button-input">Reading Button Input</a></h1>
@@ -8169,11 +8212,17 @@ course, we'll keep it simple. In production code, you'd add debouncing logic.</p
 <li>Active low is common in hardware - pressed means LOW</li>
 <li>The main loop polls continuously - works but uses CPU</li>
 </ul>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
-<li><em>&quot;Why active low?&quot;</em> - Better noise immunity and simpler circuit design.</li>
+<li><em>&quot;Why active low?&quot;</em> - Better noise immunity and simpler circuit design.
+The internal pull-up resistor keeps the pin high until grounded by the button.</li>
 <li><em>&quot;What about interrupts?&quot;</em> - You can trigger code on button press without
 polling, but that's an advanced topic.</li>
+<li><em>&quot;What is debouncing?&quot;</em> - Physical buttons bounce (rapidly connect/disconnect)
+for a few milliseconds. Debouncing filters this noise, typically by waiting
+~10-50ms after detecting a press before reading again.</li>
+<li><em>&quot;Why does my button seem stuck?&quot;</em> - Make sure you're checking inside the loop,
+not just once at startup. The loop runs continuously to poll the button state.</li>
 </ul>
 <p><strong>Demo suggestion:</strong></p>
 <p>Show what happens without debouncing by counting button presses - you'll
@@ -8197,11 +8246,26 @@ to create an interactive LED pattern controller.</p>
 <li>Embedded Rust program structure</li>
 </ul>
 <details>
-<p><strong>Tips:</strong></p>
+<p><strong>Key points:</strong></p>
+<ul>
+<li>This exercise combines input (buttons) and output (LEDs) in one program</li>
+<li>State management without heap allocation is a key embedded skill</li>
+<li>Row scanning demonstrates how real LED matrices work</li>
+</ul>
+<p><strong>Tips for students:</strong></p>
 <ul>
 <li>Start simple - get one pattern working first</li>
 <li>Use arrays to store patterns (they're stack-allocated)</li>
 <li>Test button logic separately before combining with LEDs</li>
+</ul>
+<p><strong>Common student questions:</strong></p>
+<ul>
+<li><em>&quot;Why does my display flicker?&quot;</em> - The row scanning delay might be too long. Try
+reducing the delay between rows.</li>
+<li><em>&quot;The button seems to register multiple presses&quot;</em> - You need edge detection (check
+for transition from unpressed to pressed), not just level detection.</li>
+<li><em>&quot;Can I use a loop instead of repeating code for each row?&quot;</em> - Yes, but the borrow
+checker makes it tricky. The Display API handles this for you.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="led-pattern-controller"><a class="header" href="#led-pattern-controller">LED Pattern Controller</a></h1>
@@ -8372,6 +8436,18 @@ let mut timer = Timer::new(board.TIMER0);
 // Much simpler! Handles row scanning internally
 display.show(&amp;mut timer, pattern, 1000);
 </code></pre>
+<p><strong>Common student questions:</strong></p>
+<ul>
+<li><em>&quot;Why use <code>u8</code> instead of <code>bool</code> for the pattern?&quot;</em> - Both work, but <code>u8</code> matches
+the Display API's expected format and is common in embedded code.</li>
+<li><em>&quot;How fast should row scanning be?&quot;</em> - Fast enough that you don't see flicker
+(&gt;60Hz total refresh), but not so fast that LEDs appear dim.</li>
+<li><em>&quot;Why does holding the button cycle through all patterns?&quot;</em> - You're detecting
+the level (is pressed) not the edge (was just pressed). Use the <code>_was_pressed</code>
+variables to detect transitions.</li>
+<li><em>&quot;Can I add more patterns?&quot;</em> - Yes! Just add more <code>const</code> arrays and update
+the <code>PATTERNS</code> array and modulo value.</li>
+</ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="where-to-go-next"><a class="header" href="#where-to-go-next">Where to Go Next</a></h1>
 <p>Congratulations! You've written your first bare metal Rust programs. Here are
@@ -8457,11 +8533,21 @@ Curated list of crates and resources</li>
 <li>Embassy makes complex async embedded code much easier</li>
 <li>The Discovery Book is the logical next step for deeper learning</li>
 </ul>
-<p><strong>For the instructor:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
-<li>Demo the touch sensing if time permits - it's a crowd-pleaser</li>
-<li>Point students to the Discovery Book for self-study</li>
-<li>Embassy is the future of embedded Rust but adds complexity</li>
+<li><em>&quot;Should I learn Embassy or RTIC next?&quot;</em> - Embassy is more beginner-friendly and
+uses familiar async/await syntax. RTIC is powerful but has a steeper learning curve.</li>
+<li><em>&quot;Can I use the accelerometer/compass today?&quot;</em> - They require I2C communication,
+which is a bit more complex. The Discovery Book covers this well.</li>
+<li><em>&quot;How do I debug when things go wrong?&quot;</em> - Use <code>defmt</code> + RTT for printf-style
+debugging, or use probe-rs with VS Code for breakpoints.</li>
+<li><em>&quot;Is this how real embedded products are built?&quot;</em> - Production code uses interrupts,
+DMA, and proper power management. This course teaches the foundations.</li>
+</ul>
+<p><strong>Demo suggestion:</strong></p>
+<ul>
+<li>Show the touch sensing example if time permits - it's a crowd-pleaser!</li>
+<li>The logo touch requires no extra hardware and surprises students.</li>
 </ul>
 </details>
 

@@ -320,6 +320,18 @@ let mut timer = Timer::new(board.TIMER0);
 // Much simpler! Handles row scanning internally
 display.show(&amp;mut timer, pattern, 1000);
 </code></pre>
+<p><strong>Common student questions:</strong></p>
+<ul>
+<li><em>&quot;Why use <code>u8</code> instead of <code>bool</code> for the pattern?&quot;</em> - Both work, but <code>u8</code> matches
+the Display API's expected format and is common in embedded code.</li>
+<li><em>&quot;How fast should row scanning be?&quot;</em> - Fast enough that you don't see flicker
+(&gt;60Hz total refresh), but not so fast that LEDs appear dim.</li>
+<li><em>&quot;Why does holding the button cycle through all patterns?&quot;</em> - You're detecting
+the level (is pressed) not the edge (was just pressed). Use the <code>_was_pressed</code>
+variables to detect transitions.</li>
+<li><em>&quot;Can I add more patterns?&quot;</em> - Yes! Just add more <code>const</code> arrays and update
+the <code>PATTERNS</code> array and modulo value.</li>
+</ul>
 </details>
 
                     </main>

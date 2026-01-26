@@ -240,12 +240,17 @@ taken once</li>
 <li><code>embedded_hal::digital::OutputPin</code> is a trait - same code works on any chip</li>
 <li><code>delay()</code> is a busy-wait loop, not a proper timer</li>
 </ul>
-<p><strong>Common questions:</strong></p>
+<p><strong>Common student questions:</strong></p>
 <ul>
 <li><em>&quot;Why <code>unwrap()</code> everywhere?&quot;</em> - These operations can't really fail on
 this hardware, but the traits return <code>Result</code> for portability.</li>
 <li><em>&quot;Is busy-waiting bad?&quot;</em> - For blinking an LED, it's fine. For real
 applications, use hardware timers or interrupts.</li>
+<li><em>&quot;Why set column LOW and row HIGH?&quot;</em> - The LED matrix uses this convention.
+Current flows from row (high) through LED to column (low). Setting both
+high or both low means no current flows.</li>
+<li><em>&quot;Can I control brightness?&quot;</em> - Yes, using PWM (Pulse Width Modulation).
+Rapidly toggling the LED faster than the eye can see creates apparent dimming.</li>
 </ul>
 </details>
 
