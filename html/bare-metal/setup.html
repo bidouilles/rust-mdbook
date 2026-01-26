@@ -190,12 +190,43 @@ sudo udevadm control --reload-rules
 <tr><td>Device not found (macOS)</td><td>No special drivers needed, try different port</td></tr>
 <tr><td>Device not found (Windows)</td><td>Install <a href="https://zadig.akeo.ie/">Zadig</a> driver</td></tr>
 </tbody></table>
-</div><details>
+</div>
+<h2 id="understanding-the-build-configuration"><a class="header" href="#understanding-the-build-configuration">Understanding the Build Configuration</a></h2>
+<p>Bare metal projects typically need two configuration files that tell the compiler
+where to place code in memory:</p>
+<h3 id="cargoconfigtoml"><a class="header" href="#cargoconfigtoml"><code>.cargo/config.toml</code></a></h3>
+<p>Sets the default target and linker configuration:</p>
+<pre><code class="language-toml">[build]
+target = &quot;thumbv7em-none-eabihf&quot;
+
+[target.thumbv7em-none-eabihf]
+rustflags = [&quot;-C&quot;, &quot;link-arg=-Tlink.x&quot;]
+runner = &quot;probe-rs run --chip nRF52833_xxAA&quot;
+</code></pre>
+<h3 id="memoryx"><a class="header" href="#memoryx"><code>memory.x</code></a></h3>
+<p>Defines the memory layout for the linker - where Flash and RAM are located:</p>
+<pre><code class="language-text">MEMORY
+{
+  FLASH : ORIGIN = 0x00000000, LENGTH = 512K
+  RAM   : ORIGIN = 0x20000000, LENGTH = 128K
+}
+</code></pre>
+<p>The linker uses this to place your code in Flash and variables in RAM. Without
+it, the compiled binary would have no loadable segments!</p>
+<blockquote>
+<p><strong>Note:</strong> The <code>microbit-v2</code> crate provides <code>memory.x</code> automatically, so we
+don't need to create these files manually for this course. But understanding
+them is essential for working with other microcontrollers.</p>
+</blockquote>
+<details>
 <p><strong>Key points:</strong></p>
 <ul>
 <li><code>thumbv7em-none-eabihf</code> = Thumb instruction set, Cortex-M4, no OS, hardware float</li>
 <li>probe-rs replaces older tools like OpenOCD + GDB</li>
 <li>The micro:bit has a built-in debug probe (no extra hardware!)</li>
+<li>Memory layout is fundamental: the linker must know where Flash and RAM are</li>
+<li><code>link.x</code> (from <code>cortex-m-rt</code>) uses <code>memory.x</code> to generate the final linker script</li>
+<li>BSPs often provide <code>memory.x</code>, but for custom boards you must create it yourself</li>
 </ul>
 <p><strong>Common student questions:</strong></p>
 <ul>
@@ -205,6 +236,16 @@ but hardware is recommended.</li>
 <code>none</code> = no OS, <code>eabihf</code> = embedded ABI with hardware floating-point.</li>
 <li><em>&quot;Can I use OpenOCD instead of probe-rs?&quot;</em> - Yes, but probe-rs is simpler to
 set up and is the modern standard for Rust embedded development.</li>
+<li><em>&quot;Where do the memory addresses come from?&quot;</em> - From the chip's datasheet. The
+nRF52833 has Flash at 0x00000000 and RAM at 0x20000000. Every chip is different!</li>
+<li><em>&quot;What happens without memory.x?&quot;</em> - The linker doesn't know where to put your
+code, resulting in &quot;no loadable segments&quot; errors when flashing.</li>
+<li><em>&quot;Why is Flash at 0x00000000?&quot;</em> - ARM Cortex-M processors boot from address 0.
+The vector table (interrupt handlers) must be at the start of Flash.</li>
+<li><em>&quot;What's the difference between Flash and RAM?&quot;</em> - Flash is persistent (code
+survives power off) but slow to write. RAM is fast but volatile (lost on reset).</li>
+<li><em>&quot;Can I change these addresses?&quot;</em> - Only if your chip supports it. Some chips
+have configurable memory maps, but most have fixed addresses from the hardware.</li>
 </ul>
 </details>
 
