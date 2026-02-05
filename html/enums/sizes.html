@@ -193,7 +193,7 @@ fn main() {
 <p>Key Points:</p>
 <ul>
 <li>Internally Rust is using a field (discriminant) to keep track of the enum variant.</li>
-<li><code>Bar</code> enum demonstrates that there is a way to control the discriminant value and type. If <code>repr</code> is removed, the discriminant type takes 2 bytes, becuase 10001 fits 2 bytes.</li>
+<li><code>Bar</code> enum demonstrates that there is a way to control the discriminant value and type. If <code>repr</code> is removed, the discriminant type takes 2 bytes, because 10001 fits 2 bytes.</li>
 <li>As a niche optimization an enum discriminant is merged with the pointer so that <code>Option&lt;&amp;Foo&gt;</code> is the same size as <code>&amp;Foo</code>.</li>
 <li><code>Option&lt;bool&gt;</code> is another example of tight packing.</li>
 <li>For <a href="https://doc.rust-lang.org/std/option/#representation">some types</a>, Rust guarantees that <code>size_of::&lt;T&gt;()</code> equals <code>size_of::&lt;Option&lt;T&gt;&gt;()</code>.</li>

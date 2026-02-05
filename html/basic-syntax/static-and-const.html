@@ -182,7 +182,7 @@ fn main() {
     println!(&quot;Digest: {digest:?}&quot;);
 }
 </code></pre></pre>
-<p>According the the <a href="https://rust-lang.github.io/rfcs/0246-const-vs-static.html">Rust RFC Book</a> these are inlined upon use.</p>
+<p>According to the <a href="https://rust-lang.github.io/rfcs/0246-const-vs-static.html">Rust RFC Book</a>, these are inlined upon use.</p>
 <h2 id="static"><a class="header" href="#static"><code>static</code></a></h2>
 <p>You can also declare static variables:</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">static BANNER: &amp;str = &quot;Welcome to RustOS 3.14&quot;;
@@ -196,8 +196,8 @@ fn main() {
 <details>
 <ul>
 <li><code>pub fn unwrap_or(self, default: T) -&gt; T</code>. Returns the contained <code>Some</code> value or a provided default. Here, ZERO.unwrap_or(0) is equal to 42. It would return 0 if ZERO was equal to None.</li>
-<li><code>const</code> is used to define a constant value that is inlined wherever it is used. inlingin means that the compiler replaces all instances of the constant with its value.</li>
-<li><code>static</code>, on the other hand have a fixed memory location and can be mutated.</li>
+<li><code>const</code> is used to define a constant value that is inlined wherever it is used. Inlining means that the compiler replaces all instances of the constant with its value.</li>
+<li><code>static</code>, on the other hand, has a fixed memory location and can be mutated.</li>
 </ul>
 </details>
 

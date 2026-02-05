@@ -210,7 +210,7 @@ declare two types:</p>
 </ul>
 <p>Note that <code>IntoIter</code> and <code>Item</code> are linked: the iterator must have the same
 <code>Item</code> type, which means that it returns <code>Option&lt;Item&gt;</code></p>
-<p>Like before, what  is the type returned by the iterator?</p>
+<p>Like before, what is the type returned by the iterator?</p>
 <pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">fn main() {
     let v: Vec&lt;String&gt; = vec![String::from(&quot;foo&quot;), String::from(&quot;bar&quot;)];
     let mut iter = v.into_iter();
@@ -221,7 +221,7 @@ declare two types:</p>
 </code></pre></pre>
 <h2 id="for-loops"><a class="header" href="#for-loops"><code>for</code> Loops</a></h2>
 <p>Now that we know both <code>Iterator</code> and <code>IntoIterator</code>, we can build <code>for</code> loops.
-They call <code>into_iter()</code> on an expression and iterates over the resulting
+They call <code>into_iter()</code> on an expression and iterate over the resulting
 iterator:</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     let v: Vec&lt;String&gt; = vec![String::from(&quot;foo&quot;), String::from(&quot;bar&quot;)];

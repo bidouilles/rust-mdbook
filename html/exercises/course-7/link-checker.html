@@ -158,7 +158,7 @@ start at a webpage and check that links on the page are valid. It should
 recursively check other pages on the same domain and keep doing this until all
 pages have been validated.</p>
 <p>For this, you will need an HTTP client such as <a href="https://docs.rs/reqwest/"><code>reqwest</code></a>. Create a new
-Cargo project and <code>reqwest</code> it as a dependency with:</p>
+Cargo project and add <code>reqwest</code> as a dependency with:</p>
 <pre><code class="language-shell">$ cargo new link-checker
 $ cd link-checker
 $ cargo add --features blocking,rustls-tls reqwest

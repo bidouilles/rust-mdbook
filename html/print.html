@@ -169,7 +169,7 @@ error handling) to better explain or contrast the Rust approach.</p>
 <ul>
 <li>Course 1: Basic Rust.</li>
 <li>Course 2: Ownership and the borrow checker.</li>
-<li>Course 3: Compound data types,  pattern matching.</li>
+<li>Course 3: Compound data types, pattern matching.</li>
 <li>Course 4: The standard library.</li>
 <li>Course 5: Traits and generics, error handling</li>
 <li>Course 6: Testing, unsafe Rust.</li>
@@ -188,7 +188,7 @@ error handling) to better explain or contrast the Rust approach.</p>
 <p>When you start reading about Rust, you will soon meet <a href="https://doc.rust-lang.org/cargo/">Cargo</a>, the standard tool
 used in the Rust ecosystem to build and run Rust applications. Here we want to
 give a brief overview of what Cargo is and how it fits into the wider ecosystem
-and how it fits into this training.</p>
+and this training.</p>
 <h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
 <h3 id="rustup-recommended"><a class="header" href="#rustup-recommended">Rustup (Recommended)</a></h3>
 <p>You can follow the instructions to install cargo and rust compiler, among other standard ecosystem tools with the <a href="https://rustup.rs/">rustup</a> tool, which is maintained by the Rust Foundation.</p>
@@ -416,7 +416,7 @@ Please remind the students that:
     keep the related to how Rust does things vs some other language. It can be
     hard to find the right balance, but err on the side of allowing discussions
     since they engage people much more than one-way communication.
-* The questions will likely mean that we about things ahead of the slides.
+* The questions will likely mean that we talk about things ahead of the slides.
   * This is perfectly okay! Repetition is an important part of learning. Remember
     that the slides are just a support and you are free to skip them as you
     like.
@@ -487,7 +487,7 @@ program:</p>
 </ul>
 <details>
 <p>This slide tries to make the students comfortable with Rust code. They will see
-a ton of it over the next four days so we start small with something familiar.</p>
+a lot of it throughout the course, so we start small with something familiar.</p>
 <p>Key points:</p>
 <ul>
 <li>
@@ -651,7 +651,7 @@ which does not do bounds checking.</p>
 <ul>
 <li>
 <p>Remind people to read the errors --- many developers have gotten used to
-ignore lengthy compiler output. The Rust compiler is significantly more
+ignoring lengthy compiler output. The Rust compiler is significantly more
 talkative than other compilers. It will often provide you with <em>actionable</em>
 feedback, ready to copy-paste into your code.</p>
 </li>
@@ -752,7 +752,7 @@ It is followed by <code>(#)+</code>, then <code>&quot;</code>, the literal, <cod
 <p><code>r##&quot;foo #&quot;# bar&quot;##</code> stands for <code>foo #&quot;# bar</code>.
 Each character in a raw string literal is represented as a Unicode scalar value.
 <code>r#&quot;Hello, &quot;Rust&quot;!&quot;#</code> is a string that includes the characters <code>H, e, l, l, o, ,, , &quot;, R, u, s, t, &quot;, !</code>.</p>
-<p><code>b#&quot;...&quot;#</code> denotes a byte string, ie a sequence of bytes.
+<p><code>b#&quot;...&quot;#</code> denotes a byte string, i.e., a sequence of bytes.
 <code>b&quot;hello&quot;</code> is equivalent to <code>[104, 101, 108, 108, 111]</code> (ASCII values for 'h', 'e', 'l', 'l', 'o').</p>
 <p><code>br#&quot;...&quot;#</code> is for a raw byte string.</p>
 </details><div style="break-before: page; page-break-before: always;"></div><h1 id="compound-types"><a class="header" href="#compound-types">Compound Types</a></h1>
@@ -814,7 +814,7 @@ the only valid value of that type - that is to say both the type and its value
 are expressed as <code>()</code>. It is used to indicate, for example, that a function or
 expression has no return value, as we'll see in a future slide.</p>
 <ul>
-<li>You can think of it as <code>void</code> that can be familiar to you from other
+<li>You can think of it as <code>void</code>, which may be familiar from other
 programming languages.</li>
 </ul>
 </li>
@@ -1093,7 +1093,7 @@ fn main() {
 }
 </code></pre></pre>
 <ul>
-<li>We will look much more at methods in this class' exercise and in the next class.</li>
+<li>We will look at methods in more detail in the exercises for this class and in the next class.</li>
 </ul>
 <details>
 <ul>
@@ -1141,7 +1141,7 @@ polymorphism on argument types. We will see more details in a later section.</p>
 pid of the current process</p>
 </li>
 </ul>
-</defails>
+</details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="course-1-exercises"><a class="header" href="#course-1-exercises">Course 1: Exercises</a></h1>
 <p>In these exercises, we will explore two parts of Rust:</p>
 <ul>
@@ -1216,7 +1216,7 @@ the pairs you check.</p>
 }
 </code></pre>
 <p>Your code should check that the matrices have the right dimensions.</p>
-<p>There are different ways to represent 2-D arrays in Rust, here we chose the type <code>&amp;Vec&lt;Vec&lt;i32&gt;&gt;</code>. When you finish this exercice, feel free to explore other possible representations (e.g <code>ndarray::arr2</code>).</p>
+<p>There are different ways to represent 2-D arrays in Rust, here we chose the type <code>&amp;Vec&lt;Vec&lt;i32&gt;&gt;</code>. When you finish this exercise, feel free to explore other possible representations (e.g., <code>ndarray::arr2</code>).</p>
 <p>Usage example:</p>
 <pre><code class="language-rs">fn main() {
     let matrix_a = vec![
@@ -1312,7 +1312,7 @@ The solution and the answer to the bonus section are available in the
 <div style="break-before: page; page-break-before: always;"></div><h1 id="palindrome"><a class="header" href="#palindrome">Palindrome</a></h1>
 <p>Implement a Rust function that determines whether a given string is a palindrome.</p>
 <p>A palindrome is a sequence of characters that reads the same forward and backward (e.g. kayak, madam, racecar, ...).</p>
-<p>In this exercices we ask you to ignore spaces, punctuation, and case.</p>
+<p>In this exercise, we ask you to ignore spaces, punctuation, and case.</p>
 <p>Have a look at the <a href="https://doc.rust-lang.org/std/primitive.str.html"><code>std::str</code></a> documentation if needed.</p>
 <p>Function signature:</p>
 <pre><code class="language-rs">fn is_palindrome(s: &amp;str) -&gt; bool{
@@ -1466,7 +1466,7 @@ default:</p>
 <details>
 <ul>
 <li>Due to type inference the <code>i32</code> is optional. We will gradually show the types less and less as the course progresses.</li>
-<li>Note that since <code>println!</code> is a macro, <code>x</code> is not moved, even using the function like syntax of <code>println!(&quot;x: {}&quot;, x)</code></li>
+<li>Note that since <code>println!</code> is a macro, <code>x</code> is not moved, even using the function-like syntax of <code>println!(&quot;x: {}&quot;, x)</code></li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="type-inference"><a class="header" href="#type-inference">Type Inference</a></h1>
@@ -1492,7 +1492,7 @@ fn main() {
 <p>This slide demonstrates how the Rust compiler infers types based on constraints given by variable declarations and usages.</p>
 <p>It is very important to emphasize that variables declared like this are not of some sort of dynamic &quot;any type&quot; that can
 hold any data. The machine code generated by such declaration is identical to the explicit declaration of a type.
-The compiler does the job for us and helps us to write a more concise code.</p>
+The compiler does the job for us and helps us write more concise code.</p>
 <p>The following code tells the compiler to copy into a certain generic container without the code ever explicitly specifying the contained type, using <code>_</code> as a placeholder:</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     let mut v = Vec::new();
@@ -1563,7 +1563,7 @@ fn main() {
     println!(&quot;Digest: {digest:?}&quot;);
 }
 </code></pre></pre>
-<p>According the the <a href="https://rust-lang.github.io/rfcs/0246-const-vs-static.html">Rust RFC Book</a> these are inlined upon use.</p>
+<p>According to the <a href="https://rust-lang.github.io/rfcs/0246-const-vs-static.html">Rust RFC Book</a>, these are inlined upon use.</p>
 <h2 id="static"><a class="header" href="#static"><code>static</code></a></h2>
 <p>You can also declare static variables:</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">static BANNER: &amp;str = &quot;Welcome to RustOS 3.14&quot;;
@@ -1577,8 +1577,8 @@ fn main() {
 <details>
 <ul>
 <li><code>pub fn unwrap_or(self, default: T) -&gt; T</code>. Returns the contained <code>Some</code> value or a provided default. Here, ZERO.unwrap_or(0) is equal to 42. It would return 0 if ZERO was equal to None.</li>
-<li><code>const</code> is used to define a constant value that is inlined wherever it is used. inlingin means that the compiler replaces all instances of the constant with its value.</li>
-<li><code>static</code>, on the other hand have a fixed memory location and can be mutated.</li>
+<li><code>const</code> is used to define a constant value that is inlined wherever it is used. Inlining means that the compiler replaces all instances of the constant with its value.</li>
+<li><code>static</code>, on the other hand, has a fixed memory location and can be mutated.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="scopes-and-shadowing"><a class="header" href="#scopes-and-shadowing">Scopes and Shadowing</a></h1>
@@ -1601,7 +1601,7 @@ same scope:</p>
 </code></pre></pre>
 <details>
 <ul>
-<li>Definition: Shadowing is different from mutation, because after shadowing both variable's memory locations exist at the same time. Both are available under the same name, depending where you use it in the code.</li>
+<li>Definition: Shadowing is different from mutation, because after shadowing both variables' memory locations exist at the same time. Both are available under the same name, depending where you use it in the code.</li>
 <li>A shadowing variable can have a different type.</li>
 <li>Shadowing looks obscure at first, but is convenient for holding on to values after <code>.unwrap()</code>.</li>
 <li>The following code demonstrates why the compiler can't simply reuse memory locations when shadowing an immutable variable in a scope, even if the type does not change.</li>
@@ -2144,7 +2144,7 @@ fn main() {
 }
 </code></pre></pre>
 <ul>
-<li>Remove <code>Copy</code> from the <code>derive</code> attribute. The compiler error is now in the <code>println!</code> for  <code>p1</code>.</li>
+<li>Remove <code>Copy</code> from the <code>derive</code> attribute. The compiler error is now in the <code>println!</code> for <code>p1</code>.</li>
 </ul>
 <pre><pre class="playground"><code class="language-rust editable edition2021">#[derive(Clone, Debug)]
 struct Point(i32, i32, String);
@@ -2224,7 +2224,7 @@ fn main() {
 <ul>
 <li>If return value optimization (RVO) did not happen, Rust would simply perform an efficient <code>memcpy</code> copy — there are no constructors with side effects to worry about.</li>
 </ul>
-<p>Elision means dropping, omitting, cutting. It is used for a sound that is not pronounced in a word, for example.</p>
+<p>Elision means dropping, omitting, or cutting. For example, it describes a sound that is not pronounced in a word.</p>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="shared-and-unique-borrows"><a class="header" href="#shared-and-unique-borrows">Shared and Unique Borrows</a></h1>
 <p>Rust puts constraints on the ways you can borrow values:</p>
@@ -2555,7 +2555,7 @@ declare two types:</p>
 </ul>
 <p>Note that <code>IntoIter</code> and <code>Item</code> are linked: the iterator must have the same
 <code>Item</code> type, which means that it returns <code>Option&lt;Item&gt;</code></p>
-<p>Like before, what  is the type returned by the iterator?</p>
+<p>Like before, what is the type returned by the iterator?</p>
 <pre><pre class="playground"><code class="language-rust editable compile_fail edition2021">fn main() {
     let v: Vec&lt;String&gt; = vec![String::from(&quot;foo&quot;), String::from(&quot;bar&quot;)];
     let mut iter = v.into_iter();
@@ -2566,7 +2566,7 @@ declare two types:</p>
 </code></pre></pre>
 <h2 id="for-loops"><a class="header" href="#for-loops"><code>for</code> Loops</a></h2>
 <p>Now that we know both <code>Iterator</code> and <code>IntoIterator</code>, we can build <code>for</code> loops.
-They call <code>into_iter()</code> on an expression and iterates over the resulting
+They call <code>into_iter()</code> on an expression and iterate over the resulting
 iterator:</p>
 <pre><pre class="playground"><code class="language-rust editable edition2021">fn main() {
     let v: Vec&lt;String&gt; = vec![String::from(&quot;foo&quot;), String::from(&quot;bar&quot;)];
@@ -2764,7 +2764,7 @@ Key Points:
 <li>The next slide will introduce Tuple structs.</li>
 </ul>
 </li>
-<li>.. is an operator that is used for pattern binding here. It performs a &quot;and the rest&quot; pattern binding.</li>
+<li><code>..</code> is an operator used for pattern binding here. It performs an &quot;and the rest&quot; pattern binding.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="tuple-structs"><a class="header" href="#tuple-structs">Tuple Structs</a></h1>
@@ -2798,7 +2798,7 @@ fn main() {
 <p>Newtypes are a great way to encode additional information about the value in a primitive type, for example:</p>
 <ul>
 <li>The number is measured in some units: <code>Newtons</code> in the example above.</li>
-<li>The value passed some validation when it was created, so you no longer have to validate it again at every use: 'PhoneNumber(String)<code>or</code>OddNumber(u32)`.</li>
+<li>The value passed some validation when it was created, so you no longer have to validate it again at every use: <code>PhoneNumber(String)</code> or <code>OddNumber(u32)</code>.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="field-shorthand-syntax"><a class="header" href="#field-shorthand-syntax">Field Shorthand Syntax</a></h1>
@@ -2861,7 +2861,7 @@ fn main() {
 <p>Key Points:</p>
 <ul>
 <li>Enumerations allow you to collect a set of values under one type</li>
-<li>This page offers an enum type <code>CoinFlip</code> with two variants <code>Heads</code> and <code>Tail</code>. You might note the namespace when using variants.</li>
+<li>This page offers an enum type <code>CoinFlip</code> with two variants <code>Heads</code> and <code>Tails</code>. You might note the namespace when using variants.</li>
 <li>This might be a good time to compare Structs and Enums:
 <ul>
 <li>In both, you can have a simple version without fields (unit struct) or one with different types of fields (variant payloads).</li>
@@ -2947,7 +2947,7 @@ fn main() {
 <p>Key Points:</p>
 <ul>
 <li>Internally Rust is using a field (discriminant) to keep track of the enum variant.</li>
-<li><code>Bar</code> enum demonstrates that there is a way to control the discriminant value and type. If <code>repr</code> is removed, the discriminant type takes 2 bytes, becuase 10001 fits 2 bytes.</li>
+<li><code>Bar</code> enum demonstrates that there is a way to control the discriminant value and type. If <code>repr</code> is removed, the discriminant type takes 2 bytes, because 10001 fits 2 bytes.</li>
 <li>As a niche optimization an enum discriminant is merged with the pointer so that <code>Option&lt;&amp;Foo&gt;</code> is the same size as <code>&amp;Foo</code>.</li>
 <li><code>Option&lt;bool&gt;</code> is another example of tight packing.</li>
 <li>For <a href="https://doc.rust-lang.org/std/option/#representation">some types</a>, Rust guarantees that <code>size_of::&lt;T&gt;()</code> equals <code>size_of::&lt;Option&lt;T&gt;&gt;()</code>.</li>
@@ -3078,7 +3078,7 @@ fn main() {
 <li>You can showcase the error that appears when trying to call <code>finish</code> twice.</li>
 </ul>
 </li>
-<li>Note, that although the method receivers are different, the non-static functions are called the same way in the main body. Rust enables automatic referencing and dereferencing when calling methods. Rust automatically adds in the <code>&amp;</code>, <code>*</code>, <code>muts</code> so that that object matches the method signature.</li>
+<li>Note that although the method receivers are different, the non-static functions are called the same way in the main body. Rust enables automatic referencing and dereferencing when calling methods. Rust automatically adds in the <code>&amp;</code>, <code>*</code>, <code>mut</code> so that the object matches the method signature.</li>
 <li>You might point out that <code>print_laps</code> is using a vector that is iterated over. We describe vectors in more detail in course 4.</li>
 </ul>
 </details>
@@ -3101,7 +3101,7 @@ comparisons are done from top to bottom and the first match wins.</p>
 <details>
 <p>Key Points:</p>
 <ul>
-<li>You might point out how some specific characters are being used when in a patten
+<li>You might point out how some specific characters are being used when in a pattern
 <ul>
 <li><code>|</code> as an <code>or</code></li>
 <li><code>..</code> can expand as much as it needs to be</li>
@@ -3376,7 +3376,7 @@ fn test_set_age() {
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="polygon-struct"><a class="header" href="#polygon-struct">Polygon Struct</a></h1>
-<p>We will create a <code>Polygon</code> struct which contain some points. Copy the code below
+<p>We will create a <code>Polygon</code> struct which contains some points. Copy the code below
 to <a href="https://play.rust-lang.org/">https://play.rust-lang.org/</a> and fill in the missing methods to make the
 tests pass:</p>
 <pre><pre class="playground"><code class="language-rust edition2021">// TODO: remove this when you're done with your implementation.
@@ -3734,7 +3734,6 @@ while let Some(top) = stack.pop() {
 <span class="boring">}
 </span></code></pre></pre>
 </details>
-```
 <div style="break-before: page; page-break-before: always;"></div><h1 id="while-let-expressions"><a class="header" href="#while-let-expressions"><code>while let</code> expressions</a></h1>
 <p>Like with <code>if</code>, there is a <code>while let</code> variant which repeatedly tests a value
 against a pattern:</p>
@@ -3747,7 +3746,7 @@ against a pattern:</p>
     }
 }
 </code></pre></pre>
-<p>Here the iterator returned by <code>v.iter()</code> will return a <code>Option&lt;i32&gt;</code> on every
+<p>Here the iterator returned by <code>v.iter()</code> will return an <code>Option&lt;i32&gt;</code> on every
 call to <code>next()</code>. It returns <code>Some(x)</code> until it is done, after which it will
 return <code>None</code>. The <code>while let</code> lets us keep iterating through all items.</p>
 <p>See <a href="control-flow/../pattern-matching.html">pattern matching</a> for more details on patterns in
@@ -3862,7 +3861,6 @@ either <code>break</code> or <code>return</code> to stop the loop:</p>
 <span class="boring">}
 </span></code></pre></pre>
 </details>
-```
 <div style="break-before: page; page-break-before: always;"></div><h1 id="match-expressions"><a class="header" href="#match-expressions"><code>match</code> expressions</a></h1>
 <p>The <code>match</code> keyword is used to match a value against one or more patterns. In
 that sense, it works like a series of <code>if let</code> expressions:</p>
@@ -4048,7 +4046,7 @@ methods on a <code>Vec</code>.</p>
 <ul>
 <li>
 <p><code>Vec</code> is a type of collection, along with <code>String</code> and <code>HashMap</code>. The data it contains is stored
-on the heap. This means the amount of data doesn't need to be  known at compile time. It can grow
+on the heap. This means the amount of data doesn't need to be known at compile time. It can grow
 or shrink at runtime.</p>
 </li>
 <li>
@@ -4082,7 +4080,7 @@ fn main() {
     page_counts.insert(&quot;Pride and Prejudice&quot;.to_string(), 303);
 
     if !page_counts.contains_key(&quot;Les Misérables&quot;) {
-        println!(&quot;We've know about {} books, but not Les Misérables.&quot;,
+        println!(&quot;We know about {} books, but not Les Misérables.&quot;,
                  page_counts.len());
     }
 
@@ -4653,7 +4651,7 @@ Show a <code>use</code> statement with glob imports (<code>use std::collections:
 Show <code>cargo new --lib mylib</code> and create a nested module structure to demonstrate both styles.</p>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="course-4-exercises"><a class="header" href="#course-4-exercises">Course 4: Exercises</a></h1>
-<p>In course 4, the exercices will focus on strings and iterators.</p>
+<p>In course 4, the exercises will focus on strings and iterators.</p>
 <!-- <details>
 
 After looking at the exercises, you can look at the [solutions] provided.
@@ -5028,7 +5026,7 @@ fn main() {
 }
 </code></pre></pre>
 <details>
-<p>Centimeters reuses the behavior of <code>not_equal</code> from the Equals trait. It overwrites <code>equal</code>, however.</p>
+<p>Centimeter reuses the behavior of <code>not_equal</code> from the Equals trait. It overwrites <code>equal</code>, however.</p>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="important-traits"><a class="header" href="#important-traits">Important Traits</a></h1>
 <p>We will now look at some of the most common traits of the Rust standard library:</p>
@@ -5108,7 +5106,7 @@ implementations.</p>
 <details>
 <p><code>Iterator</code> implements
 <code>fn collect&lt;B&gt;(self) -&gt; B where     B: FromIterator&lt;Self::Item&gt;,     Self: Sized</code>
-<code>collect</code> enables to convert an interator into a collection. Here it enables to reconstruct a vector.</p>
+<code>collect</code> enables you to convert an iterator into a collection. Here it enables you to reconstruct a vector.</p>
 <p>There are also implementations which let you do cool things like convert an
 <code>Iterator&lt;Item = Result&lt;V, E&gt;&gt;</code> into a <code>Result&lt;Vec&lt;V&gt;, E&gt;</code>.</p>
 <p>Add this line to print the computed squares:
@@ -5416,7 +5414,7 @@ fn main() {
 hand-coded the data structures without the abstraction.</p>
 <details>
 <p><a href="https://rustc-dev-guide.rust-lang.org/backend/monomorph.html">Monomorphization</a></p>
-<p>&quot;In Rust, the compiler stamps out a different copy of the code of a generic function for each concrete type needed. For example, if I use a <code>Vec&lt;u64&gt;</code> and a <code>Vec&lt;String&gt;</code> in my code, then the generated binary will have two copies of the generated code for Vec: one for <code>Vec&lt;u64&gt;</code> and another for <code>Vec&lt;String&gt;</code>. The result is fast programs, but it comes at the cost of compile time (creating all those copies can take a while) and binary size (all those copies might take a lot of space).&quot; This is different from Java, where the precise type is known at run-time and (almost) all variables are reference values (ie pointer to a heap allocated object). This has performance cost because of the dereference for each access.</p>
+<p>&quot;In Rust, the compiler stamps out a different copy of the code of a generic function for each concrete type needed. For example, if I use a <code>Vec&lt;u64&gt;</code> and a <code>Vec&lt;String&gt;</code> in my code, then the generated binary will have two copies of the generated code for Vec: one for <code>Vec&lt;u64&gt;</code> and another for <code>Vec&lt;String&gt;</code>. The result is fast programs, but it comes at the cost of compile time (creating all those copies can take a while) and binary size (all those copies might take a lot of space).&quot; This is different from Java, where the precise type is known at run-time and (almost) all variables are reference values (i.e., pointer to a heap-allocated object). This has performance cost because of the dereference for each access.</p>
 </details><div style="break-before: page; page-break-before: always;"></div><h1 id="closures"><a class="header" href="#closures">Closures</a></h1>
 <p>Closures (also known as lambda expressions) are anonymous functions that can
 capture values from their environment.</p>
@@ -5639,7 +5637,7 @@ concrete type at compile time.</li>
 </ul>
 </details>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="course-5-exercises"><a class="header" href="#course-5-exercises">Course 5 Exercises</a></h1>
-<p>We will design a classical GUI library traits and trait objects.</p>
+<p>We will design a classical GUI library using traits and trait objects.</p>
 <!-- <details>
 
 After looking at the exercises, you can look at the [solutions] provided.
@@ -6570,7 +6568,6 @@ must uphold to avoid undefined behaviour:</p>
 <li>Violating the preconditions causes undefined behavior (UB).</li>
 </ul>
 </details>
-```
 <div style="break-before: page; page-break-before: always;"></div><h1 id="writing-unsafe-functions"><a class="header" href="#writing-unsafe-functions">Writing Unsafe Functions</a></h1>
 <p>You can mark your own functions as <code>unsafe</code> if they require particular conditions to avoid undefined
 behaviour.</p>
@@ -6732,7 +6729,7 @@ functions you would use from C to read the filenames of a directory.</p>
 <li><a href="https://man7.org/linux/man-pages/man3/readdir.3.html"><code>readdir(3)</code></a></li>
 <li><a href="https://man7.org/linux/man-pages/man3/closedir.3.html"><code>closedir(3)</code></a></li>
 </ul>
-<p>You will also want to browse the <a href="https://doc.rust-lang.org/std/ffi/"><code>std::ffi</code></a> module, particular for <a href="https://doc.rust-lang.org/std/ffi/struct.CStr.html"><code>CStr</code></a>
+<p>You will also want to browse the <a href="https://doc.rust-lang.org/std/ffi/"><code>std::ffi</code></a> module, particularly for <a href="https://doc.rust-lang.org/std/ffi/struct.CStr.html"><code>CStr</code></a>
 and <a href="https://doc.rust-lang.org/std/ffi/struct.CString.html"><code>CString</code></a> types which are used to hold NUL-terminated strings coming from
 C. The <a href="https://doc.rust-lang.org/nomicon/ffi.html">Nomicon</a> also has a very useful chapter about FFI.</p>
 <p>Copy the code below to <a href="https://play.rust-lang.org/">https://play.rust-lang.org/</a> and fill in the missing
@@ -7485,7 +7482,7 @@ start at a webpage and check that links on the page are valid. It should
 recursively check other pages on the same domain and keep doing this until all
 pages have been validated.</p>
 <p>For this, you will need an HTTP client such as <a href="https://docs.rs/reqwest/"><code>reqwest</code></a>. Create a new
-Cargo project and <code>reqwest</code> it as a dependency with:</p>
+Cargo project and add <code>reqwest</code> as a dependency with:</p>
 <pre><code class="language-shell">$ cargo new link-checker
 $ cd link-checker
 $ cargo add --features blocking,rustls-tls reqwest
