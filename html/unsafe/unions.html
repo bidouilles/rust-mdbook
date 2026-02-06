@@ -168,6 +168,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p>Unions share memory between fields. Reading is unsafe — you must track the active field yourself.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Unions share memory between all fields — only one is valid at a time.</li>

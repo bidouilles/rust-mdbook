@@ -176,6 +176,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p><code>static mut</code> is unsafe due to data races. Prefer <code>Mutex</code>, <code>RwLock</code>, or atomics instead.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Immutable statics are safe and common — they're truly global constants.</li>

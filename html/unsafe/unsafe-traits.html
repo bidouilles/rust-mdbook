@@ -176,6 +176,8 @@ pub unsafe trait AsBytes {
 unsafe impl AsBytes for u32 {}
 </code></pre></pre>
 <details>
+<p>Unsafe traits have invariants the compiler can't verify. <code>unsafe impl</code> means &quot;I promise.&quot;</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Unsafe traits have invariants that the compiler can't verify.</li>

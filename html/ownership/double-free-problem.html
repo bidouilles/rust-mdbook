@@ -193,6 +193,8 @@ s2 = s1  # Both reference the same object
 <li>Memory is freed exactly once, when <code>s2</code> goes out of scope.</li>
 </ul>
 <details>
+<p>C allows double-free bugs. Python uses reference counting. Rust uses move semantics — zero cost, compile-time safe.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>C gives you control but lets you make mistakes (double-free, use-after-free).</li>

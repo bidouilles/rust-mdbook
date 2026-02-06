@@ -166,6 +166,8 @@
 <p>The <code>From::from</code> call here means we attempt to convert the error type to the
 type returned by the function:</p>
 <details>
+<p><code>?</code> calls <code>From::from</code> to convert error types automatically.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>The <code>?</code> operator does automatic error conversion via <code>From::from</code>.</li>

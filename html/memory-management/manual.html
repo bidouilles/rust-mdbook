@@ -169,6 +169,8 @@
 <p>Memory is leaked if the function returns early between <code>malloc</code> and <code>free</code>: the
 pointer is lost and we cannot deallocate the memory.</p>
 <details>
+<p>You call malloc and free yourself. Error-prone: leaks, use-after-free, double-free.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Manual memory management requires perfect discipline — every malloc needs a free.</li>

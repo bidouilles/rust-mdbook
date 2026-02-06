@@ -161,6 +161,8 @@
 in that thread. So the question is when you can allocate a value in one thread
 and deallocate it in another.</p>
 <details>
+<p><code>Send</code> means a type can safely move to another thread. Most types are <code>Send</code> automatically.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>Send</code> is a marker trait with no methods — it's purely a compile-time guarantee.</li>

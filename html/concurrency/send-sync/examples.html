@@ -190,6 +190,8 @@ non-atomic reference count.</li>
 concurrency considerations.</li>
 </ul>
 <details>
+<p>Most types are <code>Send + Sync</code>. <code>Rc</code> is neither. <code>Cell</code>/<code>RefCell</code> are <code>Send</code> but not <code>Sync</code>.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>This is a reference table — students don't need to memorize it, but should understand the categories.</li>

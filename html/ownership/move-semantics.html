@@ -170,6 +170,8 @@
 <li>There is always <em>exactly</em> one variable binding which owns a value.</li>
 </ul>
 <details>
+<p>Assignment transfers ownership. The old variable becomes invalid. Exactly one owner at a time.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Move semantics are Rust's default for non-Copy types — no special syntax needed.</li>

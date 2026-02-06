@@ -170,6 +170,8 @@ automatically call <code>into_iter()</code> on the expression and then iterate o
 </code></pre></pre>
 <p>You can use <code>break</code> and <code>continue</code> here as usual.</p>
 <details>
+<p><code>for x in collection</code> iterates over items. Use <code>&amp;collection</code> to borrow instead of consuming.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>for x in collection</code> calls <code>into_iter()</code> automatically — consumes the collection.</li>

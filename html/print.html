@@ -203,6 +203,8 @@ and this training.</p>
 <a href="https://code.visualstudio.com/">VS Code</a> to edit the code (but any LSP compatible editor works).</p>
 <p>Some folks also like to use the <a href="https://www.jetbrains.com/clion/">JetBrains</a> family of IDEs, which do their own analysis but have their own tradeoffs. If you prefer them, you can install the <a href="https://www.jetbrains.com/rust/">Rust Plugin</a>. Please take note that as of January 2023 debugging only works on the CLion version of the JetBrains IDEA suite.</p>
 <details>
+<p>Cargo is Rust's build system and package manager. Use <code>rustup</code> to install Rust.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Cargo is Rust's build system AND package manager (like npm + webpack for JS, or Maven for Java).</li>
@@ -863,6 +865,8 @@ enough.</li>
 <li>We will talk more about borrowing when we get to ownership.</li>
 </ul>
 <details>
+<p>Rust prevents dangling references at compile time. References can't outlive what they point to.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>This is a compile-time error, not a runtime crash. Rust prevents the bug before the program runs.</li>
@@ -1658,6 +1662,8 @@ runtime overhead and less predictable performance.</li>
 </li>
 </ul>
 <details>
+<p>The stack stores local variables of fixed size. The heap stores dynamically-sized data.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Stack allocation is &quot;free&quot; — just moving a pointer. Heap requires finding free space.</li>
@@ -1705,6 +1711,8 @@ data on the heap:</p>
 <p>Memory is leaked if the function returns early between <code>malloc</code> and <code>free</code>: the
 pointer is lost and we cannot deallocate the memory.</p>
 <details>
+<p>You call malloc and free yourself. Error-prone: leaks, use-after-free, double-free.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Manual memory management requires perfect discipline — every malloc needs a free.</li>
@@ -1763,6 +1771,8 @@ how you exit (normal return, exception, etc.).</p>
 </ul>
 <p>No explicit cleanup needed, and the compiler guarantees it happens.</p>
 <details>
+<p>Resources are automatically freed when variables go out of scope (RAII pattern).</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>RAII = &quot;Resource Acquisition Is Initialization&quot; — resources tied to object lifetime.</li>
@@ -1793,6 +1803,8 @@ management:</p>
 }
 </code></pre>
 <details>
+<p>A garbage collector automatically finds and frees unused memory at runtime.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>GC languages trade predictability for convenience — you don't manage memory, but can't control when cleanup happens.</li>
@@ -1818,6 +1830,8 @@ management:</p>
 </ul>
 <p>It achieves this by modeling <em>ownership</em> explicitly.</p>
 <details>
+<p>Rust enforces memory safety at compile time through ownership — no GC, no manual free.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Rust's key innovation: compile-time ownership tracking with zero runtime cost.</li>
@@ -1893,6 +1907,8 @@ Emphasize that this is the &quot;aha moment&quot; — Rust gets the best of all 
 </li>
 </ul>
 <details>
+<p>Manual is fast but unsafe. GC is safe but has pauses. Rust is safe, fast, but has a learning curve.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>This is a summary slide — use it to reinforce the trade-offs.</li>
@@ -1952,6 +1968,8 @@ fn main() {
 <li>There is always <em>exactly</em> one variable binding which owns a value.</li>
 </ul>
 <details>
+<p>Assignment transfers ownership. The old variable becomes invalid. Exactly one owner at a time.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Move semantics are Rust's default for non-Copy types — no special syntax needed.</li>
@@ -1976,6 +1994,8 @@ In Rust, <code>let s2 = s1</code> <em>moves</em> ownership — only <code>s2</co
 <p>After move to <code>s2</code>:</p>
 <div style='width:100%; height:304px;'><style type="text/css">svg { width: 100% !important; }</style><svg xmlns="http://www.w3.org/2000/svg" width="512" height="304" class="svgbob"><style>.svgbob line, .svgbob path, .svgbob circle, .svgbob rect, .svgbob polygon {  stroke: var(--fg);  stroke-width: 2;  stroke-opacity: 1;  fill-opacity: 1;  stroke-linecap: round;  stroke-linejoin: miter;}.svgbob text {  white-space: pre;  fill: var(--fg);  font-family: Iosevka Fixed, monospace;  font-size: 14px;}.svgbob rect.backdrop {  stroke: none;  fill: transparent;}.svgbob .broken {  stroke-dasharray: 8;}.svgbob .filled {  fill: black;}.svgbob .bg_filled {  fill: transparent;  stroke-width: 1;}.svgbob .nofill {  fill: transparent;}.svgbob .end_marked_arrow {  marker-end: url(#arrow);}.svgbob .start_marked_arrow {  marker-start: url(#arrow);}.svgbob .end_marked_diamond {  marker-end: url(#diamond);}.svgbob .start_marked_diamond {  marker-start: url(#diamond);}.svgbob .end_marked_circle {  marker-end: url(#circle);}.svgbob .start_marked_circle {  marker-start: url(#circle);}.svgbob .end_marked_open_circle {  marker-end: url(#open_circle);}.svgbob .start_marked_open_circle {  marker-start: url(#open_circle);}.svgbob .end_marked_big_open_circle {  marker-end: url(#big_open_circle);}.svgbob .start_marked_big_open_circle {  marker-start: url(#big_open_circle);}</style><defs><marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 0,4 4,2 0,0"></polygon></marker><marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,2 2,0 4,2 2,4 0,2"></polygon></marker><marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="filled"></circle></marker><marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="bg_filled"></circle></marker><marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="3" class="bg_filled"></circle></marker></defs><rect class="backdrop" x="0" y="0" width="512" height="304"></rect><text x="10" y="12" >Stack</text><line x1="24" y1="24" x2="32" y2="24" class="solid"></line><line x1="40" y1="24" x2="48" y2="24" class="solid"></line><text x="282" y="12" >Heap</text><line x1="296" y1="24" x2="304" y2="24" class="solid"></line><line x1="312" y1="24" x2="320" y2="24" class="solid"></line><text x="42" y="60" >s1</text><text x="50" y="92" >ptr</text><line x1="176" y1="88" x2="164" y2="88" class="solid end_marked_open_circle"></line><polygon points="296,84 304,88 296,92" class="filled"></polygon><text x="322" y="92" >R</text><text x="362" y="92" >u</text><text x="402" y="92" >s</text><text x="442" y="92" >t</text><text x="50" y="108" >len</text><text x="178" y="108" >4</text><text x="50" y="124" >capacity</text><text x="178" y="124" >4</text><text x="42" y="172" >s2</text><text x="50" y="204" >ptr</text><line x1="176" y1="200" x2="164" y2="200" class="solid end_marked_open_circle"></line><text x="50" y="220" >len</text><text x="178" y="220" >4</text><text x="50" y="236" >capacity</text><text x="178" y="236" >4</text><line x1="56" y1="24" x2="64" y2="24" class="solid"></line><line x1="72" y1="24" x2="80" y2="24" class="solid"></line><line x1="88" y1="24" x2="96" y2="24" class="solid"></line><line x1="104" y1="24" x2="112" y2="24" class="solid"></line><line x1="120" y1="24" x2="128" y2="24" class="solid"></line><line x1="136" y1="24" x2="144" y2="24" class="solid"></line><line x1="152" y1="24" x2="160" y2="24" class="solid"></line><line x1="168" y1="24" x2="176" y2="24" class="solid"></line><line x1="184" y1="24" x2="192" y2="24" class="solid"></line><line x1="200" y1="24" x2="208" y2="24" class="solid"></line><line x1="328" y1="24" x2="336" y2="24" class="solid"></line><line x1="344" y1="24" x2="352" y2="24" class="solid"></line><line x1="360" y1="24" x2="368" y2="24" class="solid"></line><line x1="376" y1="24" x2="384" y2="24" class="solid"></line><line x1="392" y1="24" x2="400" y2="24" class="solid"></line><line x1="408" y1="24" x2="416" y2="24" class="solid"></line><line x1="424" y1="24" x2="432" y2="24" class="solid"></line><line x1="440" y1="24" x2="448" y2="24" class="solid"></line><line x1="456" y1="24" x2="464" y2="24" class="solid"></line><line x1="472" y1="24" x2="480" y2="24" class="solid"></line><line x1="296" y1="152" x2="304" y2="152" class="solid"></line><line x1="312" y1="152" x2="320" y2="152" class="solid"></line><line x1="328" y1="152" x2="336" y2="152" class="solid"></line><line x1="344" y1="152" x2="352" y2="152" class="solid"></line><line x1="360" y1="152" x2="368" y2="152" class="solid"></line><line x1="376" y1="152" x2="384" y2="152" class="solid"></line><line x1="392" y1="152" x2="400" y2="152" class="solid"></line><line x1="408" y1="152" x2="416" y2="152" class="solid"></line><line x1="424" y1="152" x2="432" y2="152" class="solid"></line><line x1="440" y1="152" x2="448" y2="152" class="solid"></line><line x1="456" y1="152" x2="464" y2="152" class="solid"></line><line x1="472" y1="152" x2="480" y2="152" class="solid"></line><line x1="24" y1="280" x2="32" y2="280" class="solid"></line><line x1="40" y1="280" x2="48" y2="280" class="solid"></line><line x1="56" y1="280" x2="64" y2="280" class="solid"></line><line x1="72" y1="280" x2="80" y2="280" class="solid"></line><line x1="88" y1="280" x2="96" y2="280" class="solid"></line><line x1="104" y1="280" x2="112" y2="280" class="solid"></line><line x1="120" y1="280" x2="128" y2="280" class="solid"></line><line x1="136" y1="280" x2="144" y2="280" class="solid"></line><line x1="152" y1="280" x2="160" y2="280" class="solid"></line><line x1="168" y1="280" x2="176" y2="280" class="solid"></line><line x1="184" y1="280" x2="192" y2="280" class="solid"></line><line x1="200" y1="280" x2="208" y2="280" class="solid"></line><text x="66" y="60" >(inaccessible)</text><g><path d="M 8,24 A 4,4 0,0,0 4,28" class="nofill"></path><line x1="4" y1="28" x2="4" y2="276" class="broken"></line><line x1="8" y1="24" x2="16" y2="24" class="solid"></line><path d="M 4,276 A 4,4 0,0,0 8,280" class="nofill"></path><line x1="8" y1="280" x2="16" y2="280" class="solid"></line></g><g><line x1="216" y1="24" x2="224" y2="24" class="solid"></line><path d="M 224,24 A 4,4 0,0,1 228,28" class="nofill"></path><line x1="228" y1="28" x2="228" y2="276" class="broken"></line><line x1="216" y1="280" x2="224" y2="280" class="solid"></line><path d="M 228,276 A 4,4 0,0,1 224,280" class="nofill"></path></g><g><path d="M 280,24 A 4,4 0,0,0 276,28" class="nofill"></path><line x1="276" y1="28" x2="276" y2="148" class="broken"></line><line x1="280" y1="24" x2="288" y2="24" class="solid"></line><path d="M 276,148 A 4,4 0,0,0 280,152" class="nofill"></path><line x1="280" y1="152" x2="288" y2="152" class="solid"></line></g><g><line x1="36" y1="72" x2="196" y2="72" class="solid"></line><line x1="36" y1="72" x2="36" y2="136" class="solid"></line><line x1="132" y1="72" x2="132" y2="136" class="solid"></line><line x1="196" y1="72" x2="196" y2="136" class="solid"></line><line x1="36" y1="136" x2="196" y2="136" class="solid"></line></g><g><line x1="308" y1="72" x2="468" y2="72" class="solid"></line><line x1="308" y1="72" x2="308" y2="104" class="solid"></line><line x1="348" y1="72" x2="348" y2="104" class="solid"></line><line x1="388" y1="72" x2="388" y2="104" class="solid"></line><line x1="428" y1="72" x2="428" y2="104" class="solid"></line><line x1="468" y1="72" x2="468" y2="104" class="solid"></line><line x1="308" y1="104" x2="468" y2="104" class="solid"></line></g><g><line x1="176" y1="88" x2="296" y2="88" class="solid"></line><line x1="252" y1="88" x2="252" y2="196" class="solid"></line><line x1="176" y1="200" x2="248" y2="200" class="solid"></line><path d="M 252,196 A 4,4 0,0,1 248,200" class="nofill"></path></g><g><line x1="36" y1="184" x2="196" y2="184" class="solid"></line><line x1="36" y1="184" x2="36" y2="248" class="solid"></line><line x1="132" y1="184" x2="132" y2="248" class="solid"></line><line x1="196" y1="184" x2="196" y2="248" class="solid"></line><line x1="36" y1="248" x2="196" y2="248" class="solid"></line></g><g><line x1="488" y1="24" x2="496" y2="24" class="solid"></line><path d="M 496,24 A 4,4 0,0,1 500,28" class="nofill"></path><line x1="500" y1="28" x2="500" y2="148" class="broken"></line><line x1="488" y1="152" x2="496" y2="152" class="solid"></line><path d="M 500,148 A 4,4 0,0,1 496,152" class="nofill"></path></g></svg></div>
 <details>
+<p>After a move, only the new owner is valid. The heap data stays in place — just the pointer is copied.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>This diagram is crucial — spend time on it! It shows move semantics visually.</li>
@@ -2033,6 +2053,8 @@ s2 = s1  # Both reference the same object
 <li>Memory is freed exactly once, when <code>s2</code> goes out of scope.</li>
 </ul>
 <details>
+<p>C allows double-free bugs. Python uses reference counting. Rust uses move semantics — zero cost, compile-time safe.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>C gives you control but lets you make mistakes (double-free, use-after-free).</li>
@@ -3209,6 +3231,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p>Destructure arrays with patterns. Use <code>..</code> for rest, <code>_</code> for ignored elements.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Array destructuring works with fixed-size arrays and slices.</li>
@@ -3638,6 +3662,8 @@ evaluate one of two blocks, but the blocks can have a value which then becomes
 the value of the <code>if</code> expression. Other control flow expressions work similarly
 in Rust.</p>
 <details>
+<p>In Rust, <code>if</code>, <code>match</code>, and loops are expressions — they return values.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>In Rust, most control flow constructs are <em>expressions</em>, not just statements.</li>
@@ -3670,6 +3696,8 @@ in Rust.</p>
 <p>See <a href="control-flow/../pattern-matching.html">pattern matching</a> for more details on patterns in
 Rust.</p>
 <details>
+<p><code>if let</code> matches a single pattern. Use it instead of <code>match</code> when you only care about one case.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>if let</code> is syntactic sugar for a <code>match</code> with one interesting arm and a wildcard.</li>
@@ -3711,6 +3739,8 @@ println!(&quot;Program name: {value}&quot;);
 }
 </code></pre></pre>
 <details>
+<p><code>while</code> loops until the condition is false. Condition must be a <code>bool</code>.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>while</code> works like in most languages — nothing surprising here.</li>
@@ -3788,6 +3818,8 @@ automatically call <code>into_iter()</code> on the expression and then iterate o
 </code></pre></pre>
 <p>You can use <code>break</code> and <code>continue</code> here as usual.</p>
 <details>
+<p><code>for x in collection</code> iterates over items. Use <code>&amp;collection</code> to borrow instead of consuming.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>for x in collection</code> calls <code>into_iter()</code> automatically — consumes the collection.</li>
@@ -3837,6 +3869,8 @@ either <code>break</code> or <code>return</code> to stop the loop:</p>
 }
 </code></pre></pre>
 <details>
+<p><code>loop</code> is an infinite loop. Use <code>break</code> to exit, optionally with a return value.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>loop</code> is Rust's infinite loop — clearer intent than <code>while true</code>.</li>
@@ -3881,6 +3915,8 @@ expression of the block, if any. In the example above, the type is <code>()</cod
 <p>See <a href="control-flow/../pattern-matching.html">pattern matching</a> for more details on patterns in
 Rust.</p>
 <details>
+<p><code>match</code> compares a value against patterns. Must be exhaustive — use <code>_</code> as a catch-all.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>match</code> must be exhaustive — all possible values must be covered.</li>
@@ -3920,6 +3956,8 @@ take a label argument which is used to break out of nested loops:</p>
 </code></pre></pre>
 <p>In this case we break the outer loop after 3 iterations of the inner loop.</p>
 <details>
+<p><code>break</code> exits a loop, <code>continue</code> skips to the next iteration. Use labels (<code>'outer:</code>) for nested loops.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Labels start with a single quote (<code>'outer:</code>) — don't confuse with lifetime syntax (same notation, different context).</li>
@@ -4167,6 +4205,8 @@ fn main() {
 allows the compiler to optimize the memory layout:</p>
 <div style='width:100%; height:192px;'><style type="text/css">svg { width: 100% !important; }</style><svg xmlns="http://www.w3.org/2000/svg" width="656" height="192" class="svgbob"><style>.svgbob line, .svgbob path, .svgbob circle, .svgbob rect, .svgbob polygon {  stroke: var(--fg);  stroke-width: 2;  stroke-opacity: 1;  fill-opacity: 1;  stroke-linecap: round;  stroke-linejoin: miter;}.svgbob text {  white-space: pre;  fill: var(--fg);  font-family: Iosevka Fixed, monospace;  font-size: 14px;}.svgbob rect.backdrop {  stroke: none;  fill: transparent;}.svgbob .broken {  stroke-dasharray: 8;}.svgbob .filled {  fill: black;}.svgbob .bg_filled {  fill: transparent;  stroke-width: 1;}.svgbob .nofill {  fill: transparent;}.svgbob .end_marked_arrow {  marker-end: url(#arrow);}.svgbob .start_marked_arrow {  marker-start: url(#arrow);}.svgbob .end_marked_diamond {  marker-end: url(#diamond);}.svgbob .start_marked_diamond {  marker-start: url(#diamond);}.svgbob .end_marked_circle {  marker-end: url(#circle);}.svgbob .start_marked_circle {  marker-start: url(#circle);}.svgbob .end_marked_open_circle {  marker-end: url(#open_circle);}.svgbob .start_marked_open_circle {  marker-start: url(#open_circle);}.svgbob .end_marked_big_open_circle {  marker-end: url(#big_open_circle);}.svgbob .start_marked_big_open_circle {  marker-start: url(#big_open_circle);}</style><defs><marker id="arrow" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,0 0,4 4,2 0,0"></polygon></marker><marker id="diamond" viewBox="-2 -2 8 8" refX="4" refY="2" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><polygon points="0,2 2,0 4,2 2,4 0,2"></polygon></marker><marker id="circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="filled"></circle></marker><marker id="open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="2" class="bg_filled"></circle></marker><marker id="big_open_circle" viewBox="0 0 8 8" refX="4" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><circle cx="4" cy="4" r="3" class="bg_filled"></circle></marker></defs><rect class="backdrop" x="0" y="0" width="656" height="192"></rect><text x="10" y="12" >Stack</text><line x1="24" y1="24" x2="32" y2="24" class="solid"></line><line x1="40" y1="24" x2="48" y2="24" class="solid"></line><text x="266" y="12" >Heap</text><line x1="280" y1="24" x2="288" y2="24" class="solid"></line><line x1="296" y1="24" x2="304" y2="24" class="solid"></line><text x="42" y="60" >list</text><text x="50" y="92" >0</text><text x="122" y="92" >1</text><polygon points="288,84 296,88 288,92" class="filled"></polygon><text x="314" y="92" >0</text><text x="394" y="92" >2</text><polygon points="472,84 480,88 472,92" class="filled"></polygon><line x1="504" y1="80" x2="496" y2="96" class="solid"></line><line x1="512" y1="80" x2="504" y2="96" class="solid"></line><line x1="520" y1="80" x2="512" y2="96" class="solid"></line><line x1="528" y1="80" x2="520" y2="96" class="solid"></line><line x1="536" y1="80" x2="528" y2="96" class="solid"></line><line x1="544" y1="80" x2="536" y2="96" class="solid"></line><line x1="576" y1="80" x2="568" y2="96" class="solid"></line><line x1="584" y1="80" x2="576" y2="96" class="solid"></line><line x1="592" y1="80" x2="584" y2="96" class="solid"></line><line x1="600" y1="80" x2="592" y2="96" class="solid"></line><line x1="136" y1="104" x2="124" y2="104" class="solid end_marked_open_circle"></line><line x1="408" y1="104" x2="396" y2="104" class="solid end_marked_open_circle"></line><text x="570" y="108" >null</text><line x1="56" y1="24" x2="64" y2="24" class="solid"></line><line x1="72" y1="24" x2="80" y2="24" class="solid"></line><line x1="88" y1="24" x2="96" y2="24" class="solid"></line><line x1="104" y1="24" x2="112" y2="24" class="solid"></line><line x1="120" y1="24" x2="128" y2="24" class="solid"></line><line x1="136" y1="24" x2="144" y2="24" class="solid"></line><line x1="152" y1="24" x2="160" y2="24" class="solid"></line><line x1="168" y1="24" x2="176" y2="24" class="solid"></line><line x1="184" y1="24" x2="192" y2="24" class="solid"></line><line x1="312" y1="24" x2="320" y2="24" class="solid"></line><line x1="328" y1="24" x2="336" y2="24" class="solid"></line><line x1="344" y1="24" x2="352" y2="24" class="solid"></line><line x1="360" y1="24" x2="368" y2="24" class="solid"></line><line x1="376" y1="24" x2="384" y2="24" class="solid"></line><line x1="392" y1="24" x2="400" y2="24" class="solid"></line><line x1="408" y1="24" x2="416" y2="24" class="solid"></line><line x1="424" y1="24" x2="432" y2="24" class="solid"></line><line x1="440" y1="24" x2="448" y2="24" class="solid"></line><line x1="456" y1="24" x2="464" y2="24" class="solid"></line><line x1="472" y1="24" x2="480" y2="24" class="solid"></line><line x1="488" y1="24" x2="496" y2="24" class="solid"></line><line x1="504" y1="24" x2="512" y2="24" class="solid"></line><line x1="520" y1="24" x2="528" y2="24" class="solid"></line><line x1="536" y1="24" x2="544" y2="24" class="solid"></line><line x1="552" y1="24" x2="560" y2="24" class="solid"></line><line x1="568" y1="24" x2="576" y2="24" class="solid"></line><line x1="584" y1="24" x2="592" y2="24" class="solid"></line><line x1="600" y1="24" x2="608" y2="24" class="solid"></line><line x1="616" y1="24" x2="624" y2="24" class="solid"></line><line x1="24" y1="168" x2="32" y2="168" class="solid"></line><line x1="40" y1="168" x2="48" y2="168" class="solid"></line><line x1="56" y1="168" x2="64" y2="168" class="solid"></line><line x1="72" y1="168" x2="80" y2="168" class="solid"></line><line x1="88" y1="168" x2="96" y2="168" class="solid"></line><line x1="104" y1="168" x2="112" y2="168" class="solid"></line><line x1="120" y1="168" x2="128" y2="168" class="solid"></line><line x1="136" y1="168" x2="144" y2="168" class="solid"></line><line x1="152" y1="168" x2="160" y2="168" class="solid"></line><line x1="168" y1="168" x2="176" y2="168" class="solid"></line><line x1="184" y1="168" x2="192" y2="168" class="solid"></line><line x1="280" y1="168" x2="288" y2="168" class="solid"></line><line x1="296" y1="168" x2="304" y2="168" class="solid"></line><line x1="312" y1="168" x2="320" y2="168" class="solid"></line><line x1="328" y1="168" x2="336" y2="168" class="solid"></line><line x1="344" y1="168" x2="352" y2="168" class="solid"></line><line x1="360" y1="168" x2="368" y2="168" class="solid"></line><line x1="376" y1="168" x2="384" y2="168" class="solid"></line><line x1="392" y1="168" x2="400" y2="168" class="solid"></line><line x1="408" y1="168" x2="416" y2="168" class="solid"></line><line x1="424" y1="168" x2="432" y2="168" class="solid"></line><line x1="440" y1="168" x2="448" y2="168" class="solid"></line><line x1="456" y1="168" x2="464" y2="168" class="solid"></line><line x1="472" y1="168" x2="480" y2="168" class="solid"></line><line x1="488" y1="168" x2="496" y2="168" class="solid"></line><line x1="504" y1="168" x2="512" y2="168" class="solid"></line><line x1="520" y1="168" x2="528" y2="168" class="solid"></line><line x1="536" y1="168" x2="544" y2="168" class="solid"></line><line x1="552" y1="168" x2="560" y2="168" class="solid"></line><line x1="568" y1="168" x2="576" y2="168" class="solid"></line><line x1="584" y1="168" x2="592" y2="168" class="solid"></line><line x1="600" y1="168" x2="608" y2="168" class="solid"></line><line x1="616" y1="168" x2="624" y2="168" class="solid"></line><text x="50" y="108" >1/Tag</text><text x="314" y="108" >1/Tag</text><text x="498" y="108" >1/Tag</text><g><path d="M 8,24 A 4,4 0,0,0 4,28" class="nofill"></path><line x1="4" y1="28" x2="4" y2="164" class="broken"></line><line x1="8" y1="24" x2="16" y2="24" class="solid"></line><path d="M 4,164 A 4,4 0,0,0 8,168" class="nofill"></path><line x1="8" y1="168" x2="16" y2="168" class="solid"></line></g><g><line x1="200" y1="24" x2="208" y2="24" class="solid"></line><path d="M 208,24 A 4,4 0,0,1 212,28" class="nofill"></path><line x1="212" y1="28" x2="212" y2="164" class="broken"></line><line x1="200" y1="168" x2="208" y2="168" class="solid"></line><path d="M 212,164 A 4,4 0,0,1 208,168" class="nofill"></path></g><g><path d="M 264,24 A 4,4 0,0,0 260,28" class="nofill"></path><line x1="260" y1="28" x2="260" y2="164" class="broken"></line><line x1="264" y1="24" x2="272" y2="24" class="solid"></line><path d="M 260,164 A 4,4 0,0,0 264,168" class="nofill"></path><line x1="264" y1="168" x2="272" y2="168" class="solid"></line></g><g><line x1="36" y1="72" x2="172" y2="72" class="solid"></line><line x1="36" y1="72" x2="36" y2="120" class="solid"></line><line x1="108" y1="72" x2="108" y2="120" class="solid"></line><line x1="172" y1="72" x2="172" y2="120" class="solid"></line><line x1="36" y1="120" x2="172" y2="120" class="solid"></line></g><g><line x1="300" y1="72" x2="444" y2="72" class="solid"></line><line x1="300" y1="72" x2="300" y2="120" class="solid"></line><line x1="372" y1="72" x2="372" y2="120" class="solid"></line><line x1="444" y1="72" x2="444" y2="120" class="solid"></line><line x1="300" y1="120" x2="444" y2="120" class="solid"></line></g><g><line x1="484" y1="72" x2="612" y2="72" class="solid"></line><line x1="484" y1="72" x2="484" y2="120" class="solid"></line><line x1="556" y1="72" x2="556" y2="120" class="solid"></line><line x1="612" y1="72" x2="612" y2="120" class="solid"></line><line x1="484" y1="120" x2="612" y2="120" class="solid"></line></g><g><path d="M 280,88 A 4,4 0,0,0 276,92" class="nofill"></path><line x1="276" y1="92" x2="276" y2="100" class="solid"></line><line x1="280" y1="88" x2="288" y2="88" class="solid"></line><line x1="136" y1="104" x2="272" y2="104" class="solid"></line><path d="M 276,100 A 4,4 0,0,1 272,104" class="nofill"></path></g><g><path d="M 464,88 A 4,4 0,0,0 460,92" class="nofill"></path><line x1="460" y1="92" x2="460" y2="100" class="solid"></line><line x1="464" y1="88" x2="472" y2="88" class="solid"></line><line x1="408" y1="104" x2="456" y2="104" class="solid"></line><path d="M 460,100 A 4,4 0,0,1 456,104" class="nofill"></path></g><g><line x1="632" y1="24" x2="640" y2="24" class="solid"></line><path d="M 640,24 A 4,4 0,0,1 644,28" class="nofill"></path><line x1="644" y1="28" x2="644" y2="164" class="broken"></line><line x1="632" y1="168" x2="640" y2="168" class="solid"></line><path d="M 644,164 A 4,4 0,0,1 640,168" class="nofill"></path></g></svg></div>
 <details>
+<p><code>Option&lt;Box&lt;T&gt;&gt;</code> is the same size as <code>Box&lt;T&gt;</code> — null represents <code>None</code> (niche optimization).</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>&quot;Niche optimization&quot; uses invalid bit patterns to store enum discriminants.</li>
@@ -4243,6 +4283,8 @@ index.</li>
 <p>In Rust we bundle this state and logic together into an object known as an
 &quot;iterator&quot;.</p>
 <details>
+<p>Iterators encapsulate traversal logic. Zero-cost abstraction — compiles to the same code as C-style loops.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>C-style loops mix iteration mechanics with business logic.</li>
@@ -4311,6 +4353,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p><code>Iterator</code> has one required method: <code>next()</code> returns <code>Some(item)</code> or <code>None</code> when done.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>Iterator</code> has one required method: <code>next()</code> → <code>Option&lt;Item&gt;</code>.</li>
@@ -4353,6 +4397,8 @@ customized iterators.</p>
 }
 </code></pre></pre>
 <details>
+<p>Adapters (<code>map</code>, <code>filter</code>) are lazy. Consumers (<code>sum</code>, <code>collect</code>) produce a result.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Adapters (<code>map</code>, <code>filter</code>, <code>take</code>) return new iterators — they don't consume.</li>
@@ -4395,6 +4441,8 @@ method lets you build a collection from an <code>Iterator</code>.</p>
 }
 </code></pre></pre>
 <details>
+<p><code>collect()</code> turns an iterator into a collection (Vec, HashMap, String, etc.).</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>collect()</code> is generic — works with any type implementing <code>FromIterator</code>.</li>
@@ -4475,6 +4523,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p><code>IntoIterator</code> creates an iterator from a value. <code>for</code> loops call <code>into_iter()</code> automatically.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>IntoIterator</code> is what <code>for</code> loops call — it creates an iterator from a value.</li>
@@ -4561,6 +4611,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p>Items are private by default. Use <code>pub</code> to expose them. Children can see parent's private items.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Private by default is a security-conscious design choice.</li>
@@ -4597,6 +4649,8 @@ Try uncommenting <code>outer::inner::public()</code> in main to show the error m
 </li>
 </ol>
 <details>
+<p><code>crate::</code> = crate root, <code>self::</code> = current module, <code>super::</code> = parent module.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>crate::</code> is the current crate root — like <code>/</code> in filesystem paths.</li>
@@ -4634,6 +4688,8 @@ Show a <code>use</code> statement with glob imports (<code>use std::collections:
 <li><code>src/main.rs</code> (for a binary crate)</li>
 </ul>
 <details>
+<p><code>mod foo;</code> loads from <code>foo.rs</code> (Rust 2018) or <code>foo/mod.rs</code> (Rust 2015). Prefer the newer style.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Rust 2018 style (<code>garden.rs</code>) is preferred — it's cleaner and has fewer files.</li>
@@ -5039,6 +5095,8 @@ fn main() {
 <li><code>Drop</code> used for defining destructors.</li>
 </ul>
 <details>
+<p>Key std traits: <code>Iterator</code>, <code>From</code>/<code>Into</code>, <code>Read</code>/<code>Write</code>, <code>Drop</code>, and operator traits.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>These traits form the foundation of idiomatic Rust code.</li>
@@ -5441,6 +5499,8 @@ how it uses captured variables.</li>
 }
 </code></pre></pre>
 <details>
+<p><code>|args| body</code> is the closure syntax. Types are usually inferred.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>|args| body</code> is the basic closure syntax — pipes instead of parentheses.</li>
@@ -5487,6 +5547,8 @@ fn takes_closure(f: impl Fn(i32) -&gt; i32) { }  // Use trait instead
 }
 </code></pre></pre>
 <details>
+<p>Closures capture variables from their environment. Use <code>move</code> to take ownership.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Closures capture variables from their environment — this is what makes them &quot;closures.&quot;</li>
@@ -5555,6 +5617,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p><code>Fn</code> borrows immutably, <code>FnMut</code> borrows mutably, <code>FnOnce</code> consumes captured values.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Three traits form a hierarchy: <code>Fn</code> ⊂ <code>FnMut</code> ⊂ <code>FnOnce</code>.</li>
@@ -5881,6 +5945,8 @@ functions.</p>
 </ul>
 <p><a href="https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html">Doc on handling errors</a></p>
 <details>
+<p>No exceptions. Errors are explicit values in <code>Result&lt;T, E&gt;</code>. Use <code>?</code> to propagate.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Rust has NO exceptions. This is a deliberate design choice.</li>
@@ -6036,6 +6102,8 @@ fn main() {
 <p>The <code>From::from</code> call here means we attempt to convert the error type to the
 type returned by the function:</p>
 <details>
+<p><code>?</code> calls <code>From::from</code> to convert error types automatically.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>The <code>?</code> operator does automatic error conversion via <code>From::from</code>.</li>
@@ -6141,6 +6209,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p><code>thiserror</code> derives error enums. Use <code>#[error]</code> for messages, <code>#[from]</code> for automatic conversion.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>thiserror</code> is the go-to crate for library error types.</li>
@@ -6226,6 +6296,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p><code>anyhow</code> adds context to errors. Use <code>.context()</code> to enrich errors, <code>bail!</code> to return early.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>anyhow</code> is the go-to crate for application error handling.</li>
@@ -6477,6 +6549,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p><code>static mut</code> is unsafe due to data races. Prefer <code>Mutex</code>, <code>RwLock</code>, or atomics instead.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Immutable statics are safe and common — they're truly global constants.</li>
@@ -6522,6 +6596,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p>Unions share memory between fields. Reading is unsafe — you must track the active field yourself.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Unions share memory between all fields — only one is valid at a time.</li>
@@ -6596,6 +6672,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p>Mark functions <code>unsafe</code> when they have preconditions. Document them in <code># Safety</code>.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code># Safety</code> doc comment is critical — documents what callers must guarantee.</li>
@@ -6642,6 +6720,8 @@ fn main() {
 }
 </code></pre></pre>
 <details>
+<p>Calling foreign functions is unsafe — Rust can't verify what external code does.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>extern &quot;C&quot;</code> declares a function using C calling conventions.</li>
@@ -6691,6 +6771,8 @@ pub unsafe trait AsBytes {
 unsafe impl AsBytes for u32 {}
 </code></pre></pre>
 <details>
+<p>Unsafe traits have invariants the compiler can't verify. <code>unsafe impl</code> means &quot;I promise.&quot;</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>Unsafe traits have invariants that the compiler can't verify.</li>
@@ -6859,6 +6941,8 @@ channels.</p>
 compile time bugs. This is often referred to as <em>fearless concurrency</em> since you
 can rely on the compiler to ensure correctness at runtime.</p>
 <details>
+<p>Rust prevents data races at compile time. The type system ensures thread safety.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>&quot;Fearless concurrency&quot; means the compiler catches data races at compile time.</li>
@@ -7280,6 +7364,8 @@ know it is valid.</p>
 in that thread. So the question is when you can allocate a value in one thread
 and deallocate it in another.</p>
 <details>
+<p><code>Send</code> means a type can safely move to another thread. Most types are <code>Send</code> automatically.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li><code>Send</code> is a marker trait with no methods — it's purely a compile-time guarantee.</li>
@@ -7354,6 +7440,8 @@ non-atomic reference count.</li>
 concurrency considerations.</li>
 </ul>
 <details>
+<p>Most types are <code>Send + Sync</code>. <code>Rc</code> is neither. <code>Cell</code>/<code>RefCell</code> are <code>Send</code> but not <code>Sync</code>.</p>
+<hr />
 <p><strong>Key points for speakers:</strong></p>
 <ul>
 <li>This is a reference table — students don't need to memorize it, but should understand the categories.</li>
